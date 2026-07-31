@@ -1,0 +1,81 @@
+
+                          QANTAS AIRWAYS LIMITED                    26Apr26 2151
+                     SH Flight Crew Roster - Bid Period 3715
+
+
+     Name    :  PAPPIN TW                                    Category:  F/O-A330
+     Staff No:  686590                                       Base    :  SYD
+     Snrty No:                                               Line    :  EFA
+     Mailbox :       0                                       WorkRule:  AEFA
+
+Date    Duty(Role)  Service                     S-On S-Of Duty  Credit Port Code
+
+--------------------------------------------------------------------------------
+03 Mon  LA                                                                  PRE
+04 Tue  LA                                                                  PRE
+05 Wed  LA                                                                  PRE
+06 Thu  LA                                                                  PRE
+07 Fri  LA                                                                  PRE
+--------------------------------------------------------------------------------
+08 Sat  LA                                                                  PRE
+09 Sun  LA                                                                  PRE
+--------------------------------------------------------------------------------
+10 Mon  LA                                                                  PRE
+11 Tue  LA                                                                  PRE
+12 Wed  LA                                                                  PRE
+13 Thu  LA                                                                  PRE
+14 Fri  LA                                                                  PRE
+--------------------------------------------------------------------------------
+15 Sat  LA                                                                  PRE
+16 Sun  LA                                                                  PRE
+--------------------------------------------------------------------------------
+17 Mon  LA                                                                  PRE
+18 Tue  LA                                                                  PRE
+19 Wed  LA                                                                  PRE
+20 Thu  LA                                                                  PRE
+21 Fri  LA                                                                  PRE
+--------------------------------------------------------------------------------
+22 Sat  LA                                                                  PRE
+23 Sun  LA                                                                  PRE
+--------------------------------------------------------------------------------
+24 Mon  AX                                                                  AW01
+25 Tue  D/O                                                                 AW99
+26 Wed  AX                                                                  AW01
+27 Thu  AX                                                                  AW01
+28 Fri  D/O                                                                 AW99
+--------------------------------------------------------------------------------
+29 Sat  AX                                                                  AW01
+30 Sun  7460A1      7525                        1420 2251 11:31  9:30  HKG  AW01
+02 Tue              PCX360                      1235 1630  3:55  1:20  PVG  
+05 Fri              7534                        0345 1902 12:17 10:35       
+
+Global Preferences                       : None
+Total Duty Hours (Total TAFB)            : 9:40 (  9:40)
+Total Passive Credit Hours               : 0:00 
+Total Credit Hours                       : 52:55 
+Total Duty Hours Carried In (Out)        : 0:00 ( 18:03)
+Total Credit Hours Carried In (Out)      : 0:00 ( 12:45)
+Available Date/Time this (next) BP       : 03Nov25 0759 (06Dec25 1032)
+Balance of 11 Hour Buffer this (next) BP : 0:00 (  0:00)
+Consecutive Duty Days Last BP            : 0  
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           26Apr26 2151
+rosterPatns                     Pattern Details               Page:    1 of    1
+
+
+(L - time)                                       1-CPT   1-F/O                  
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+30Nov      7525  SYD  1534 HKG  2236  33X  10:02  38:59          ( 1            
+                 Rpt  1420 Rls  2251        HKG   37:44  10:02 11:31   8:40     
+                                                                                
+02Dec P   CX360  HKG  1335 PVG  1615        0:00  60:49          ( 1            
+                 Rpt  1235 Rls  1630        PVG   59:15   0:00  3:55   0:00     
+                                                                                
+05Dec      7534  PVG  0504 SYD  1847  33X  10:43                 ( 1            
+                 Rpt  0345 Rls  1902                     10:43 12:17   0:00     
+             TAFB   124:42      Rest   15:00     Total   20:45 27:43   8:40     
+Reason: AC                                                                      
+                                                         7460A1 DATED 30Nov25   
+
+                             *** End of Report ***

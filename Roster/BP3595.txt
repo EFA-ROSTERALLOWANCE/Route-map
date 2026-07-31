@@ -1,0 +1,105 @@
+
+                          QANTAS AIRWAYS LIMITED                    10May26 1735
+                     SH Flight Crew Roster - Bid Period 3595
+
+
+     Name    :  PAPPIN TW                                    Category:  F/O-A321
+     Staff No:  686590                                       Base    :  BNE
+     Snrty No:                                               Line    :  U/T
+     Mailbox :       0                                       WorkRule:  AEFA
+
+Date    Duty(Role)  Service                     S-On S-Of Duty  Credit Port Code
+
+--------------------------------------------------------------------------------
+01 Mon  PROBLEM                                                             AS02
+02 Tue  PROBLEM                                                             AS02
+03 Wed  PROBLEM                                                             AS02
+04 Thu  PROBLEM                                                             AS02
+05 Fri  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+06 Sat  D/O                                                                 AW01
+07 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+08 Mon  PROBLEM                                                             AS02
+09 Tue  PROBLEM                                                             AS02
+10 Wed  EFA055B3(T) A617                        0950 1350  3:00  1:10  MEL  AW22
+11 Thu              ZW7353/ZW7332/ZW7321        0130 0758  7:28  5:00  CNS  
+12 Fri              A707                        0530 0827  2:57  1:08       
+--------------------------------------------------------------------------------
+13 Sat  D/O                                                                 AW01
+14 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+15 Mon  LSN                                               20:25 11:40       AS02
+16 Tue  LSN                                                                 AS02
+17 Wed  LSN                                                                 AS02
+18 Thu  LSN                                                                 AS02
+19 Fri  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+20 Sat  D/O                                                                 AW01
+21 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+22 Mon  EFAVWVB8(T) A625/ZW7351/ZW7334          1345 0059 10:14  4:55  SYD  AS22
+23 Tue              P441                        1130 1401  2:31  0:48  MEL  
+24 Wed              ZW7353/ZW7332/ZW7321        0130 0804  7:34  5:00  CNS  
+25 Thu              A713                        1135 1430  2:55  1:08       
+26 Fri  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+27 Sat  D/O                                                                 AW01
+28 Sun  D/O                                                                 AW01
+
+Global Preferences                       : None
+Total Duty Hours (Total TAFB)            : 57:04 (119:22)
+Total Passive Credit Hours               : 0:00 
+Total Credit Hours                       : 30:49 
+Total Duty Hours Carried In (Out)        : 0:00 (  0:00)
+Total Credit Hours Carried In (Out)      : 0:00 (  0:00)
+Available Date/Time this (next) BP       : 01Jan24 0000 (29Jan24 0000)
+Balance of 11 Hour Buffer this (next) BP : 0:00 (  0:00)
+Consecutive Duty Days Last BP            : 0  
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           10May26 1735
+rosterPatns                     Pattern Details               Page:    1 of    1
+
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+10Jan A     617  BNE  1020 MEL  1335  73H   0:00  12:47          ( 1            
+                 Rpt  0950 Rls  1350        MEL   11:40   0:00  3:00   1:10     
+                                                                                
+11Jan Z    7353  MEL  0222 BNE  0333  32X   2:11   0:49          ( 1            
+11Jan Z    7332  BNE  0422 TSV  0610  32X   1:48   0:44          ( 2            
+11Jan Z    7321  TSV  0654 CNS  0743  32X   0:49  22:22          ( 3            
+                 Rpt  0130 Rls  0758        CNS   21:32   4:48  7:28   5:00     
+                                                                                
+12Jan A     707  CNS  0605 BNE  0812  73H   0:00                 ( 1            
+                 Rpt  0530 Rls  0827                      0:00  2:57   1:08     
+             TAFB    46:37      Rest   15:00     Total    4:48 13:25   7:18     
+Reason: AC   alt pax JQ961/12JAN request submitted                              
+               ALTPAX QF686 10JAN 1350/1535 ADLMEL PNR:6SMRVE                   
+                                                         EFA055B3 DATED 10Jan24 
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+22Jan A     625  BNE  1443 MEL  1811  73H   0:00   1:40          ( 1            
+22Jan Z    7351  MEL  1951 BNE  2101  32X   2:10   1:09          ( 2            
+22Jan Z    7334  BNE  2210 SYD  0044  32X   1:34  11:19          ( 3            
+                 Rpt  1345 Rls  0059        SYD   10:31   3:44 10:14   4:55     
+                                                                                
+23Jan P     441  SYD  1203 MEL  1346  73H   0:00  12:51          ( 1            
+                 Rpt  1130 Rls  1401        MEL   11:29   0:00  2:31   0:48     
+                                                                                
+24Jan Z    7353  MEL  0237 BNE  0341  32X   2:04   0:45          ( 1            
+24Jan Z    7332  BNE  0426 TSV  0617  32X   1:51   0:42          ( 2            
+24Jan Z    7321  TSV  0659 CNS  0749  32X   0:50  28:09          ( 3            
+                 Rpt  0130 Rls  0804        CNS   27:31   4:45  7:34   5:00     
+                                                                                
+25Jan A     713  CNS  1158 BNE  1415  73H   0:00                 ( 1            
+                 Rpt  1135 Rls  1430                      0:00  2:55   1:08     
+             TAFB    72:45      Rest   15:00     Total    8:29 23:14  11:51     
+Reason: AC   moved to QF441 @ crew request.                                     
+               safety pilto carried on the qf7332/qf7321.                       
+                                                         EFAVWVB8 DATED 22Jan24 
+
+                             *** End of Report ***

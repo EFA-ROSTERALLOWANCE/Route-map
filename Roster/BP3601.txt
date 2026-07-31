@@ -1,0 +1,128 @@
+
+                          QANTAS AIRWAYS LIMITED                    10May26 1755
+                     SH Flight Crew Roster - Bid Period 3601
+
+
+     Name    :  PAPPIN TW                                    Category:  F/O-A321
+     Staff No:  686590                                       Base    :  BNE
+     Snrty No:                                               Line    :  U/T
+     Mailbox :       0                                       WorkRule:  AEFA
+
+Date    Duty(Role)  Service                     S-On S-Of Duty  Credit Port Code
+
+--------------------------------------------------------------------------------
+29 Mon  BNE074B5(T) A708                        0835 1138  3:03  1:13  CNS  AS22
+30 Tue              T7313/T7335                 1815 0207  6:52  4:25  MEL  
+31 Wed              A620                        1350 1805  5:15  1:05       
+01 Thu  PROBLEM                                                             AS02
+02 Fri  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+03 Sat  D/O                                                                 AW01
+04 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+05 Mon  7814WRB2(T) P690/T7354/T7340            1535 2322  8:17  3:28       AS22
+06 Tue              T7396                       2320 0346  6:26  5:25  PER  
+08 Thu              T7398/A620                  0450 1603  9:13  4:35       
+09 Fri  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+10 Sat  D/O                                                                 AW01
+11 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+12 Mon  PROBLEM                                                             AS02
+13 Tue  PROBLEM                                                             AS02
+14 Wed  OMMEBBB2(T) T7396                       2320 0341  6:21  5:25  PER  AS22
+16 Fri              T7398/A620                  0450 1542  8:52  4:35       
+--------------------------------------------------------------------------------
+17 Sat  D/O                                                                 AW01
+18 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+19 Mon  PROBLEM                                                             AS02
+20 Tue  EFAGGOB4(T) A615                        0845 1301  3:16  1:10  MEL  AS22
+21 Wed              GMD/P673                    0130 0741  6:41  4:40  ADL  
+21 Wed  MD                                      0030 0330  3:00             AS22
+22 Thu  PROBLEM                                                             AS02
+23 Fri  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+24 Sat  D/O                                                                 AW01
+25 Sun  D/O                                                                 AW01
+
+Global Preferences                       : None
+Total Duty Hours (Total TAFB)            : 64:16 (193:16)
+Total Passive Credit Hours               : 0:00 
+Total Credit Hours                       : 36:01 
+Total Duty Hours Carried In (Out)        : 0:00 (  0:00)
+Total Credit Hours Carried In (Out)      : 0:00 (  0:00)
+Available Date/Time this (next) BP       : 29Jan24 0000 (26Feb24 0000)
+Balance of 11 Hour Buffer this (next) BP : 0:00 (  0:00)
+Consecutive Duty Days Last BP            : 0  
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           10May26 1755
+rosterPatns                     Pattern Details               Page:    1 of    2
+
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+29Jan A     708  BNE  0915 CNS  1123  73H   0:00  31:52          ( 1            
+                 Rpt  0835 Rls  1138        CNS   30:37   0:00  3:03   1:13     
+                                                                                
+30Jan      7313  CNS  1915 BNE  2138  32X   2:23   0:53          ( 1            
+30Jan      7335  BNE  2231 MEL  0152  32X   2:21  14:32          ( 2            
+                 Rpt  1815 Rls  0207        MEL   11:43   4:44  6:52   4:25     
+                                                                                
+31Jan A     620  MEL  1624 BNE  1750  73H   0:00                 ( 1            
+                 Rpt  1350 Rls  1805                      0:00  5:15   1:05     
+             TAFB    57:30      Rest   15:00     Total    4:44 15:10   6:43     
+Reason: AC   QF712 29JAN BNE/CNS 1525/1750 PNR:5S5HPR                           
+               mt                                                               
+                                                         BNE074B5 DATED 29Jan24 
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+05Feb P     690  ADL  1622 MEL  1809  73H   0:00   1:52          ( 1            
+05Feb      7354  MEL  2001 SYD  2129  32X   1:28   1:03          ( 2            
+05Feb      7340  SYD  2232 BNE  2307  32X   1:35  25:06          ( 3            
+                 Rpt  1535 Rls  2322        BNE   23:58   3:03  8:17   3:28     
+                                                                                
+07Feb      7396  BNE  0013 PER  0331  32X   5:18  25:59          ( 1            
+                 Rpt  2320 Rls  0346        PER   25:04   5:18  6:26   5:25     
+                                                                                
+08Feb      7398  PER  0530 MEL  1221  32X   3:51   2:10          ( 1            
+08Feb A     620  MEL  1431 BNE  1548  73H   0:00                 ( 2            
+                 Rpt  0450 Rls  1603                      3:51  9:13   4:35     
+             TAFB    72:58      Rest   15:00     Total   12:12 23:56  13:28     
+Reason: AC   REQUEST QF690 ADL/MEL 05FEB AND BANK ALT PAX 08FEB                 
+                                                         7814WRB2 DATED 05Feb24 
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+15Feb      7396  BNE  0010 PER  0326  32X   5:16  26:10          ( 1            
+                 Rpt  2320 Rls  0341        PER   25:09   5:16  6:21   5:25     
+                                                                                
+16Feb      7398  PER  0536 MEL  1227  32X   3:51   1:50          ( 1            
+16Feb A     620  MEL  1417 BNE  1527  73H   0:00                 ( 2            
+                 Rpt  0450 Rls  1542                      3:51  8:52   4:35     
+             TAFB    40:22      Rest   15:00     Total    9:07 15:13  10:00     
+Reason: AC   pax ticket banked                                                  
+                                                         OMMEBBB2 DATED 14Feb24 
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           10May26 1755
+rosterPatns                     Pattern Details               Page:    2 of    2
+
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+20Feb A     615  BNE  0926 MEL  1246  73H   0:00  12:44          ( 1            
+                 Rpt  0845 Rls  1301        MEL   12:29   0:00  3:16   1:10     
+                                                                                
+21Feb G      MD  MEL  0130 MEL  0430        0:00   2:06          ( 1            
+21Feb P     673  MEL  0636 ADL  0726  73H   0:00                 ( 2            
+                 Rpt  0130 Rls  0741                      0:00  6:41   4:40     
+             TAFB    22:26      Rest   12:00     Total    0:00  9:57   5:50     
+Reason: AC   7353 7332 7321 xxld                                                
+                                                         EFAGGOB4 DATED 20Feb24 
+
+                             *** End of Report ***

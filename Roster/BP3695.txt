@@ -1,0 +1,123 @@
+
+                          QANTAS AIRWAYS LIMITED                    26Apr26 2153
+                     SH Flight Crew Roster - Bid Period 3695
+
+
+     Name    :  PAPPIN TW                                    Category:  F/O-A330
+     Staff No:  686590                                       Base    :  BNE
+     Snrty No:                                               Line    :  U/T
+     Mailbox :       0                                       WorkRule:  AEFA
+
+Date    Duty(Role)  Service                     S-On S-Of Duty  Credit Port Code
+
+--------------------------------------------------------------------------------
+14 Mon  D/O                                                                 AW99
+15 Tue  PAPP15B4(T) A511                        0815 1033  2:18  0:48  SYD  AW22
+16 Wed              T7345/P765                  1200 1958  9:58  3:30  PER  
+17 Thu              T7318/A532                  0800 1824  8:24  5:00       
+18 Fri  D/O                                                                 AW99
+--------------------------------------------------------------------------------
+19 Sat  MS                                      1200 1201  0:01             AW99
+20 Sun  7414MTC2(T) A539/T7301                  1445 2114  6:29  2:18       AW22
+--------------------------------------------------------------------------------
+21 Mon  7415MTC2(T) P937                        1250 1712  6:22  2:40  PER  AW22
+22 Tue              T7318/A528                  0615 1644  8:29  4:55       
+23 Wed  D/O                                                                 AW99
+24 Thu  PROBLEM                                                             AS02
+25 Fri  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+26 Sat  PROBLEM                                                             AS02
+27 Sun  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+28 Mon  PROBLEM                                                             AS02
+29 Tue  PROBLEM                                                             AS02
+30 Wed  PROBLEM                                                             AS02
+31 Thu  PROBLEM                                                             AS02
+01 Fri  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+02 Sat  PROBLEM                                                             AS02
+03 Sun  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+04 Mon  PROBLEM                                                             AS02
+05 Tue  PAPP05B17(T A555                        1915 2149  2:34  0:48       AW22
+07 Thu              T7525                       1615 0154 11:39  9:30  HKG  
+08 Fri              P030/A608                   1905 1056 13:51  5:48  BNE  
+--------------------------------------------------------------------------------
+10 Sun  PROBLEM                                                             AS02
+
+Global Preferences                       : None
+Total Duty Hours (Total TAFB)            : 70:05 (180:14)
+Total Passive Credit Hours               : 0:00 
+Total Credit Hours                       : 35:17 
+Total Duty Hours Carried In (Out)        : 0:00 (  0:00)
+Total Credit Hours Carried In (Out)      : 0:00 (  0:00)
+Available Date/Time this (next) BP       : 14Jul25 0000 (11Aug25 0000)
+Balance of 11 Hour Buffer this (next) BP : 0:00 (  0:00)
+Consecutive Duty Days Last BP            : 0  
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           26Apr26 2153
+rosterPatns                     Pattern Details               Page:    1 of    2
+
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+15Jul A     511  BNE  0842 SYD  1018  73H   0:00  26:50          ( 1            
+                 Rpt  0815 Rls  1033        SYD   25:27   0:00  2:18   0:48     
+                                                                                
+16Jul      7345  SYD  1308 MEL  1502  33X   1:54   2:27          ( 1            
+16Jul P     765  MEL  1729 PER  1943  73H   0:00  13:19          ( 2            
+                 Rpt  1200 Rls  1958        PER   12:02   1:54  9:58   3:30     
+                                                                                
+17Jul      7318  PER  0902 SYD  1444  33X   3:42   1:40          ( 1            
+17Jul A     532  SYD  1624 BNE  1809  73H   0:00                 ( 2            
+                 Rpt  0800 Rls  1824                      3:42  8:24   5:00     
+             TAFB    58:09      Rest   15:00     Total    5:36 20:40   9:18     
+Reason: AC   STG 2 LT // WITH RATTLE - 2 ALT PAX BANKED                         
+               QF7345 NITESTOP SYD NOW S/ON 1200 16JUN                          
+                                                         PAPP15B4 DATED 15Jul25 
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+20Jul A     539  BNE  1617 SYD  1755  73H   0:00   1:27          ( 1            
+20Jul      7301  SYD  1922 BNE  2059  33X   1:37                 ( 2            
+                 Rpt  1445 Rls  2114                      1:37  6:29   2:18     
+             TAFB     6:29      Rest   12:00     Total    1:37  6:29   2:18     
+Reason: AC   ALT PAX QF742 20/7 14:55/17:15 EC39HO                              
+                                                         7414MTC2 DATED 20Jul25 
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+21Jul P     937  BNE  1323 PER  1657  73H   0:00  15:08          ( 1            
+                 Rpt  1250 Rls  1712        PER   13:03   0:00  6:22   2:40     
+                                                                                
+22Jul      7318  PER  0805 SYD  1421  33X   4:16   0:37          ( 1            
+22Jul A     528  SYD  1458 BNE  1629  73H   0:00                 ( 2            
+                 Rpt  0615 Rls  1644                      4:16  8:29   4:55     
+             TAFB    27:54      Rest   35:53     Total    4:16 14:51   7:35     
+Reason: AC   ALT PAX BANKED 22/7                                                
+                                                         7415MTC2 DATED 21Jul25 
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+05Aug A     555  BNE  2006 SYD  2134  73H   0:00  43:56          ( 1            
+                 Rpt  1915 Rls  2149        SYD   42:26   0:00  2:34   0:48     
+                                                                                
+07Aug      7525  SYD  1730 HKG  0139  33X  10:09  18:31          ( 1            
+                 Rpt  1615 Rls  0154        HKG   17:11  10:09 11:39   9:30     
+                                                                                
+08Aug P     030  HKG  2010 MEL  0719  333   0:00   1:01          ( 1            
+09Aug A     608  MEL  0820 BNE  1041  73H   0:00                 ( 2            
+                 Rpt  1905 Rls  1056                      0:00 13:51   5:48     
+             TAFB    87:41      Rest   15:00     Total   10:09 28:04  16:06     
+Reason: AC   ALT PAX QF675 09AUG MEL/ADL 0835/0925 PNR..DKNXRR                  
+                                                         PAPP05B17 DATED 05Aug25
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           26Apr26 2153
+rosterPatns                     Pattern Details               Page:    2 of    2
+
+
+                             *** End of Report ***

@@ -1,0 +1,124 @@
+
+                          QANTAS AIRWAYS LIMITED                    10May26 2054
+                     SH Flight Crew Roster - Bid Period 3741
+
+
+     Name    :  DUNSTON PA                                   Category:  F/O-A330
+     Staff No:  683847                                       Base    :  SYD
+     Snrty No:                                               Line    :  EFA
+     Mailbox :       0                                       WorkRule:  AEFA
+
+Date    Duty(Role)  Service                     S-On S-Of Duty  Credit Port Code
+
+--------------------------------------------------------------------------------
+23 Mon              PCX367                      1245 1700  4:15  1:30  HKG  
+25 Wed              7526                        2255 1252 10:57  9:20       
+27 Fri  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+28 Sat  D/O                                                                 AW99
+29 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+30 Mon  D/O                                                                 AW01
+31 Tue  D/O                                                                 AW99
+01 Wed  7417B4      A127/PCX362                 1010 2225 15:15  6:18  PVG  AW99
+03 Fri              7536                        0140 0839  6:59  5:50  SIN  
+03 Fri              7536                        2000 0804  9:04  7:40       
+--------------------------------------------------------------------------------
+05 Sun  AX                                                                  CLRD
+--------------------------------------------------------------------------------
+06 Mon  D/O                                                                 AW99
+07 Tue  D/O                                                                 AW99
+08 Wed  MD                                      0900 1700  8:00  4:00       AW99
+09 Thu  V61                                     1700 2200  5:00             AW99
+10 Fri  MD                                      1000 1700  7:00  4:00       AW99
+--------------------------------------------------------------------------------
+11 Sat  D/O                                                                 AW01
+12 Sun  D/O                                                                 AW99
+--------------------------------------------------------------------------------
+13 Mon  7444B6      A649                        1155 1524  5:29  2:30  PER  AW99
+14 Tue              P760                        0545 1214  4:29  1:45  MEL  
+15 Wed  D/O                                                                 AW01
+16 Thu  7452B2      7535                        1425 0042 12:17 10:55  PVG  AS01
+--------------------------------------------------------------------------------
+19 Sun              7536                        0140 0904  7:24  5:50  SIN  
+19 Sun              P038                        2230 0953  9:23  3:40  MEL  
+
+Global Preferences                       : None
+Total Duty Hours (Total TAFB)            : 96:09 (280:40)
+Total Passive Credit Hours               : 0:00 
+Total Credit Hours                       : 59:38 
+Total Duty Hours Carried In (Out)        : 15:12 (  9:23)
+Total Credit Hours Carried In (Out)      : 10:50 (  3:40)
+Available Date/Time this (next) BP       : 27Mar26 0422 (21Apr26 0123)
+Balance of 11 Hour Buffer this (next) BP : 0:00 (  0:00)
+Consecutive Duty Days Last BP            : 2  
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           10May26 2054
+rosterPatns                     Pattern Details               Page:    1 of    2
+
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+21Mar      7533  SYD  1832 PVG  0156  33X  10:24  35:49          ( 1            
+                 Rpt  1720 Rls  0211        PVG   34:34  10:24 11:51  10:55     
+                                                                                
+23Mar P   CX367  PVG  1345 HKG  1645        0:00  55:24          ( 1            
+                 Rpt  1245 Rls  1700        HKG   53:55   0:00  4:15   0:00     
+                                                                                
+26Mar      7526  HKG  0009 SYD  1237  33X   9:28                 ( 1            
+                 Rpt  2255 Rls  1252                      9:28 10:57   0:00     
+             TAFB   115:32      Rest   15:00     Total   19:52 27:03  10:55     
+Reason: AC                                                                      
+                                                         7456ZA1 DATED 21Mar26  
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+01Apr A     127  SYD  1132 HKG  1756  333   0:00   1:24          ( 1            
+01Apr P   CX362  HKG  1920 PVG  2210        0:00  28:49          ( 2            
+                 Rpt  1010 Rls  2225        PVG   27:15   0:00 15:15   6:18     
+                                                                                
+03Apr      7536  PVG  0259 SIN  0824  33X   5:25  12:33          ( 1            
+                 Rpt  0140 Rls  0839        SIN   11:21   5:25  6:59   5:50     
+                                                                                
+03Apr      7536  SIN  2057 SYD  0749  33X   7:52                 ( 1            
+                 Rpt  2000 Rls  0804                      7:52  9:04   7:40     
+             TAFB    69:54      Rest   15:00     Total   13:17 31:18  19:48     
+Reason: AC   please now op QF7536 03Apr SIN/SYD due orig. FO                    
+               unable to op due flight cancellation from SYD                    
+                                                         7417B4 DATED 01Apr26   
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+13Apr A     649  SYD  1227 PER  1509  73H   0:00  15:12          ( 1            
+                 Rpt  1155 Rls  1524        PER   14:21   0:00  5:29   2:30     
+                                                                                
+14Apr P     760  PER  0621 MEL  1159  332   0:00                 ( 1            
+                 Rpt  0545 Rls  1214                      0:00  4:29   1:45     
+             TAFB    24:19      Rest   12:00     Total    0:00  9:58   4:15     
+Reason: AC   REQ PAX TO MEL                                                     
+                                                         7444B6 DATED 13Apr26   
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           10May26 2054
+rosterPatns                     Pattern Details               Page:    2 of    2
+
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+16Apr      7535  SYD  1534 PVG  0027  33X  10:53  50:47          ( 1            
+                 Rpt  1425 Rls  0042        PVG   48:58  10:53 12:17  10:55     
+                                                                                
+19Apr      7536  PVG  0314 SIN  0849  33X   5:35  14:41          ( 1            
+                 Rpt  0140 Rls  0904        SIN   13:26   5:35  7:24   5:50     
+                                                                                
+19Apr P     038  SIN  2330 MEL  0923  332   0:00                 ( 1            
+                 Rpt  2230 Rls  0953                      0:00  9:23   0:00     
+             TAFB    91:28      Rest   15:00     Total   16:28 29:04  16:45     
+Reason: AC   ALTPAX QF38 19AOR                                                  
+               THANK YOU                                                        
+                                                         7452B2 DATED 16Apr26   
+
+                             *** End of Report ***

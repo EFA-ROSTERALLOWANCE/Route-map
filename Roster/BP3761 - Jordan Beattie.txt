@@ -1,0 +1,140 @@
+
+                          QANTAS AIRWAYS LIMITED                    21Jul26 1814
+                     SH Flight Crew Roster - Bid Period 3761
+
+
+     Name    :  BEATTIE JA                                   Category:  F/O-A330
+     Staff No:  443723                                       Base    :  MEL
+     Snrty No:                                               Line    :  U/T
+     Mailbox :       0                                       WorkRule:  AEFA
+
+Date    Duty(Role)  Service                     S-On S-Of Duty  Credit Port Code
+
+--------------------------------------------------------------------------------
+13 Mon  D/O                                                                 AW99
+14 Tue  JOBE14B2(T) A418                        0730 0937  2:07  0:45  SYD  AW33
+14 Tue              N7345/N7359                 2125 0335  8:10  5:35  PER  
+16 Thu              N7318/A447                  0415 1506  8:51  4:58       
+17 Fri  MD                                      1100 1130  0:30  4:00       AW01
+--------------------------------------------------------------------------------
+18 Sat  7013X2B4    A462                        1530 1729  1:59  0:45  SYD  OL48
+19 Sun              7525                        1820 0350 11:30  9:30  HKG  
+22 Wed              7526/P443                   2245 1430 13:45 10:08       
+24 Fri  AX                                                                  AS02
+--------------------------------------------------------------------------------
+25 Sat  AX                                                                  AS02
+26 Sun  SYDWSIB1    7301/PCAR001                1330 1745  4:15  1:15       OL13
+--------------------------------------------------------------------------------
+27 Mon  7031        7345/7359                   2150 0420  8:30  5:45  PER  AW01
+29 Wed              7318                        1250 2005  5:15  4:00  WSI  
+30 Thu  AX                                                                  AW01
+31 Fri  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+01 Sat  D/O                                                                 AW01
+02 Sun  7043        7525                        1220 2105 10:45  9:30  HKG  AW01
+05 Wed              7526                        2245 1120 10:35  9:20       
+07 Fri  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+08 Sat  D/O                                                                 AW01
+09 Sun  7058A1      7525                        1220 2105 10:45  9:30  HKG  AW01
+12 Wed              7526                        2245 1120 10:35  9:20       
+
+Global Preferences                       : None
+Total Duty Hours (Total TAFB)            : 96:57 (332:16)
+Total Passive Credit Hours               : 0:00 
+Total Credit Hours                       : 75:01 
+Total Duty Hours Carried In (Out)        : 0:00 ( 10:35)
+Total Credit Hours Carried In (Out)      : 0:00 (  9:20)
+Available Date/Time this (next) BP       : 13Jul26 0000 (14Aug26 0250)
+Balance of 11 Hour Buffer this (next) BP : 0:00 (  0:00)
+Consecutive Duty Days Last BP            : 0  
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           21Jul26 1814
+rosterPatns                     Pattern Details               Page:    1 of    2
+
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+14Jul A     418  MEL  0756 SYD  0922  73H   0:00  13:14          ( 1            
+                 Rpt  0730 Rls  0937        SYD   11:48   0:00  2:07   0:45     
+                                                                                
+14Jul      7345  SYD  2236 MEL  0012  33X   1:36   1:13          ( 1            
+15Jul      7359  MEL  0125 PER  0320  33X   3:55  25:54          ( 2            
+                 Rpt  2125 Rls  0335        PER   24:40   5:31  8:10   5:35     
+                                                                                
+16Jul      7318  PER  0514 SYD  1129  33X   4:15   2:02          ( 1            
+16Jul A     447  SYD  1331 MEL  1451  73H   0:00                 ( 2            
+                 Rpt  0415 Rls  1506                      4:15  8:51   4:58     
+             TAFB    55:36      Rest   15:00     Total    9:46 19:08  11:18     
+Reason: AC    STG3 RTLA CHK FOR FO BEATTIE                                      
+               ALT PAX QF528/16JUL SYDBNE 1300/1435 RELOC EZON9I                
+                                                         JOBE14B2 DATED 14Jul26 
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+18Jul A     462  MEL  1557 SYD  1714  73H   0:00  26:50          ( 1            
+                 Rpt  1530 Rls  1729        SYD   24:51   0:00  1:59   0:45     
+                                                                                
+19Jul      7525  SYD  2004 HKG  0335  33X   9:31  68:10          ( 1            
+                 Rpt  1820 Rls  0350        HKG   66:55   9:31 11:30   9:30     
+                                                                                
+22Jul      7526  HKG  2345 SYD  1105  33X   9:20   1:35          ( 1            
+23Jul P     443  SYD  1240 MEL  1415  73H   0:00                 ( 2            
+                 Rpt  2245 Rls  1430                      9:20 13:45  10:08     
+             TAFB   119:00      Rest   15:00     Total   18:51 27:14  20:23     
+Reason: AC   SIGN ON 19TH NOW 1820 DUE EBE MECHANICAL                           
+                                                         7013X2B4 DATED 18Jul26 
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+26Jul      7301  SYD  1430 WSI  1515  33X   0:45   1:30          ( 1            
+26Jul P  CAR001  WSI  1645 SYD  1745        0:00                 ( 2            
+                 Rpt  1330 Rls  1745                      0:45  4:15   1:15     
+             TAFB     4:15      Rest   12:00     Total    0:45  4:15   1:15     
+Reason: AF   ADDTL WSI FLYING 26JUL                                             
+                                                         SYDWSIB1 DATED 26Jul26 
+
+(L - time)                                       1-CPT   1-F/O                  
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+27Jul      7345  WSI  2250 MEL  0025  33X   1:35   1:30          ( 1            
+28Jul      7359  MEL  0155 PER  0405  33X   4:10  33:45          ( 2            
+                 Rpt  2150 Rls  0420        PER   32:30   5:45  8:30   5:45     
+                                                                                
+29Jul      7318  PER  1350 WSI  1950  33X   4:00                 ( 1            
+                 Rpt  1250 Rls  2005                      4:00  5:15   4:00     
+             TAFB    46:15      Rest   15:00     Total    9:45 13:45   9:45     
+                                                         7031 DATED 27Jul26     
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           21Jul26 1814
+rosterPatns                     Pattern Details               Page:    2 of    2
+
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+02Aug      7525  SYD  1320 HKG  2050  33X   9:30  74:55          ( 1            
+                 Rpt  1220 Rls  2105        HKG   73:40   9:30 10:45   9:30     
+                                                                                
+05Aug      7526  HKG  2345 SYD  1105  33X   9:20                 ( 1            
+                 Rpt  2245 Rls  1120                      9:20 10:35   9:20     
+             TAFB    95:00      Rest   15:00     Total   18:50 21:20  18:50     
+Reason: MT                                                                      
+                                                         7043 DATED 02Aug26     
+
+(L - time)                                       1-CPT   1-F/O                  
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+09Aug      7525  SYD  1320 HKG  2050  33X   9:30  74:55          ( 1            
+                 Rpt  1220 Rls  2105        HKG   73:40   9:30 10:45   9:30     
+                                                                                
+12Aug      7526  HKG  2345 SYD  1105  33X   9:20                 ( 1            
+                 Rpt  2245 Rls  1120                      9:20 10:35   0:00     
+             TAFB    95:00      Rest   15:00     Total   18:50 21:20   9:30     
+Reason: TG   ALC for CP STRAUSS                                                 
+                                                         7058A1 DATED 09Aug26   
+
+                             *** End of Report ***

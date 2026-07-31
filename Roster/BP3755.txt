@@ -1,0 +1,106 @@
+
+                          QANTAS AIRWAYS LIMITED                    14Jul26 1348
+                     SH Flight Crew Roster - Bid Period 3755
+
+
+     Name    :  PAPPIN TW                                    Category:  F/O-A330
+     Staff No:  686590                                       Base    :  SYD
+     Snrty No:                                               Line    :  EFA
+     Mailbox :       0                                       WorkRule:  AEFA
+
+Date    Duty(Role)  Service                     S-On S-Of Duty  Credit Port Code
+
+--------------------------------------------------------------------------------
+15 Mon  D/O                                                                 AW01
+16 Tue  D/O                                                                 AW99
+17 Wed  V11                                     0700 1500  8:00             AW01
+18 Thu  7008B2      7535                        1425 0103 12:38 10:55  PVG  AW01
+--------------------------------------------------------------------------------
+21 Sun              7536                        0140 0800  6:20  5:50  SIN  
+21 Sun              A082                        2000 0705  9:05  3:53       
+23 Tue  D/O                                                                 AW01
+24 Wed  D/O                                                                 AW01
+25 Thu  D/O                                                                 AW01
+26 Fri  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+27 Sat  D/O                                                                 AW01
+28 Sun  7029ZA1     7525                        1220 2158 11:38  9:30  HKG  OL06
+01 Wed              7526                        2245 1112 10:27  9:20       
+03 Fri  AX                                                                  CLRD
+--------------------------------------------------------------------------------
+04 Sat  D/O                                                                 AW01
+05 Sun  7043A1      7525                        1220 2126 11:06  9:30  HKG  AW01
+08 Wed              7526                        2245 1028  9:43  9:20       
+10 Fri  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+11 Sat  7053B13     A081                        0920 1739 10:19  4:18  SIN  AW01
+--------------------------------------------------------------------------------
+13 Mon              7536                        2230 1039 10:09  7:40       
+
+Global Preferences                       : None
+Total Duty Hours (Total TAFB)            : 89:16 (324:20)
+Total Passive Credit Hours               : 0:00 
+Total Credit Hours                       : 62:36 
+Total Duty Hours Carried In (Out)        : 0:00 ( 10:09)
+Total Credit Hours Carried In (Out)      : 0:00 (  7:40)
+Available Date/Time this (next) BP       : 15Jun26 0000 (15Jul26 0209)
+Balance of 11 Hour Buffer this (next) BP : 0:00 (  0:00)
+Consecutive Duty Days Last BP            : 0  
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           14Jul26 1348
+rosterPatns                     Pattern Details               Page:    1 of    1
+
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+18Jun      7535  SYD  1521 PVG  0048  33X  11:27  49:45          ( 1            
+                 Rpt  1425 Rls  0103        PVG   48:37  11:27 12:38  10:55     
+                                                                                
+21Jun      7536  PVG  0233 SIN  0745  33X   5:12  13:14          ( 1            
+                 Rpt  0140 Rls  0800        SIN   12:00   5:12  6:20   5:50     
+                                                                                
+21Jun A     082  SIN  2059 SYD  0635  388   0:00                 ( 1            
+                 Rpt  2000 Rls  0705                      0:00  9:05   3:53     
+             TAFB    88:40      Rest   15:00     Total   16:39 28:03  20:38     
+Reason: AC   ALT PAX QF36 SIN/MEL 2015/0535 PNR: ECNRJE                         
+                                                         7008B2 DATED 18Jun26   
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+28Jun      7525  SYD  1349 HKG  2143  33X   9:54  74:08          ( 1            
+                 Rpt  1220 Rls  2158        HKG   72:47   9:54 11:38   9:30     
+                                                                                
+01Jul      7526  HKG  2351 SYD  1057  33X   9:06                 ( 1            
+                 Rpt  2245 Rls  1112                      9:06 10:27   9:20     
+             TAFB    94:52      Rest   15:00     Total   19:00 22:05  18:50     
+Reason: AC                                                                      
+                                                         7029ZA1 DATED 28Jun26  
+
+(L - time)                                       1-CPT   1-F/O                  
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+05Jul      7525  SYD  1335 HKG  2111  33X   9:36  74:33          ( 1            
+                 Rpt  1220 Rls  2126        HKG   73:19   9:36 11:06   9:30     
+                                                                                
+08Jul      7526  HKG  2344 SYD  1013  33X   8:29                 ( 1            
+                 Rpt  2245 Rls  1028                      8:29  9:43   9:20     
+             TAFB    94:08      Rest   15:00     Total   18:05 20:49  18:50     
+Reason: AC                                                                      
+                                                         7043A1 DATED 05Jul26   
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+11Jul A     081  SYD  1028 SIN  1709  330   0:00  54:14          ( 1            
+                 Rpt  0920 Rls  1739        SIN   52:51   0:00 10:19   4:18     
+                                                                                
+13Jul      7536  SIN  2323 SYD  1024  33X   9:01                 ( 1            
+                 Rpt  2230 Rls  1039                      9:01 10:09   0:00     
+             TAFB    73:19      Rest   15:00     Total    9:01 20:28   4:18     
+Reason: AC   DUE NIL CREW RESOURCES, PLS NOW OP QF7536                          
+               ILO PAX                                                          
+                                                         7053B13 DATED 11Jul26  
+
+                             *** End of Report ***

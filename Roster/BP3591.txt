@@ -1,0 +1,85 @@
+
+                          QANTAS AIRWAYS LIMITED                    10May26 1735
+                     SH Flight Crew Roster - Bid Period 3591
+
+
+     Name    :  PAPPIN TW                                    Category:  F/O-A321
+     Staff No:  686590                                       Base    :  BNE
+     Snrty No:                                               Line    :  U/T
+     Mailbox :       0                                       WorkRule:  AEFA
+
+Date    Duty(Role)  Service                     S-On S-Of Duty  Credit Port Code
+
+--------------------------------------------------------------------------------
+04 Mon  PROBLEM                                                             AS02
+05 Tue  PROBLEM                                                             AS02
+06 Wed  PROBLEM                                                             AS02
+07 Thu  PROBLEM                                                             AS02
+08 Fri  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+09 Sat  D/O                                                                 AW01
+10 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+11 Mon  PROBLEM                                                             AS02
+12 Tue  PROBLEM                                                             AS02
+13 Wed  PROBLEM                                                             AS02
+14 Thu  PROBLEM                                                             AS02
+15 Fri  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+16 Sat  D/O                                                                 AW01
+17 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+18 Mon  PAPP18B3    P889                        1850 2046  4:26  1:38  PER  AW01
+19 Tue              &SIM511                     1500 2100  6:00  4:00  PER  
+20 Wed              &SIM510                     1500 2100  6:00  4:00  PER  
+21 Thu              P884                        0905 1523  3:48  1:25  ADL  
+19 Tue  SIM511(T)                               1500 1700  3:22  4:00       AW01
+20 Wed  SIM510(T)                               1500 1700  3:22  4:00       AW01
+22 Fri  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+23 Sat  D/O                                                                 AW01
+24 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+25 Mon  PROBLEM                                                             AS02
+26 Tue  PROBLEM                                                             AS02
+27 Wed  PROBLEM                                                             AS02
+28 Thu  PROBLEM                                                             AS02
+29 Fri  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+30 Sat  D/O                                                                 AW01
+31 Sun  D/O                                                                 AW01
+
+Global Preferences                       : None
+Total Duty Hours (Total TAFB)            : 20:14 ( 68:33)
+Total Passive Credit Hours               : 0:00 
+Total Credit Hours                       : 11:03 
+Total Duty Hours Carried In (Out)        : 0:00 (  0:00)
+Total Credit Hours Carried In (Out)      : 0:00 (  0:00)
+Available Date/Time this (next) BP       : 04Dec23 0000 (01Jan24 0000)
+Balance of 11 Hour Buffer this (next) BP : 0:00 (  0:00)
+Consecutive Duty Days Last BP            : 0  
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           10May26 1735
+rosterPatns                     Pattern Details               Page:    1 of    1
+
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+18Dec P     889  ADL  1950 PER  2031  73H   0:00  19:29          ( 1            
+                 Rpt  1850 Rls  2046        PER   18:14   0:00  4:26   1:38     
+                                                                                
+19Dec &  SIM511  PER  1600 PER  2000        0:00  20:00          ( 1            
+                 Rpt  1500 Rls  2100        PER   18:00   0:00  6:00   4:00     
+                                                                                
+20Dec &  SIM510  PER  1600 PER  2000        0:00  13:47          ( 1            
+                 Rpt  1500 Rls  2100        PER   12:05   0:00  6:00   4:00     
+                                                                                
+21Dec P     884  PER  0947 ADL  1508  73H   0:00                 ( 1            
+                 Rpt  0905 Rls  1523                      0:00  3:48   1:25     
+             TAFB    68:33      Rest   15:00     Total    0:00 20:14  11:03     
+Reason: AC   request pax 889/18dec & 884/21dec                                  
+               thank you                                                        
+                                                         PAPP18B3 DATED 18Dec23 
+
+                             *** End of Report ***

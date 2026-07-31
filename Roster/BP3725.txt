@@ -1,0 +1,101 @@
+
+                          QANTAS AIRWAYS LIMITED                    26Apr26 2151
+                     SH Flight Crew Roster - Bid Period 3725
+
+
+     Name    :  PAPPIN TW                                    Category:  F/O-A330
+     Staff No:  686590                                       Base    :  SYD
+     Snrty No:                                               Line    :  EFA
+     Mailbox :       0                                       WorkRule:  AEFA
+
+Date    Duty(Role)  Service                     S-On S-Of Duty  Credit Port Code
+
+--------------------------------------------------------------------------------
+29 Mon  7400B2      A033                        1430 1744  6:14  2:25  PER  AW01
+30 Tue              7318                        0800 1632  5:32  4:10       
+31 Wed  D/O                                                                 AW01
+01 Thu  AX                                                                  AW01
+02 Fri  AX                                                                  AW01
+--------------------------------------------------------------------------------
+03 Sat  AX                                                                  AW01
+04 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+05 Mon  V61                                     1700 2200  5:00             AS02
+06 Tue  AX                                                                  AS02
+07 Wed  AX                                                                  AS02
+08 Thu  D/O                                                                 AW01
+09 Fri  7417ZA1     7525                        1120 1926 11:06  9:30  HKG  AW01
+--------------------------------------------------------------------------------
+10 Sat              PCX368                      0845 1245  4:00  1:23  PVG  
+11 Sun              7534                        0345 1834 11:49 10:35       
+--------------------------------------------------------------------------------
+12 Mon  V61                                     1700 2200  5:00             AW01
+13 Tue  AX                                                                  CLRD
+14 Wed  AX                                                                  CLRD
+15 Thu  D/O                                                                 AW99
+16 Fri  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+17 Sat  D/O                                                                 AW01
+18 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+19 Mon  D/O                                                                 AW99
+20 Tue  V61                                     1700 2200  5:00             AW01
+21 Wed  V61                                     1700 2200  5:00             AW01
+22 Thu  7444ZA1     7533                        1720 0237 12:17 10:55  PVG  AW01
+--------------------------------------------------------------------------------
+25 Sun              7534                        0345 1836 11:51 10:35       
+
+Global Preferences                       : None
+Total Duty Hours (Total TAFB)            : 82:49 (174:32)
+Total Passive Credit Hours               : 0:00 
+Total Credit Hours                       : 49:33 
+Total Duty Hours Carried In (Out)        : 0:00 (  0:00)
+Total Credit Hours Carried In (Out)      : 0:00 (  0:00)
+Available Date/Time this (next) BP       : 29Dec25 0000 (26Jan26 1006)
+Balance of 11 Hour Buffer this (next) BP : 0:00 (  0:00)
+Consecutive Duty Days Last BP            : 4  
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           26Apr26 2151
+rosterPatns                     Pattern Details               Page:    1 of    1
+
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+29Dec A     033  SYD  1525 PER  1714  789   0:00  16:01          ( 1            
+                 Rpt  1430 Rls  1744        PER   14:16   0:00  6:14   2:25     
+                                                                                
+30Dec      7318  PER  0915 SYD  1617  33X   4:02                 ( 1            
+                 Rpt  0800 Rls  1632                      4:02  5:32   4:10     
+             TAFB    26:02      Rest   12:00     Total    4:02 11:46   6:35     
+Reason: AC   ALTPAX QF887/29DEC PNR: FGHFDW                                     
+                                                         7400B2 DATED 29Dec25   
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+09Jan      7525  SYD  1225 HKG  1911  33X   9:46  14:34          ( 1            
+                 Rpt  1120 Rls  1926        HKG   13:19   9:46 11:06   9:30     
+                                                                                
+10Jan P   CX368  HKG  0945 PVG  1230        0:00  16:14          ( 1            
+                 Rpt  0845 Rls  1245        PVG   15:00   0:00  4:00   1:23     
+                                                                                
+11Jan      7534  PVG  0444 SYD  1819  33X  10:35                 ( 1            
+                 Rpt  0345 Rls  1834                     10:35 11:49  10:35     
+             TAFB    55:14      Rest   15:00     Total   20:21 26:55  21:28     
+Reason: AC                                                                      
+                                                         7417ZA1 DATED 09Jan26  
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+22Jan      7533  SYD  1843 PVG  0222  33X  10:39  50:29          ( 1            
+                 Rpt  1720 Rls  0237        PVG   49:08  10:39 12:17  10:55     
+                                                                                
+25Jan      7534  PVG  0451 SYD  1821  33X  10:30                 ( 1            
+                 Rpt  0345 Rls  1836                     10:30 11:51  10:35     
+             TAFB    73:16      Rest   15:00     Total   21:09 24:08  21:30     
+Reason: AC                                                                      
+                                                         7444ZA1 DATED 22Jan26  
+
+                             *** End of Report ***

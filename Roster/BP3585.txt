@@ -1,0 +1,108 @@
+
+                          QANTAS AIRWAYS LIMITED                    10May26 1734
+                     SH Flight Crew Roster - Bid Period 3585
+
+
+     Name    :  PAPPIN TW                                    Category:  F/O-A321
+     Staff No:  686590                                       Base    :  BNE
+     Snrty No:                                               Line    :  U/T
+     Mailbox :       0                                       WorkRule:  AEFA
+
+Date    Duty(Role)  Service                     S-On S-Of Duty  Credit Port Code
+
+--------------------------------------------------------------------------------
+06 Mon  PROBLEM                                                             AS02
+07 Tue  PROBLEM                                                             AS02
+08 Wed  PROBLEM                                                             AS02
+09 Thu  PROBLEM                                                             AS02
+10 Fri  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+11 Sat  D/O                                                                 AW01
+12 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+13 Mon  PROBLEM                                                             AS02
+14 Tue  PROBLEM                                                             AS02
+15 Wed  PROBLEM                                                             AS02
+16 Thu  PROBLEM                                                             AS02
+17 Fri  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+18 Sat  PAPP18B8    A611/&SIM303                0630 1900 11:30  5:10  MEL  AW01
+19 Sun              A604                        0630 0811  2:41  1:05       
+18 Sat  SIM303(T)                               1300 1900  9:00  4:00       AW01
+--------------------------------------------------------------------------------
+20 Mon  D/O                                                                 AW01
+21 Tue  7832ZZB3(T) P712/ZO7313/ZO7335          1455 0155 10:00  5:38  MEL  AW22
+22 Wed              A620                        1350 1548  2:58  1:05       
+23 Thu  PROBLEM                                                             AS02
+24 Fri  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+25 Sat  D/O                                                                 AW01
+26 Sun  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+27 Mon  PROBLEM                                                             AS02
+28 Tue  PROBLEM                                                             AS02
+29 Wed  PROBLEM                                                             AS02
+30 Thu  PAPP30B2    A613/&SIM509                0730 1900 10:30  5:10  MEL  AW01
+01 Fri              A610                        0850 1106  3:16  1:05       
+30 Thu  SIM509(T)                               1300 1900  9:00  4:00       AW01
+--------------------------------------------------------------------------------
+02 Sat  D/O                                                                 AW01
+03 Sun  D/O                                                                 AW01
+
+Global Preferences                       : None
+Total Duty Hours (Total TAFB)            : 40:55 ( 78:10)
+Total Passive Credit Hours               : 0:00 
+Total Credit Hours                       : 19:13 
+Total Duty Hours Carried In (Out)        : 0:00 (  0:00)
+Total Credit Hours Carried In (Out)      : 0:00 (  0:00)
+Available Date/Time this (next) BP       : 06Nov23 0717 (04Dec23 0000)
+Balance of 11 Hour Buffer this (next) BP : 0:00 (  0:00)
+Consecutive Duty Days Last BP            : 2  
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           10May26 1734
+rosterPatns                     Pattern Details               Page:    1 of    1
+
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+18Nov A     611  BNE  0656 MEL  1020  73H   0:00   3:40          ( 1            
+18Nov &  SIM303  MEL  1400 MEL  1800        0:00  12:55          ( 2            
+                 Rpt  0630 Rls  1900        MEL   11:30   0:00 11:30   5:10     
+                                                                                
+19Nov A     604  MEL  0655 BNE  0756  73H   0:00                 ( 1            
+                 Rpt  0630 Rls  0811                      0:00  2:41   1:05     
+             TAFB    25:41      Rest   12:00     Total    0:00 14:11   6:15     
+Reason: AC   late request QF679/18Nov 6ANWSG                                    
+                                                         PAPP18B8 DATED 18Nov23 
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+21Nov P     712  BNE  1532 CNS  1801  73H   0:00   1:21          ( 1            
+21Nov Z    7313  CNS  1922 BNE  2131  32X   2:09   0:55          ( 2            
+21Nov Z    7335  BNE  2226 MEL  0140  32X   2:14  12:45          ( 3            
+                 Rpt  1455 Rls  0155        MEL   11:55   4:23 10:00   5:38     
+                                                                                
+22Nov A     620  MEL  1425 BNE  1533  73H   0:00                 ( 1            
+                 Rpt  1350 Rls  1548                      0:00  2:58   1:05     
+             TAFB    24:53      Rest   12:00     Total    4:23 12:58   6:43     
+Reason: AC   OBS sector for Pappin                                              
+               ALT PAX QF683 22NOV MELADL 1220/1310                             
+                                                         7832ZZB3 DATED 21Nov23 
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+30Nov A     613  BNE  0804 MEL  1121  73H   0:00   2:39          ( 1            
+30Nov &  SIM509  MEL  1400 MEL  1800        0:00  15:32          ( 2            
+                 Rpt  0730 Rls  1900        MEL   13:50   0:00 10:30   5:10     
+                                                                                
+01Dec A     610  MEL  0932 BNE  1051  73H   0:00                 ( 1            
+                 Rpt  0850 Rls  1106                      0:00  3:16   1:05     
+             TAFB    27:36      Rest   12:00     Total    0:00 13:46   6:15     
+Reason: AC   trainee bne based..ALT PAX ADL/MEL QF678 0935/1125                 
+               ALT PAX 30 NOV MEL ADL 2030/2120                                 
+                                                         PAPP30B2 DATED 30Nov23 
+
+                             *** End of Report ***

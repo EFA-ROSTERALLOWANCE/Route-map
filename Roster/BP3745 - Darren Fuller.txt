@@ -1,0 +1,100 @@
+
+                          QANTAS AIRWAYS LIMITED                    27Apr26 0932
+                     SH Flight Crew Roster - Bid Period 3745
+
+
+     Name    :  FULLER DJ                                    Category:  F/O-A330
+     Staff No:  660710                                       Base    :  SYD
+     Snrty No:                                               Line    :  EFA
+     Mailbox :       0                                       WorkRule:  AEFA
+
+Date    Duty(Role)  Service                     S-On S-Of Duty  Credit Port Code
+
+--------------------------------------------------------------------------------
+20 Mon  7400A1      P649                        1155 1521  5:26  2:30  PER  AW01
+21 Tue              7318                        0415 1145  5:30  4:10       
+22 Wed  D/O                                                                 AW01
+23 Thu  V61                                     1700 2200  5:00             AW01
+24 Fri  V10                                     1000 2000 10:00             AS02
+--------------------------------------------------------------------------------
+25 Sat  V12                                     1200 2200 10:00             AW01
+26 Sun  V12                                     1200 2200 10:00             AS02
+--------------------------------------------------------------------------------
+27 Mon  V63                                     1000 1500  5:00             OL10
+28 Tue  V63                                     1000 1500  5:00             OL10
+29 Wed  D/O                                                                 AW01
+30 Thu  D/O                                                                 AW01
+01 Fri  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+02 Sat  7425A2      7535                        1425 0035 12:10 10:55  PVG  AW01
+--------------------------------------------------------------------------------
+04 Mon              PCX377                      1330 1740  4:10  1:28  HKG  
+06 Wed              7526                        2225 1120 10:55  9:40       
+08 Fri  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+09 Sat  D/O                                                                 AW01
+10 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+11 Mon  D/O                                                                 AW01
+12 Tue  D/O                                                                 AW01
+13 Wed  CC                                      1030 1830  8:00  4:00       AW01
+14 Thu  CC                                      0900 1700  8:00  4:00       AW01
+15 Fri  CC                                      0900 1700  8:00  4:00       AW01
+--------------------------------------------------------------------------------
+16 Sat  D/O                                                                 AW01
+17 Sun  7455        7525                        1320 2105  9:45  9:30  HKG  AW01
+20 Wed              7526                        2020 1120 13:00  9:40       
+
+Global Preferences                       : None
+Total Duty Hours (Total TAFB)            : 116:56 (220:25)
+Total Passive Credit Hours               : 0:00 
+Total Credit Hours                       : 50:13 
+Total Duty Hours Carried In (Out)        : 0:00 ( 13:00)
+Total Credit Hours Carried In (Out)      : 0:00 (  9:40)
+Available Date/Time this (next) BP       : 20Apr26 0759 (22May26 0250)
+Balance of 11 Hour Buffer this (next) BP : 0:00 (  0:00)
+Consecutive Duty Days Last BP            : 0  
+ARMS akb02             AIRCREW RESOURCE MANAGEMENT SYSTEM           27Apr26 0932
+rosterPatns                     Pattern Details               Page:    1 of    1
+
+
+(L - time)                                       1-CPT   1-F/O                  
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+20Apr P     649  SYD  1225 PER  1506  73H   0:00  14:25          ( 1            
+                 Rpt  1155 Rls  1521        PER   12:54   0:00  5:26   2:30     
+                                                                                
+21Apr      7318  PER  0531 SYD  1130  33X   3:59                 ( 1            
+                 Rpt  0415 Rls  1145                      3:59  5:30   4:10     
+             TAFB    23:50      Rest   12:00     Total    3:59 10:56   6:40     
+Reason: AC                                                                      
+                                                         7400A1 DATED 20Apr26   
+
+(L - time)                                       1-CPT   1-F/O                  
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+02May      7535  SYD  1525 PVG  0020  33X  10:55  38:10          ( 1            
+                 Rpt  1425 Rls  0035        PVG   36:55  10:55 12:10  10:55     
+                                                                                
+04May P   CX377  PVG  1430 HKG  1725        0:00  54:00          ( 1            
+                 Rpt  1330 Rls  1740        HKG   52:45   0:00  4:10   1:28     
+                                                                                
+06May      7526  HKG  2325 SYD  1105  33X   9:40                 ( 1            
+                 Rpt  2225 Rls  1120                      9:40 10:55   9:40     
+             TAFB   116:55      Rest   15:00     Total   20:35 27:15  22:03     
+Reason: MT   sign on changed due sch                                            
+                                                         7425A2 DATED 02May26   
+
+(L - time)                                       1-CPT   1-F/O                  
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+17May      7525  SYD  1320 HKG  2050  33X   9:30  74:35          ( 1            
+                 Rpt  1320 Rls  2105        HKG   71:15   9:30  9:45   9:30     
+                                                                                
+20May      7526  HKG  2325 SYD  1105  33X   9:40                 ( 1            
+                 Rpt  2020 Rls  1120                      9:40 13:00   0:00     
+             TAFB    94:00      Rest   15:00     Total   19:10 22:45   9:30     
+Reason: AC                                                                      
+                                                         7455 DATED 17May26     
+
+                             *** End of Report ***

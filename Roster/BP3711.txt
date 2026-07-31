@@ -1,0 +1,90 @@
+
+                          QANTAS AIRWAYS LIMITED                    26Apr26 2151
+                     SH Flight Crew Roster - Bid Period 3711
+
+
+     Name    :  PAPPIN TW                                    Category:  F/O-A330
+     Staff No:  686590                                       Base    :  SYD
+     Snrty No:                                               Line    :  EFA
+     Mailbox :       0                                       WorkRule:  AEFA
+
+Date    Duty(Role)  Service                     S-On S-Of Duty  Credit Port Code
+
+--------------------------------------------------------------------------------
+06 Mon  D/O                                                                 AW01
+07 Tue  THPA07B7    A427/GCC                    0830 1700  8:30  4:48  MEL  AW01
+08 Wed              &SIMATPL/A474               0900 1921 10:21  6:13       
+07 Tue  CC                                      1200 1700  5:00             AW01
+08 Wed  SIMATPL(T)                              0900 1600 10:30  5:30       AW01
+09 Thu  PROBLEM                                                             AS02
+10 Fri  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+11 Sat  D/O                                                                 AW01
+12 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+13 Mon  D/O                                                                 AW99
+14 Tue  V63                                     1000 1500  5:00             AW01
+15 Wed  V63                                     1000 1500  5:00             AW01
+16 Thu  V61                                     1700 2200  5:00             AW01
+17 Fri  AX                                                                  AW01
+--------------------------------------------------------------------------------
+18 Sat  AX                                                                  AW01
+19 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+20 Mon  D/O                                                                 AW01
+21 Tue  V63                                     1000 1500  5:00             AW01
+22 Wed  ZZHKGB1     7525                        1300 2101 11:01  9:30  HKG  OL13
+24 Fri              7526                        2100 1111 11:11  9:20       
+--------------------------------------------------------------------------------
+26 Sun  AX                                                                  AS02
+--------------------------------------------------------------------------------
+27 Mon  LA                                                                  PRE
+28 Tue  LA                                                                  PRE
+29 Wed  LA                                                                  PRE
+30 Thu  LA                                                                  PRE
+31 Fri  LA                                                                  PRE
+--------------------------------------------------------------------------------
+01 Sat  LA                                                                  PRE
+02 Sun  LA                                                                  PRE
+
+Global Preferences                       : None
+Total Duty Hours (Total TAFB)            : 61:03 (125:02)
+Total Passive Credit Hours               : 0:00 
+Total Credit Hours                       : 44:36 
+Total Duty Hours Carried In (Out)        : 0:00 (  0:00)
+Total Credit Hours Carried In (Out)      : 0:00 (  0:00)
+Available Date/Time this (next) BP       : 06Oct25 0500 (03Nov25 0759)
+Balance of 11 Hour Buffer this (next) BP : 0:00 (  0:00)
+Consecutive Duty Days Last BP            : 1  
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           26Apr26 2151
+rosterPatns                     Pattern Details               Page:    1 of    1
+
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+07Oct A     427  SYD  0911 MEL  1048  73H   0:00   1:12          ( 1            
+07Oct G      CC  MEL  1200 MEL  1700        0:00  18:00          ( 2            
+                 Rpt  0830 Rls  1700        MEL   16:00   0:00  8:30   4:48     
+                                                                                
+08Oct & SIMATPL  MEL  1100 MEL  1500        0:00   2:38          ( 1            
+08Oct A     474  MEL  1738 SYD  1906  73H   0:00                 ( 2            
+                 Rpt  0900 Rls  1921                      0:00 10:21   6:13     
+             TAFB    34:51      Rest   12:00     Total    0:00 18:51  11:01     
+Reason: AC   ALTPAX BANKED                                                      
+                                                         THPA07B7 DATED 07Oct25 
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+22Oct      7525  SYD  1410 HKG  2046  33X   9:36  50:04          ( 1            
+                 Rpt  1300 Rls  2101        HKG   47:59   9:36 11:01   9:30     
+                                                                                
+24Oct      7526  HKG  2250 SYD  1056  33X   9:06                 ( 1            
+                 Rpt  2100 Rls  1111                      9:06 11:11   9:20     
+             TAFB    70:11      Rest   15:00     Total   18:42 22:12  18:50     
+Reason: AC   ZZ CREW                                                            
+                                                         ZZHKGB1 DATED 22Oct25  
+
+                             *** End of Report ***

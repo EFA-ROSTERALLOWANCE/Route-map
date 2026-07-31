@@ -1,0 +1,80 @@
+
+                          QANTAS AIRWAYS LIMITED                    26Apr26 2154
+                     SH Flight Crew Roster - Bid Period 3675
+
+
+     Name    :  PAPPIN TW                                    Category:  F/O-A330
+     Staff No:  686590                                       Base    :  BNE
+     Snrty No:                                               Line    :  U/T
+     Mailbox :       0                                       WorkRule:  AEFA
+
+Date    Duty(Role)  Service                     S-On S-Of Duty  Credit Port Code
+
+--------------------------------------------------------------------------------
+24 Mon  PROBLEM                                                             AS02
+25 Tue  PROBLEM                                                             AS02
+26 Wed  PROBLEM                                                             AS02
+27 Thu  PROBLEM                                                             AS02
+28 Fri  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+29 Sat  PROBLEM                                                             AS02
+30 Sun  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+31 Mon  PROBLEM                                                             AS02
+01 Tue  7415ZZB2    A535                        1415 1752  2:37  0:48  SYD  AW01
+02 Wed              Z7525                       1300 2054 10:54  9:30  HKG  
+04 Fri              Z7526                       2100 1152 11:52  9:20  SYD  
+--------------------------------------------------------------------------------
+06 Sun              A512                        0935 1142  2:07  0:45       
+--------------------------------------------------------------------------------
+07 Mon  PROBLEM                                                             AS02
+08 Tue  PROBLEM                                                             AS02
+09 Wed  PROBLEM                                                             AS02
+10 Thu  PROBLEM                                                             AS02
+11 Fri  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+12 Sat  PROBLEM                                                             AS02
+13 Sun  PROBLEM                                                             AS02
+--------------------------------------------------------------------------------
+14 Mon  PROBLEM                                                             AS02
+15 Tue  PROBLEM                                                             AS02
+16 Wed  LA                                                                  AW99
+17 Thu  LA                                                                  AW99
+18 Fri  LA                                                                  AW99
+--------------------------------------------------------------------------------
+19 Sat  LA                                                                  AW99
+20 Sun  LA                                                                  AW99
+
+Global Preferences                       : None
+Total Duty Hours (Total TAFB)            : 27:30 (117:27)
+Total Passive Credit Hours               : 0:00 
+Total Credit Hours                       : 30:55 
+Total Duty Hours Carried In (Out)        : 0:00 (  0:00)
+Total Credit Hours Carried In (Out)      : 0:00 (  0:00)
+Available Date/Time this (next) BP       : 24Mar25 0000 (21Apr25 0759)
+Balance of 11 Hour Buffer this (next) BP : 0:00 (  0:00)
+Consecutive Duty Days Last BP            : 0  
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           26Apr26 2154
+rosterPatns                     Pattern Details               Page:    1 of    1
+
+
+(L - time)                                       1-F/O                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+01Apr A     535  BNE  1453 SYD  1737  332   0:00  20:23          ( 1            
+                 Rpt  1415 Rls  1752        SYD   19:08   0:00  2:37   0:48     
+                                                                                
+02Apr Z    7525  SYD  1400 HKG  2039  33X   9:39  50:35          ( 1            
+                 Rpt  1300 Rls  2054        HKG   48:06   9:39 10:54   9:30     
+                                                                                
+04Apr Z    7526  HKG  2314 SYD  1137  33X   9:23  23:20          ( 1            
+                 Rpt  2100 Rls  1152        SYD   22:43   9:23 11:52   9:20     
+                                                                                
+06Apr A     512  SYD  0957 BNE  1127  73H   0:00                 ( 1            
+                 Rpt  0935 Rls  1142                      0:00  2:07   0:45     
+             TAFB   117:27      Rest   15:00     Total   19:02 27:30  20:23     
+Reason: AC   alt pax tickets to be used later..                                 
+                                                         7415ZZB2 DATED 01Apr25 
+
+                             *** End of Report ***
