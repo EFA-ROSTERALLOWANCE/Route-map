@@ -1,0 +1,95 @@
+
+                          QANTAS AIRWAYS LIMITED                    30Jul26 1129
+                     SH Flight Crew Roster - Bid Period 3705
+
+
+     Name    :  PETERS TF                                    Category:  CPT-A330
+     Staff No:  117039                                       Base    :  MEL
+     Snrty No:                                               Line    :  EFA
+     Mailbox :       0                                       WorkRule:  AEFA
+
+Date    Duty(Role)  Service                     S-On S-Of Duty  Credit Port Code
+
+--------------------------------------------------------------------------------
+08 Mon  D/O                                                                 AW01
+09 Tue  7404ZMA4    P484                        1820 2031  2:11  0:43  SYD  AW01
+10 Wed              7525                        1120 2054 11:34  9:30  HKG  
+12 Fri              7526                        2015 0907 10:52  9:20  SYD  
+--------------------------------------------------------------------------------
+13 Sat              A497                        2110 2317  2:07  0:48       
+14 Sun  AX                                                                  AW01
+--------------------------------------------------------------------------------
+15 Mon  D/O                                                                 AW01
+16 Tue  D/O                                                                 AW99
+17 Wed  XEP17B3     P432/CEF19                  0930 1945 10:15  4:43  SYD  AS22
+18 Thu              A415                        0700 0933  2:33  0:48       
+17 Wed  EF19                                    1245 1945  7:00  4:00       AS22
+19 Fri  AX                                                                  AW01
+--------------------------------------------------------------------------------
+20 Sat  AX                                                                  AW01
+21 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+22 Mon  LA                                                                  PRE
+23 Tue  LA                                                                  PRE
+24 Wed  LA                                                                  PRE
+25 Thu  LA                                                                  PRE
+26 Fri  LA                                                                  PRE
+--------------------------------------------------------------------------------
+27 Sat  LA                                                                  PRE
+28 Sun  LA                                                                  PRE
+--------------------------------------------------------------------------------
+29 Mon  LA                                                                  PRE
+30 Tue  LA                                                                  PRE
+01 Wed  LA                                                                  PRE
+02 Thu  LA                                                                  PRE
+03 Fri  LA                                                                  PRE
+--------------------------------------------------------------------------------
+04 Sat  LA                                                                  PRE
+05 Sun  LA                                                                  PRE
+
+Global Preferences                       : None
+Total Duty Hours (Total TAFB)            : 39:32 (125:00)
+Total Passive Credit Hours               : 0:00 
+Total Credit Hours                       : 56:34 
+Total Duty Hours Carried In (Out)        : 0:00 (  0:00)
+Total Credit Hours Carried In (Out)      : 0:00 (  0:00)
+Available Date/Time this (next) BP       : 08Sep25 0100 (06Oct25 0759)
+Balance of 11 Hour Buffer this (next) BP : 0:00 (  0:00)
+Consecutive Duty Days Last BP            : 2  
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           30Jul26 1129
+rosterPatns                     Pattern Details               Page:    1 of    1
+
+
+(L - time)                                       1-CPT                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+09Sep P     484  MEL  1856 SYD  2016  73H   0:00  16:27          ( 1            
+                 Rpt  1820 Rls  2031        SYD   14:49   0:00  2:11   0:43     
+                                                                                
+10Sep      7525  SYD  1243 HKG  2039  33X   9:56  48:40          ( 1            
+                 Rpt  1120 Rls  2054        HKG   47:21   9:56 11:34   9:30     
+                                                                                
+12Sep      7526  HKG  2119 SYD  0852  33X   9:33  12:44          ( 1            
+                 Rpt  2015 Rls  0907        SYD   12:03   9:33 10:52   9:20     
+                                                                                
+13Sep A     497  SYD  2136 MEL  2302  73H   0:00                 ( 1            
+                 Rpt  2110 Rls  2317                      0:00  2:07   0:48     
+             TAFB   100:57      Rest   15:00     Total   19:29 26:44  20:21     
+Reason: AC   MEL CPT 3RD PILOT / ALT PAX QF449 13SEP SYDMEL                     
+                                                         7404ZMA4 DATED 09Sep25 
+
+(L - time)                                       1-CPT                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+17Sep P     432  MEL  1001 SYD  1122  73H   0:00   1:23          ( 1            
+17Sep C    EF19  SYD  1245 SYD  1945        0:00  11:45          ( 2            
+                 Rpt  0930 Rls  1945        SYD   11:15   0:00 10:15   4:43     
+                                                                                
+18Sep A     415  SYD  0730 MEL  0918  73H   0:00                 ( 1            
+                 Rpt  0700 Rls  0933                      0:00  2:33   0:48     
+             TAFB    24:03      Rest   12:00     Total    0:00 12:48   5:31     
+Reason: AC   ALT PAX QF499/18SEP SYDMEL PNR EQZ2IO                              
+                                                         XEP17B3 DATED 17Sep25  
+
+                             *** End of Report ***

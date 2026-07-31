@@ -1,0 +1,95 @@
+
+                          QANTAS AIRWAYS LIMITED                    30Jul26 1128
+                     SH Flight Crew Roster - Bid Period 3745
+
+
+     Name    :  PETERS TF                                    Category:  CPT-A330
+     Staff No:  117039                                       Base    :  MEL
+     Snrty No:                                               Line    :  EFA
+     Mailbox :       0                                       WorkRule:  AEFA
+
+Date    Duty(Role)  Service                     S-On S-Of Duty  Credit Port Code
+
+--------------------------------------------------------------------------------
+20 Mon  V9                                      0900 1700  8:00             AW01
+21 Tue  AX                                                                  CLRD
+22 Wed  SIM251C(T)                              1400 2000  9:00  5:30       AW01
+23 Thu  SIM251D(T)                              2200 0400  9:00  5:30       AW01
+24 Fri  SIM251D(T)                              2200 0400                   AW01
+--------------------------------------------------------------------------------
+25 Sat  D/O                                                                 AW01
+26 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+27 Mon  AX                                                                  CLRD
+28 Tue  V61                                     1700 2200  5:00             AW01
+29 Wed  V61                                     1700 2200  5:00             OL10
+30 Thu  V61                                     1700 2200  5:00             OL10
+01 Fri  V63                                     1000 1500  5:00             AS02
+--------------------------------------------------------------------------------
+02 Sat  D/O                                                                 AW01
+03 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+04 Mon  7427MA1     P767                        1235 1518  4:43  2:05  PER  AW01
+05 Tue              7318/P443                   0415 1422  8:07  4:58       
+06 Wed  AX                                                                  CLRD
+07 Thu  D/O                                                                 AW01
+08 Fri  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+09 Sat  D/O                                                                 AW01
+10 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+11 Mon  D/O                                                                 AW01
+12 Tue  D/O                                                                 AW01
+13 Wed  7451ZMA6    P478                        1730 1945  2:15  0:45  SYD  AW01
+14 Thu              7535                        1425 0049 12:24 10:55  PVG  
+--------------------------------------------------------------------------------
+16 Sat              PCX0369                     1640 2045  4:05  1:25  HKG  
+17 Sun              7526/P439                   2240 1332 12:52 10:08       
+
+Global Preferences                       : None
+Total Duty Hours (Total TAFB)            : 77:34 (156:17)
+Total Passive Credit Hours               : 0:00 
+Total Credit Hours                       : 31:08 
+Total Duty Hours Carried In (Out)        : 0:00 ( 12:52)
+Total Credit Hours Carried In (Out)      : 0:00 ( 10:08)
+Available Date/Time this (next) BP       : 20Apr26 0759 (19May26 0502)
+Balance of 11 Hour Buffer this (next) BP : 0:00 (  0:00)
+Consecutive Duty Days Last BP            : 0  
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           30Jul26 1128
+rosterPatns                     Pattern Details               Page:    1 of    1
+
+
+(L - time)                                       1-CPT                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+04May P     767  MEL  1311 PER  1503  332   0:00  14:34          ( 1            
+                 Rpt  1235 Rls  1518        PER   12:57   0:00  4:43   2:05     
+                                                                                
+05May      7318  PER  0537 SYD  1152  33X   4:15   0:48          ( 1            
+05May P     443  SYD  1240 MEL  1407  73H   0:00                 ( 2            
+                 Rpt  0415 Rls  1422                      4:15  8:07   4:58     
+             TAFB    25:47      Rest   12:00     Total    4:15 12:50   7:03     
+Reason: AC                                                                      
+                                                         7427MA1 DATED 04May26  
+
+(L - time)                                       1-CPT                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+13May P     478  MEL  1751 SYD  1930  73H   0:00  19:58          ( 1            
+                 Rpt  1730 Rls  1945        SYD   18:40   0:00  2:15   0:45     
+                                                                                
+14May      7535  SYD  1528 PVG  0034  33X  11:06  41:06          ( 1            
+                 Rpt  1425 Rls  0049        PVG   39:51  11:06 12:24  10:55     
+                                                                                
+16May P  CX0369  PVG  1740 HKG  2030        0:00  26:58          ( 1            
+                 Rpt  1640 Rls  2045        HKG   25:55   0:00  4:05   1:25     
+                                                                                
+17May      7526  HKG  2328 SYD  1005  33X   8:37   1:40          ( 1            
+18May P     439  SYD  1145 MEL  1317  73H   0:00                 ( 2            
+                 Rpt  2240 Rls  1332                      8:37 12:52   0:00     
+             TAFB   116:02      Rest   15:00     Total   19:43 31:36  13:05     
+Reason: AC   now pax qf439 18 may                                               
+                                                         7451ZMA6 DATED 13May26 
+
+                             *** End of Report ***
