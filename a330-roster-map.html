@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A330 Roster Map & Search</title>
+<style>
+  :root{
+    --bg:#0b1220; --panel:#121b2e; --panel2:#0f1830; --border:#22304d;
+    --text:#e8edf7; --muted:#8ea0c2; --accent:#4fa3ff; --accent2:#ff9f43;
+    --op:#3ddc97; --pax:#ffb454; --red:#ff5d5d;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  #app{display:flex;flex-direction:column;height:100vh;}
+
+  header{padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--border);
+    display:flex;flex-direction:column;gap:8px;flex-shrink:0;}
+  header h1{font-size:16px;margin:0;font-weight:700;letter-spacing:.2px;}
+  header .sub{font-size:11px;color:var(--muted);}
+
+  .tabs{display:flex;gap:6px;background:var(--panel2);border-radius:10px;padding:4px;}
+  .tab{flex:1;text-align:center;padding:8px 6px;border-radius:8px;font-size:13px;font-weight:600;
+    color:var(--muted);cursor:pointer;user-select:none;}
+  .tab.active{background:var(--accent);color:#04101f;}
+
+  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  input[type=text], input[type=date], select{
+    background:var(--panel2);border:1px solid var(--border);color:var(--text);
+    padding:8px 10px;border-radius:8px;font-size:13px;outline:none;
+  }
+  input[type=text]{flex:1;min-width:120px;}
+  .chip{padding:6px 10px;border-radius:20px;font-size:12px;border:1px solid var(--border);
+    background:var(--panel2);color:var(--muted);cursor:pointer;user-select:none;}
+  .chip.active{background:var(--accent);color:#04101f;border-color:var(--accent);font-weight:700;}
+
+  main{flex:1;overflow:hidden;position:relative;}
+  #listView, #dateView{position:absolute;inset:0;overflow-y:auto;display:none;}
+  #listView.show, #dateView.show{display:block;}
+
+  #dateView{display:none;flex-direction:column;}
+  #dateView.show{display:flex;}
+  #map{flex:1 1 45%;min-height:200px;background:#0d1730;position:relative;overflow:hidden;}
+  #map svg{width:100%;height:100%;display:block;}
+  .mapLabel{font-size:9px;fill:#8ea0c2;font-family:inherit;}
+  .mapPort{fill:#4fa3ff;stroke:#0d1730;stroke-width:1;}
+  .mapPortHome{fill:#ff9f43;}
+  .mapGrat{stroke:#1c2a4a;stroke-width:0.5;}
+  .mapCoast{fill:#16213f;stroke:#22304d;stroke-width:0.6;}
+  #dayPanel{flex:1 1 55%;overflow-y:auto;border-top:1px solid var(--border);background:var(--panel);}
+
+  .flightRow{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:4px;}
+  .flightRow:active{background:#182541;}
+  .rowTop{display:flex;justify-content:space-between;align-items:center;}
+  .flightNo{font-weight:700;font-size:14px;}
+  .badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px;}
+  .badge.op{background:rgba(61,220,151,.15);color:var(--op);}
+  .badge.pax{background:rgba(255,180,84,.15);color:var(--pax);}
+  .route{font-size:15px;font-weight:600;}
+  .meta{font-size:11.5px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;}
+  .dateHeader{position:sticky;top:0;background:var(--bg);color:var(--accent);font-size:12px;
+    font-weight:700;padding:8px 14px 4px;letter-spacing:.4px;border-bottom:1px solid var(--border);}
+
+  .dateNav{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--panel);
+    border-bottom:1px solid var(--border);}
+  .navBtn{background:var(--panel2);border:1px solid var(--border);color:var(--text);
+    border-radius:8px;padding:8px 12px;font-size:14px;cursor:pointer;}
+  .dateLabel{flex:1;text-align:center;font-size:14px;font-weight:700;}
+  .dateSub{text-align:center;font-size:11px;color:var(--muted);}
+
+  #dayPanel .empty{padding:30px 14px;text-align:center;color:var(--muted);font-size:13px;}
+  #dayFlights .flightRow{cursor:pointer;}
+  #dayFlights .flightRow.hi{background:#1b2c52;}
+
+  .legend{display:flex;gap:14px;padding:8px 14px;font-size:11px;color:var(--muted);background:var(--panel);border-top:1px solid var(--border);}
+  .legend span{display:inline-flex;align-items:center;gap:5px;}
+  .dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
+  .dot.op{background:var(--op);}
+  .dot.pax{background:var(--pax);}
+
+  .count{font-size:11px;color:var(--muted);padding:6px 14px;}
+
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>✈️ EFA A330 Roster</h1>
+    <div class="sub" id="subHeader">Loading…</div>
+    <div class="tabs">
+      <div class="tab active" data-tab="list">All Flights (List)</div>
+      <div class="tab" data-tab="date">Search by Date + Map</div>
+    </div>
+    <div class="controls" id="listControls">
+      <input type="text" id="searchBox" placeholder="Search flight no, port, pilot…">
+      <div class="chip active" data-filter="all">All</div>
+      <div class="chip" data-filter="op">Operating</div>
+      <div class="chip" data-filter="pax">Pax/Positioning</div>
+    </div>
+  </header>
+
+  <main>
+    <div id="listView" class="show">
+      <div class="count" id="listCount"></div>
+      <div id="listBody"></div>
+    </div>
+
+    <div id="dateView">
+      <div class="dateNav">
+        <div class="navBtn" id="prevDay">◀</div>
+        <div style="flex:1;">
+          <div class="dateLabel" id="dateLabel">Select a date</div>
+          <div class="dateSub" id="dateSub"></div>
+        </div>
+        <div class="navBtn" id="nextDay">▶</div>
+      </div>
+      <div class="controls" style="padding:8px 14px;background:var(--panel);border-bottom:1px solid var(--border);">
+        <input type="date" id="datePicker">
+        <select id="dateJump"></select>
+      </div>
+      <div id="map"><svg id="mapSvg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet"></svg></div>
+      <div id="dayPanel">
+        <div id="dayFlights"></div>
+      </div>
+    </div>
+  </main>
+
+  <div class="legend">
+    <span><span class="dot op"></span>Operating (crew flying)</span>
+    <span><span class="dot pax"></span>Pax / deadhead / positioning</span>
+  </div>
+</div>
+
+<script>
+// ---------- DATA ----------
+const FLIGHTS = [{"date":"2024-12-13","flight":"126","dep":"AKL","depT":"1708","arr":"BNE","arrT":"1741","eq":"332","blk":"0:00","op":false,"pilot":"PAPPIN TW","base":"BNE","bp":"3655","marker":"A"},{"date":"2025-01-25","flight":"292","dep":"SIN","depT":"2053","arr":"SYD","arrT":"0747","eq":"333","blk":"0:00","op":false,"pilot":"PAPPIN TW","base":"BNE","bp":"3661","marker":"A"},{"date":"2025-02-26","flight":"7525","dep":"SYD","depT":"1557","arr":"HKG","arrT":"2216","eq":"33X","blk":"9:19","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3671","marker":"Z"},{"date":"2025-02-28","flight":"7526","dep":"HKG","depT":"2348","arr":"SYD","arrT":"1215","eq":"33X","blk":"9:27","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3671","marker":"Z"},{"date":"2025-04-01","flight":"535","dep":"BNE","depT":"1453","arr":"SYD","arrT":"1737","eq":"332","blk":"0:00","op":false,"pilot":"PAPPIN TW","base":"BNE","bp":"3675","marker":"A"},{"date":"2025-04-02","flight":"7525","dep":"SYD","depT":"1400","arr":"HKG","arrT":"2039","eq":"33X","blk":"9:39","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3675","marker":"Z"},{"date":"2025-04-04","flight":"7526","dep":"HKG","depT":"2314","arr":"SYD","arrT":"1137","eq":"33X","blk":"9:23","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3675","marker":"Z"},{"date":"2025-06-06","flight":"7531","dep":"PER","depT":"1236","arr":"HKG","arrT":"2055","eq":"33X","blk":"8:19","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3685","marker":""},{"date":"2025-06-08","flight":"7526","dep":"HKG","depT":"2159","arr":"SYD","arrT":"0848","eq":"33X","blk":"8:49","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3685","marker":""},{"date":"2025-06-24","flight":"7345","dep":"SYD","depT":"2224","arr":"MEL","arrT":"2355","eq":"33X","blk":"1:31","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3691","marker":""},{"date":"2025-06-25","flight":"7359","dep":"MEL","depT":"0142","arr":"PER","arrT":"0340","eq":"33X","blk":"3:58","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3691","marker":""},{"date":"2025-06-26","flight":"7318","dep":"PER","depT":"0907","arr":"SYD","arrT":"1525","eq":"33X","blk":"4:18","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3691","marker":""},{"date":"2025-07-02","flight":"7318","dep":"PER","depT":"0920","arr":"SYD","arrT":"1515","eq":"33X","blk":"3:55","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3691","marker":""},{"date":"2025-07-09","flight":"7525","dep":"SYD","depT":"1227","arr":"HKG","arrT":"2028","eq":"33X","blk":"10:01","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3691","marker":""},{"date":"2025-07-11","flight":"7526","dep":"HKG","depT":"2150","arr":"SYD","arrT":"0919","eq":"33X","blk":"9:29","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3691","marker":""},{"date":"2025-07-16","flight":"7345","dep":"SYD","depT":"1308","arr":"MEL","arrT":"1502","eq":"33X","blk":"1:54","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3695","marker":""},{"date":"2025-07-17","flight":"7318","dep":"PER","depT":"0902","arr":"SYD","arrT":"1444","eq":"33X","blk":"3:42","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3695","marker":""},{"date":"2025-07-20","flight":"7301","dep":"SYD","depT":"1922","arr":"BNE","arrT":"2059","eq":"33X","blk":"1:37","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3695","marker":""},{"date":"2025-07-22","flight":"7318","dep":"PER","depT":"0805","arr":"SYD","arrT":"1421","eq":"33X","blk":"4:16","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3695","marker":""},{"date":"2025-08-07","flight":"7525","dep":"SYD","depT":"1730","arr":"HKG","arrT":"0139","eq":"33X","blk":"10:09","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3695","marker":""},{"date":"2025-08-08","flight":"030","dep":"HKG","depT":"2010","arr":"MEL","arrT":"0719","eq":"333","blk":"0:00","op":false,"pilot":"PAPPIN TW","base":"BNE","bp":"3695","marker":"P"},{"date":"2025-08-12","flight":"7345","dep":"SYD","depT":"2216","arr":"MEL","arrT":"2346","eq":"33X","blk":"1:30","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3701","marker":""},{"date":"2025-08-14","flight":"7345","dep":"SYD","depT":"2236","arr":"MEL","arrT":"0011","eq":"33X","blk":"1:35","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3701","marker":""},{"date":"2025-08-15","flight":"7359","dep":"MEL","depT":"0138","arr":"PER","arrT":"0354","eq":"33X","blk":"4:16","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3701","marker":""},{"date":"2025-08-18","flight":"7345","dep":"SYD","depT":"2219","arr":"MEL","arrT":"2338","eq":"33X","blk":"1:19","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3701","marker":""},{"date":"2025-08-19","flight":"7359","dep":"MEL","depT":"0134","arr":"PER","arrT":"0343","eq":"33X","blk":"4:09","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3701","marker":""},{"date":"2025-08-20","flight":"7318","dep":"PER","depT":"0734","arr":"SYD","arrT":"1339","eq":"33X","blk":"4:05","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3701","marker":""},{"date":"2025-08-28","flight":"7345","dep":"SYD","depT":"2221","arr":"MEL","arrT":"0007","eq":"33X","blk":"1:46","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3701","marker":""},{"date":"2025-08-29","flight":"7359","dep":"MEL","depT":"0126","arr":"PER","arrT":"0334","eq":"33X","blk":"4:08","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3701","marker":""},{"date":"2025-09-04","flight":"7533","dep":"SYD","depT":"1915","arr":"PVG","arrT":"0411","eq":"33X","blk":"10:56","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3701","marker":""},{"date":"2025-09-07","flight":"7534","dep":"PVG","depT":"0918","arr":"SYD","arrT":"2218","eq":"33X","blk":"11:00","op":true,"pilot":"PAPPIN TW","base":"BNE","bp":"3701","marker":""},{"date":"2025-09-15","flight":"7345","dep":"SYD","depT":"2254","arr":"MEL","arrT":"0045","eq":"33X","blk":"1:51","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3705","marker":""},{"date":"2025-09-16","flight":"7359","dep":"MEL","depT":"0216","arr":"PER","arrT":"0434","eq":"33X","blk":"4:18","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3705","marker":""},{"date":"2025-09-17","flight":"7318","dep":"PER","depT":"0912","arr":"SYD","arrT":"1500","eq":"33X","blk":"3:48","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3705","marker":""},{"date":"2025-09-21","flight":"7525","dep":"SYD","depT":"1138","arr":"HKG","arrT":"1916","eq":"33X","blk":"9:38","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3705","marker":""},{"date":"2025-09-26","flight":"7534","dep":"PVG","depT":"0528","arr":"SYD","arrT":"1825","eq":"33X","blk":"10:57","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3705","marker":""},{"date":"2025-10-22","flight":"7525","dep":"SYD","depT":"1410","arr":"HKG","arrT":"2046","eq":"33X","blk":"9:36","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3711","marker":""},{"date":"2025-10-24","flight":"7526","dep":"HKG","depT":"2250","arr":"SYD","arrT":"1056","eq":"33X","blk":"9:06","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3711","marker":""},{"date":"2025-11-30","flight":"7525","dep":"SYD","depT":"1534","arr":"HKG","arrT":"2236","eq":"33X","blk":"10:02","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3715","marker":""},{"date":"2025-12-05","flight":"7534","dep":"PVG","depT":"0504","arr":"SYD","arrT":"1847","eq":"33X","blk":"10:43","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3715","marker":""},{"date":"2025-12-09","flight":"7318","dep":"PER","depT":"0857","arr":"SYD","arrT":"1610","eq":"33X","blk":"4:13","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3721","marker":""},{"date":"2025-12-25","flight":"7533","dep":"SYD","depT":"1831","arr":"PVG","arrT":"0150","eq":"33X","blk":"10:19","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3721","marker":""},{"date":"2025-12-27","flight":"030","dep":"HKG","depT":"1918","arr":"MEL","arrT":"0752","eq":"333","blk":"0:00","op":false,"pilot":"PAPPIN TW","base":"SYD","bp":"3721","marker":"P"},{"date":"2025-12-30","flight":"7318","dep":"PER","depT":"0915","arr":"SYD","arrT":"1617","eq":"33X","blk":"4:02","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3725","marker":""},{"date":"2026-01-07","flight":"7525","dep":"SYD","depT":"1550","arr":"HKG","arrT":"2217","eq":"33X","blk":"9:27","op":true,"pilot":"PETERS TF","base":"MEL","bp":"3725","marker":""},{"date":"2026-01-09","flight":"7525","dep":"SYD","depT":"1225","arr":"HKG","arrT":"1911","eq":"33X","blk":"9:46","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3725","marker":""},{"date":"2026-01-09","flight":"7526","dep":"HKG","depT":"2032","arr":"SYD","arrT":"0841","eq":"33X","blk":"9:09","op":true,"pilot":"PETERS TF","base":"MEL","bp":"3725","marker":""},{"date":"2026-01-11","flight":"7534","dep":"PVG","depT":"0444","arr":"SYD","arrT":"1819","eq":"33X","blk":"10:35","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3725","marker":""},{"date":"2026-01-21","flight":"7525","dep":"SYD","depT":"1652","arr":"HKG","arrT":"2308","eq":"33X","blk":"9:16","op":true,"pilot":"PETERS TF","base":"MEL","bp":"3725","marker":""},{"date":"2026-01-22","flight":"7533","dep":"SYD","depT":"1843","arr":"PVG","arrT":"0222","eq":"33X","blk":"10:39","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3725","marker":""},{"date":"2026-01-23","flight":"7526","dep":"HKG","depT":"2347","arr":"SYD","arrT":"1152","eq":"33X","blk":"9:05","op":true,"pilot":"PETERS TF","base":"MEL","bp":"3725","marker":""},{"date":"2026-01-25","flight":"7534","dep":"PVG","depT":"0451","arr":"SYD","arrT":"1821","eq":"33X","blk":"10:30","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3725","marker":""},{"date":"2026-02-04","flight":"7345","dep":"SYD","depT":"2218","arr":"MEL","arrT":"2352","eq":"33X","blk":"1:34","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3731","marker":""},{"date":"2026-02-05","flight":"7359","dep":"MEL","depT":"0132","arr":"PER","arrT":"0256","eq":"33X","blk":"4:24","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3731","marker":""},{"date":"2026-02-06","flight":"7532","dep":"PER","depT":"1442","arr":"HKG","arrT":"2238","eq":"33X","blk":"7:56","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3731","marker":""},{"date":"2026-02-09","flight":"7526","dep":"HKG","depT":"0131","arr":"SYD","arrT":"1353","eq":"33X","blk":"9:22","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3731","marker":""},{"date":"2026-03-07","flight":"7533","dep":"SYD","depT":"1813","arr":"PVG","arrT":"0119","eq":"33X","blk":"10:06","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3735","marker":""},{"date":"2026-03-12","flight":"7526","dep":"HKG","depT":"0003","arr":"SYD","arrT":"1222","eq":"33X","blk":"9:19","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3735","marker":""},{"date":"2026-03-15","flight":"7525","dep":"SYD","depT":"1326","arr":"HKG","arrT":"2002","eq":"33X","blk":"9:36","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3735","marker":""},{"date":"2026-03-20","flight":"7534","dep":"PVG","depT":"0426","arr":"SYD","arrT":"1751","eq":"33X","blk":"10:25","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3735","marker":""},{"date":"2026-03-28","flight":"7533","dep":"SYD","depT":"1819","arr":"PVG","arrT":"0145","eq":"33X","blk":"10:26","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3741","marker":""},{"date":"2026-03-30","flight":"030","dep":"HKG","depT":"2000","arr":"MEL","arrT":"0813","eq":"332","blk":"0:00","op":false,"pilot":"PAPPIN TW","base":"SYD","bp":"3741","marker":"P"},{"date":"2026-04-03","flight":"7525","dep":"SYD","depT":"1341","arr":"HKG","arrT":"2014","eq":"33X","blk":"9:33","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3741","marker":""},{"date":"2026-04-05","flight":"7526","dep":"HKG","depT":"2248","arr":"SYD","arrT":"0947","eq":"33X","blk":"8:59","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3741","marker":""},{"date":"2026-04-07","flight":"7523","dep":"SYD","depT":"2247","arr":"AKL","arrT":"0330","eq":"33X","blk":"2:43","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3741","marker":""},{"date":"2026-04-15","flight":"7345","dep":"SYD","depT":"2211","arr":"MEL","arrT":"2340","eq":"33X","blk":"1:29","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3741","marker":""},{"date":"2026-04-16","flight":"7359","dep":"MEL","depT":"0130","arr":"PER","arrT":"0342","eq":"33X","blk":"4:12","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3741","marker":""},{"date":"2026-04-17","flight":"7531","dep":"PER","depT":"1431","arr":"HKG","arrT":"2257","eq":"33X","blk":"8:26","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3741","marker":""},{"date":"2026-04-20","flight":"7526","dep":"HKG","depT":"0012","arr":"SYD","arrT":"1132","eq":"33X","blk":"9:20","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3741","marker":""},{"date":"2026-04-21","flight":"7318","dep":"PER","depT":"0531","arr":"SYD","arrT":"1130","eq":"33X","blk":"3:59","op":true,"pilot":"FULLER DJ","base":null,"bp":"3745","marker":""},{"date":"2026-04-23","flight":"7535","dep":"SYD","depT":"1523","arr":"PVG","arrT":"2339","eq":"33X","blk":"10:16","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3745","marker":""},{"date":"2026-04-23","flight":"7345","dep":"SYD","depT":"2222","arr":"MEL","arrT":"2355","eq":"33X","blk":"1:33","op":true,"pilot":"BEATTIE JA","base":"MEL","bp":"3745","marker":"Z"},{"date":"2026-04-24","flight":"7359","dep":"MEL","depT":"0302","arr":"PER","arrT":"0507","eq":"33X","blk":"4:05","op":true,"pilot":"BEATTIE JA","base":"MEL","bp":"3745","marker":"Z"},{"date":"2026-04-26","flight":"7536","dep":"PVG","depT":"0252","arr":"SIN","arrT":"0816","eq":"33X","blk":"5:24","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3745","marker":""},{"date":"2026-05-02","flight":"7535","dep":"SYD","depT":"1525","arr":"PVG","arrT":"0020","eq":"33X","blk":"10:55","op":true,"pilot":"FULLER DJ","base":null,"bp":"3745","marker":""},{"date":"2026-05-06","flight":"7526","dep":"HKG","depT":"2325","arr":"SYD","arrT":"1105","eq":"33X","blk":"9:40","op":true,"pilot":"FULLER DJ","base":null,"bp":"3745","marker":""},{"date":"2026-05-09","flight":"023","dep":"SYD","depT":"1018","arr":"BKK","arrT":"1700","eq":"333","blk":"0:00","op":false,"pilot":"BEATTIE JA","base":"MEL","bp":"3745","marker":"A"},{"date":"2026-05-09","flight":"7535","dep":"SYD","depT":"1536","arr":"PVG","arrT":"0051","eq":"33X","blk":"11:15","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3745","marker":""},{"date":"2026-05-10","flight":"128","dep":"HKG","depT":"1926","arr":"SYD","arrT":"0641","eq":"333","blk":"0:00","op":false,"pilot":"PAPPIN TW","base":"SYD","bp":"3745","marker":"A"},{"date":"2026-05-12","flight":"024","dep":"BKK","depT":"1817","arr":"SYD","arrT":"0637","eq":"333","blk":"0:00","op":false,"pilot":"BEATTIE JA","base":"MEL","bp":"3745","marker":"A"},{"date":"2026-05-16","flight":"7535","dep":"SYD","depT":"1521","arr":"PVG","arrT":"0029","eq":"33X","blk":"11:08","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3745","marker":""},{"date":"2026-05-16","flight":"7535","dep":"SYD","depT":"1521","arr":"PVG","arrT":"0029","eq":"33X","blk":"11:08","op":true,"pilot":"HUDSON JA","base":"SYD","bp":"3751","marker":""},{"date":"2026-05-17","flight":"7525","dep":"SYD","depT":"1320","arr":"HKG","arrT":"2050","eq":"33X","blk":"9:30","op":true,"pilot":"FULLER DJ","base":null,"bp":"3745","marker":""},{"date":"2026-05-17","flight":"128","dep":"HKG","depT":"1928","arr":"SYD","arrT":"0631","eq":"333","blk":"0:00","op":false,"pilot":"HUDSON JA","base":"SYD","bp":"3751","marker":"P"},{"date":"2026-05-17","flight":"128","dep":"HKG","depT":"1930","arr":"SYD","arrT":"0645","eq":"333","blk":"0:00","op":false,"pilot":"PAPPIN TW","base":"SYD","bp":"3751","marker":"P"},{"date":"2026-05-17","flight":"030","dep":"HKG","depT":"2001","arr":"MEL","arrT":"0641","eq":"333","blk":"0:00","op":false,"pilot":"PAPPIN TW","base":"SYD","bp":"3745","marker":"P"},{"date":"2026-05-18","flight":"7345","dep":"SYD","depT":"2226","arr":"MEL","arrT":"2356","eq":"33X","blk":"1:30","op":true,"pilot":"BEATTIE JA","base":"MEL","bp":"3745","marker":""},{"date":"2026-05-19","flight":"7359","dep":"MEL","depT":"0125","arr":"PER","arrT":"0321","eq":"33X","blk":"3:56","op":true,"pilot":"BEATTIE JA","base":"MEL","bp":"3745","marker":""},{"date":"2026-05-20","flight":"7318","dep":"PER","depT":"0520","arr":"SYD","arrT":"1120","eq":"33X","blk":"4:00","op":true,"pilot":"BEATTIE JA","base":"MEL","bp":"3745","marker":""},{"date":"2026-05-20","flight":"7525","dep":"SYD","depT":"1234","arr":"HKG","arrT":"2006","eq":"33X","blk":"9:32","op":true,"pilot":"HUDSON JA","base":"SYD","bp":"3751","marker":""},{"date":"2026-05-20","flight":"7526","dep":"HKG","depT":"2325","arr":"SYD","arrT":"1105","eq":"33X","blk":"9:40","op":true,"pilot":"FULLER DJ","base":null,"bp":"3745","marker":""},{"date":"2026-05-23","flight":"7526","dep":"HKG","depT":"0013","arr":"SYD","arrT":"1107","eq":"33X","blk":"8:54","op":true,"pilot":"HUDSON JA","base":"SYD","bp":"3751","marker":""},{"date":"2026-05-27","flight":"7345","dep":"SYD","depT":"2225","arr":"MEL","arrT":"2350","eq":"33X","blk":"1:25","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3751","marker":""},{"date":"2026-05-28","flight":"7359","dep":"MEL","depT":"0130","arr":"PER","arrT":"0340","eq":"33X","blk":"4:10","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3751","marker":""},{"date":"2026-05-28","flight":"7345","dep":"SYD","depT":"2236","arr":"MEL","arrT":"2350","eq":"33X","blk":"1:14","op":true,"pilot":"BEATTIE JA","base":"MEL","bp":"3751","marker":""},{"date":"2026-05-29","flight":"7359","dep":"MEL","depT":"0130","arr":"PER","arrT":"0336","eq":"33X","blk":"4:06","op":true,"pilot":"BEATTIE JA","base":"MEL","bp":"3751","marker":""},{"date":"2026-05-29","flight":"7531","dep":"PER","depT":"1430","arr":"HKG","arrT":"2200","eq":"33X","blk":"7:30","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3751","marker":""},{"date":"2026-05-31","flight":"7526","dep":"HKG","depT":"2320","arr":"SYD","arrT":"1100","eq":"33X","blk":"9:40","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3751","marker":""},{"date":"2026-06-06","flight":"7535","dep":"SYD","depT":"1525","arr":"PVG","arrT":"0020","eq":"33X","blk":"10:55","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3751","marker":""},{"date":"2026-06-06","flight":"7535","dep":"SYD","depT":"1526","arr":"PVG","arrT":"0000","eq":"33X","blk":"10:34","op":true,"pilot":"HUDSON JA","base":"SYD","bp":"3751","marker":""},{"date":"2026-06-07","flight":"7525","dep":"SYD","depT":"1327","arr":"HKG","arrT":"2124","eq":"33X","blk":"9:57","op":true,"pilot":"BEATTIE JA","base":"MEL","bp":"3751","marker":""},{"date":"2026-06-07","flight":"128","dep":"HKG","depT":"1930","arr":"SYD","arrT":"0645","eq":"333","blk":"0:00","op":false,"pilot":"PAPPIN TW","base":"SYD","bp":"3751","marker":"P"},{"date":"2026-06-07","flight":"060","dep":"HND","depT":"2200","arr":"SYD","arrT":"0855","eq":"333","blk":"0:00","op":false,"pilot":"HUDSON JA","base":"SYD","bp":"3751","marker":"P"},{"date":"2026-06-09","flight":"7526","dep":"HKG","depT":"2337","arr":"SYD","arrT":"1038","eq":"33X","blk":"9:01","op":true,"pilot":"BEATTIE JA","base":"MEL","bp":"3751","marker":""},{"date":"2026-06-18","flight":"7535","dep":"SYD","depT":"1521","arr":"PVG","arrT":"0048","eq":"33X","blk":"11:27","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3755","marker":""},{"date":"2026-06-21","flight":"7536","dep":"PVG","depT":"0233","arr":"SIN","arrT":"0745","eq":"33X","blk":"5:12","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3755","marker":""},{"date":"2026-06-24","flight":"127","dep":"SYD","depT":"1010","arr":"HKG","arrT":"1755","eq":"333","blk":"0:00","op":false,"pilot":"HUDSON JA","base":"SYD","bp":"3755","marker":"P"},{"date":"2026-06-26","flight":"7536","dep":"PVG","depT":"0240","arr":"SIN","arrT":"0830","eq":"33X","blk":"5:50","op":true,"pilot":"HUDSON JA","base":"SYD","bp":"3755","marker":""},{"date":"2026-06-28","flight":"7536","dep":"SIN","depT":"1100","arr":"SYD","arrT":"2040","eq":"33X","blk":"7:40","op":true,"pilot":"HUDSON JA","base":"SYD","bp":"3755","marker":""},{"date":"2026-06-28","flight":"7525","dep":"SYD","depT":"1349","arr":"HKG","arrT":"2143","eq":"33X","blk":"9:54","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3755","marker":""},{"date":"2026-07-01","flight":"7526","dep":"HKG","depT":"2351","arr":"SYD","arrT":"1057","eq":"33X","blk":"9:06","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3755","marker":""},{"date":"2026-07-02","flight":"7535","dep":"SYD","depT":"1525","arr":"PVG","arrT":"0020","eq":"33X","blk":"10:55","op":true,"pilot":"HUDSON JA","base":"SYD","bp":"3755","marker":""},{"date":"2026-07-05","flight":"7525","dep":"SYD","depT":"1335","arr":"HKG","arrT":"2111","eq":"33X","blk":"9:36","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3755","marker":""},{"date":"2026-07-05","flight":"7526","dep":"HKG","depT":"2340","arr":"SYD","arrT":"1100","eq":"33X","blk":"9:20","op":true,"pilot":"HUDSON JA","base":"SYD","bp":"3755","marker":""},{"date":"2026-07-08","flight":"7526","dep":"HKG","depT":"2344","arr":"SYD","arrT":"1013","eq":"33X","blk":"8:29","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3755","marker":""},{"date":"2026-07-11","flight":"081","dep":"SYD","depT":"1028","arr":"SIN","arrT":"1709","eq":"330","blk":"0:00","op":false,"pilot":"PAPPIN TW","base":"SYD","bp":"3755","marker":"A"},{"date":"2026-07-13","flight":"7536","dep":"SIN","depT":"2323","arr":"SYD","arrT":"1024","eq":"33X","blk":"9:01","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3755","marker":""},{"date":"2026-08-05","flight":"7345","dep":"WSI","depT":"2250","arr":"MEL","arrT":"0025","eq":"33X","blk":"1:35","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3761","marker":""},{"date":"2026-08-06","flight":"7359","dep":"MEL","depT":"0155","arr":"PER","arrT":"0405","eq":"33X","blk":"4:10","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3761","marker":""},{"date":"2026-08-07","flight":"7531","dep":"PER","depT":"1400","arr":"HKG","arrT":"2200","eq":"33X","blk":"8:00","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3761","marker":""},{"date":"2026-08-09","flight":"7526","dep":"HKG","depT":"2340","arr":"SYD","arrT":"1100","eq":"33X","blk":"9:20","op":true,"pilot":"PAPPIN TW","base":"SYD","bp":"3761","marker":""}]
+;
+
+const AIRPORTS = {
+  SYD:{lat:-33.9399,lon:151.1753,name:"Sydney"},
+  MEL:{lat:-37.6690,lon:144.8410,name:"Melbourne"},
+  BNE:{lat:-27.3842,lon:153.1175,name:"Brisbane"},
+  PER:{lat:-31.9403,lon:115.9669,name:"Perth"},
+  HKG:{lat:22.3080,lon:113.9185,name:"Hong Kong"},
+  PVG:{lat:31.1443,lon:121.8083,name:"Shanghai Pudong"},
+  SIN:{lat:1.3644,lon:103.9915,name:"Singapore Changi"},
+  AKL:{lat:-37.0082,lon:174.7850,name:"Auckland"},
+  BKK:{lat:13.6900,lon:100.7501,name:"Bangkok Suvarnabhumi"},
+  HND:{lat:35.5494,lon:139.7798,name:"Tokyo Haneda"},
+  WSI:{lat:-33.9114,lon:150.7406,name:"Western Sydney (Nancy-Bird Walton)"},
+};
+
+// ---------- helpers ----------
+function fmtDate(d){
+  const dt = new Date(d+"T00:00:00");
+  return dt.toLocaleDateString('en-AU',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
+}
+function fmtT(t){ return t.slice(0,2)+":"+t.slice(2); }
+
+const allDates = [...new Set(FLIGHTS.map(f=>f.date))].sort();
+document.getElementById('subHeader').textContent =
+  `${FLIGHTS.length} A330 flight legs · ${allDates[0]} → ${allDates[allDates.length-1]} · Pappin, Peters, Beattie, Fuller, Hudson`;
+
+// ---------- LIST VIEW ----------
+const listBody = document.getElementById('listBody');
+const listCount = document.getElementById('listCount');
+let currentFilter = 'all';
+let currentSearch = '';
+
+function renderList(){
+  let rows = FLIGHTS.slice().sort((a,b)=> a.date.localeCompare(b.date) || a.depT.localeCompare(b.depT));
+  if(currentFilter==='op') rows = rows.filter(r=>r.op);
+  if(currentFilter==='pax') rows = rows.filter(r=>!r.op);
+  if(currentSearch){
+    const q = currentSearch.toLowerCase();
+    rows = rows.filter(r =>
+      r.flight.toLowerCase().includes(q) ||
+      r.dep.toLowerCase().includes(q) ||
+      r.arr.toLowerCase().includes(q) ||
+      r.pilot.toLowerCase().includes(q) ||
+      r.date.includes(q)
+    );
+  }
+  listCount.textContent = `${rows.length} flight legs`;
+
+  let html = '';
+  let lastDate = null;
+  for(const r of rows){
+    if(r.date !== lastDate){
+      html += `<div class="dateHeader">${fmtDate(r.date)}</div>`;
+      lastDate = r.date;
+    }
+    const depName = (AIRPORTS[r.dep]||{}).name || r.dep;
+    const arrName = (AIRPORTS[r.arr]||{}).name || r.arr;
+    html += `
+      <div class="flightRow">
+        <div class="rowTop">
+          <span class="flightNo">QF${r.flight}</span>
+          <span class="badge ${r.op?'op':'pax'}">${r.op?'Operating':'Pax'}</span>
+        </div>
+        <div class="route">${r.dep} ${fmtT(r.depT)} → ${r.arr} ${fmtT(r.arrT)}</div>
+        <div class="meta">
+          <span>${depName} → ${arrName}</span>
+          <span>${r.eq}</span>
+          <span>${r.pilot}</span>
+          ${r.op?`<span>Blk ${r.blk}</span>`:''}
+        </div>
+      </div>`;
+  }
+  listBody.innerHTML = html || `<div class="empty">No flights match.</div>`;
+}
+
+document.getElementById('searchBox').addEventListener('input', e=>{
+  currentSearch = e.target.value.trim();
+  renderList();
+});
+document.querySelectorAll('.chip').forEach(chip=>{
+  chip.addEventListener('click', ()=>{
+    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    currentFilter = chip.dataset.filter;
+    renderList();
+  });
+});
+
+// ---------- TABS ----------
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const target = tab.dataset.tab;
+    document.getElementById('listView').classList.toggle('show', target==='list');
+    document.getElementById('dateView').classList.toggle('show', target==='date');
+    document.getElementById('listControls').style.display = target==='list' ? 'flex':'none';
+  });
+});
+
+// ---------- MAP (self-contained SVG, no external tiles — works fully offline) ----------
+const svg = document.getElementById('mapSvg');
+const SVG_NS = "http://www.w3.org/2000/svg";
+const VB_W = 800, VB_H = 600;
+
+// Fixed projection window covering all airports in this dataset (roughly 0N-40S, 95E-180E)
+const PROJ = { lonMin: 95, lonMax: 182, latMin: -42, latMax: 8 };
+
+function project(lat, lon){
+  const x = (lon - PROJ.lonMin) / (PROJ.lonMax - PROJ.lonMin) * VB_W;
+  const y = (PROJ.latMax - lat) / (PROJ.latMax - PROJ.latMin) * VB_H;
+  return [x,y];
+}
+
+function el(tag, attrs){
+  const e = document.createElementNS(SVG_NS, tag);
+  for(const k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+
+function drawGraticule(){
+  const g = el('g', {});
+  for(let lon=100; lon<=180; lon+=10){
+    const [x1,y1] = project(PROJ.latMax, lon);
+    const [x2,y2] = project(PROJ.latMin, lon);
+    g.appendChild(el('line',{x1,y1,x2,y2,class:'mapGrat'}));
+  }
+  for(let lat=-40; lat<=0; lat+=10){
+    const [x1,y1] = project(lat, PROJ.lonMin);
+    const [x2,y2] = project(lat, PROJ.lonMax);
+    g.appendChild(el('line',{x1,y1,x2,y2,class:'mapGrat'}));
+  }
+  svg.appendChild(g);
+}
+
+function curvedPath(p1, p2){
+  // p1,p2 = [lat,lon]; bulge the line slightly toward the equator side for a pseudo great-circle look
+  const [x1,y1] = project(p1[0], p1[1]);
+  const [x2,y2] = project(p2[0], p2[1]);
+  const mx = (x1+x2)/2, my = (y1+y2)/2;
+  const dx = x2-x1, dy = y2-y1;
+  const dist = Math.sqrt(dx*dx+dy*dy);
+  const bulge = Math.min(dist*0.18, 60);
+  // perpendicular offset, always bulge "upward" (toward lower y / higher lat) for consistency
+  let offx = -dy/dist*bulge, offy = dx/dist*bulge;
+  if(offy > 0){ offx = -offx; offy = -offy; }
+  const cx = mx+offx, cy = my+offy;
+  return `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`;
+}
+
+function clearMap(){
+  svg.innerHTML = '';
+}
+
+function drawFlightsOnMap(flights){
+  clearMap();
+  drawGraticule();
+
+  const linesGroup = el('g',{});
+  const portsGroup = el('g',{});
+  const labelsGroup = el('g',{});
+  svg.appendChild(linesGroup);
+  svg.appendChild(portsGroup);
+  svg.appendChild(labelsGroup);
+
+  flights.forEach(r=>{
+    const dep = AIRPORTS[r.dep], arr = AIRPORTS[r.arr];
+    if(!dep || !arr) return;
+    const color = r.op ? '#3ddc97' : '#ffb454';
+    const d = curvedPath([dep.lat,dep.lon],[arr.lat,arr.lon]);
+    const path = el('path',{d, stroke:color, fill:'none', 'stroke-width':2.4, 'stroke-opacity':0.9, 'stroke-linecap':'round'});
+    const title = el('title',{});
+    title.textContent = `QF${r.flight} ${r.op?'Operating':'Pax'} · ${r.dep} ${fmtT(r.depT)} → ${r.arr} ${fmtT(r.arrT)} · ${r.pilot} · ${r.eq}`;
+    path.appendChild(title);
+    linesGroup.appendChild(path);
+  });
+
+  const usedPorts = new Set();
+  flights.forEach(r=>{ usedPorts.add(r.dep); usedPorts.add(r.arr); });
+  usedPorts.forEach(code=>{
+    const a = AIRPORTS[code];
+    if(!a) return;
+    const [x,y] = project(a.lat, a.lon);
+    const circle = el('circle',{cx:x, cy:y, r:5, class:'mapPort'});
+    const t = el('title',{}); t.textContent = `${code} — ${a.name}`;
+    circle.appendChild(t);
+    portsGroup.appendChild(circle);
+    const label = el('text',{x:x+7, y:y-6, class:'mapLabel'});
+    label.textContent = code;
+    labelsGroup.appendChild(label);
+  });
+}
+
+// date navigation
+let currentDateIdx = -1;
+const datePicker = document.getElementById('datePicker');
+const dateJump = document.getElementById('dateJump');
+const dateLabel = document.getElementById('dateLabel');
+const dateSub = document.getElementById('dateSub');
+const dayFlights = document.getElementById('dayFlights');
+
+allDates.forEach(d=>{
+  const opt = document.createElement('option');
+  opt.value = d; opt.textContent = fmtDate(d);
+  dateJump.appendChild(opt);
+});
+datePicker.min = allDates[0];
+datePicker.max = allDates[allDates.length-1];
+
+function showDate(dateStr){
+  const flights = FLIGHTS.filter(f=>f.date===dateStr).sort((a,b)=>a.depT.localeCompare(b.depT));
+  currentDateIdx = allDates.indexOf(dateStr);
+  dateLabel.textContent = fmtDate(dateStr);
+  datePicker.value = dateStr;
+  dateJump.value = allDates.includes(dateStr) ? dateStr : '';
+
+  if(flights.length===0){
+    dateSub.textContent = 'No A330 flights this date';
+    dayFlights.innerHTML = `<div class="empty">No rostered A330 operating or pax flights on this date.<br>Use ▶ / ◀ or the dropdown to jump to a date with flights.</div>`;
+    clearMap();
+    return;
+  }
+  dateSub.textContent = `${flights.length} flight leg${flights.length>1?'s':''} rostered`;
+  drawFlightsOnMap(flights);
+
+  dayFlights.innerHTML = flights.map(r=>{
+    const depName = (AIRPORTS[r.dep]||{}).name || r.dep;
+    const arrName = (AIRPORTS[r.arr]||{}).name || r.arr;
+    return `
+      <div class="flightRow">
+        <div class="rowTop">
+          <span class="flightNo">QF${r.flight}</span>
+          <span class="badge ${r.op?'op':'pax'}">${r.op?'Operating':'Pax'}</span>
+        </div>
+        <div class="route">${r.dep} ${fmtT(r.depT)} → ${r.arr} ${fmtT(r.arrT)}</div>
+        <div class="meta">
+          <span>${depName} → ${arrName}</span>
+          <span>${r.eq}</span>
+          <span>${r.pilot}</span>
+          ${r.op?`<span>Blk ${r.blk}</span>`:''}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+datePicker.addEventListener('change', ()=> showDate(datePicker.value));
+dateJump.addEventListener('change', ()=> { if(dateJump.value) showDate(dateJump.value); });
+document.getElementById('prevDay').addEventListener('click', ()=>{
+  if(currentDateIdx > 0){ showDate(allDates[currentDateIdx-1]); }
+  else if(currentDateIdx === -1){ showDate(allDates[0]); }
+});
+document.getElementById('nextDay').addEventListener('click', ()=>{
+  if(currentDateIdx < allDates.length-1){ showDate(allDates[currentDateIdx+1]); }
+});
+
+// init
+renderList();
+showDate(allDates[0]);
+</script>
+</body>
+</html>
