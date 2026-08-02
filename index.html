@@ -265,16 +265,21 @@ function coveredFlights(){
 }
 
 // ---------- MAP (Leaflet + OpenStreetMap / CARTO dark basemap) ----------
-const map = L.map('map', { zoomControl:true, worldCopyJump:true }).setView([-25, 140], 3);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-  subdomains:'abcd', maxZoom:19,
-  attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
-}).addTo(map);
-setTimeout(()=>map.invalidateSize(), 200);
-window.addEventListener('resize', ()=>map.invalidateSize());
-
-const arcLayer = L.layerGroup().addTo(map);
-const portLayer = L.layerGroup().addTo(map);
+let map=null, arcLayer=null, portLayer=null;
+if(typeof L !== 'undefined'){
+  map = L.map('map', { zoomControl:true, worldCopyJump:true }).setView([-25, 140], 3);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    subdomains:'abcd', maxZoom:19,
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
+  }).addTo(map);
+  setTimeout(()=>map.invalidateSize(), 200);
+  window.addEventListener('resize', ()=>map.invalidateSize());
+  arcLayer = L.layerGroup().addTo(map);
+  portLayer = L.layerGroup().addTo(map);
+}else{
+  document.getElementById('map').innerHTML =
+    '<div style="padding:24px;text-align:center;color:#8ea0c2;font-size:13px;line-height:1.5;">Map couldn’t load (no connection?).<br>The coverage list below still works.</div>';
+}
 
 // quadratic-bezier arc (bulges toward higher latitude) for a great-circle-ish look
 function arcPoints(a,b){
@@ -297,6 +302,7 @@ function addPort(code, kind){
 }
 
 function drawMap(flights){
+  if(!map) return;
   arcLayer.clearLayers(); portLayer.clearLayers();
   const homePorts = new Set(sel.base ? (BASE_PORTS[sel.base]||[]) : []);
   const used = new Set(); const bounds = [];
