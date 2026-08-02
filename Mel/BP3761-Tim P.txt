@@ -1,0 +1,110 @@
+
+                          QANTAS AIRWAYS LIMITED                    30Jul26 1127
+                     SH Flight Crew Roster - Bid Period 3761
+
+
+     Name    :  PETERS TF                                    Category:  CPT-A330
+     Staff No:  117039                                       Base    :  MEL
+     Snrty No:                                               Line    :  EFA
+     Mailbox :       0                                       WorkRule:  AEFA
+
+Date    Duty(Role)  Service                     S-On S-Of Duty  Credit Port Code
+
+--------------------------------------------------------------------------------
+13 Mon  D/O                                                                 AW01
+14 Tue  D/O                                                                 AW01
+15 Wed  74656B6     A490/7345/7359              1920 0343 10:23  6:18  PER  OL48
+17 Fri              7531                        1300 2238  9:38  8:00  HKG  
+--------------------------------------------------------------------------------
+20 Mon              7526/P473                   0400 1925 13:25 10:08       
+21 Tue  D/O                                                                 AW01
+22 Wed  D/O                                                                 AW01
+23 Thu  V12                                     1200 2200 10:00             AS02
+24 Fri  V12                                     1200 2200 10:00             OL10
+--------------------------------------------------------------------------------
+25 Sat  D/O                                                                 AW01
+26 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+27 Mon  D/O                                                                 AW01
+28 Tue  7034MA3     P470                        1635 1902  2:27  0:45  SYD  AW01
+29 Wed              7525                        1120 2120 12:00  9:30  HKG  
+31 Fri              7526/P447                   2240 1520 14:40 10:08       
+--------------------------------------------------------------------------------
+02 Sun  D/O                                                                 AW01
+--------------------------------------------------------------------------------
+03 Mon  D/O                                                                 AW99
+04 Tue  D/O                                                                 AW99
+05 Wed  7053M       P470                        1635 1850  2:15  0:45  SYD  AW01
+06 Thu              7535                        1425 0035 12:10 10:55  PVG  
+--------------------------------------------------------------------------------
+09 Sun              7536                        0140 0845  7:05  5:50  SIN  
+09 Sun              P038                        2230 0920  8:50  3:40       
+
+Global Preferences                       : None
+Total Duty Hours (Total TAFB)            : 104:03 (338:15)
+Total Passive Credit Hours               : 0:00 
+Total Credit Hours                       : 62:19 
+Total Duty Hours Carried In (Out)        : 0:00 (  8:50)
+Total Credit Hours Carried In (Out)      : 0:00 (  3:40)
+Available Date/Time this (next) BP       : 13Jul26 0300 (11Aug26 0050)
+Balance of 11 Hour Buffer this (next) BP : 0:00 (  0:00)
+Consecutive Duty Days Last BP            : 1  
+
+ARMS crew              AIRCREW RESOURCE MANAGEMENT SYSTEM           30Jul26 1127
+rosterPatns                     Pattern Details               Page:    1 of    1
+
+
+(L - time)                                       1-CPT                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+15Jul A     490  MEL  1954 SYD  2120  32Q   0:00   1:10          ( 1            
+15Jul      7345  SYD  2230 MEL  2351  33X   1:21   1:42          ( 2            
+16Jul      7359  MEL  0133 PER  0328  33X   3:55  34:42          ( 3            
+                 Rpt  1920 Rls  0343        PER   33:17   5:16 10:23   6:18     
+                                                                                
+17Jul      7531  PER  1410 HKG  2223  33X   8:13  54:44          ( 1            
+                 Rpt  1300 Rls  2238        HKG   53:22   8:13  9:38   8:00     
+                                                                                
+20Jul      7526  HKG  0507 SYD  1627  33X   9:20   1:07          ( 1            
+20Jul P     473  SYD  1734 MEL  1910  73H   0:00                 ( 2            
+                 Rpt  0400 Rls  1925                      9:20 13:25  10:08     
+             TAFB   120:05      Rest   15:00     Total   22:49 33:26  24:26     
+Reason: AC   QF7526 6 HRS DELAYED DUE ENGINEERING                               
+                                                         74656B6 DATED 15Jul26  
+
+(L - time)                                       1-CPT                          
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+28Jul P     470  MEL  1720 SYD  1847  73H   0:00  18:27          ( 1            
+                 Rpt  1635 Rls  1902        SYD   16:18   0:00  2:27   0:45     
+                                                                                
+29Jul      7525  SYD  1314 HKG  2105  33X   9:51  50:35          ( 1            
+                 Rpt  1120 Rls  2120        HKG   49:20   9:51 12:00   9:30     
+                                                                                
+31Jul      7526  HKG  2340 SYD  1100  33X   9:20   2:30          ( 1            
+01Aug P     447  SYD  1330 MEL  1505  73H   0:00                 ( 2            
+                 Rpt  2240 Rls  1520                      9:20 14:40  10:08     
+             TAFB    94:45      Rest   16:00     Total   19:11 29:07  20:23     
+Reason: AC   29JUL NOW OPT DIRECT SYD/HKG QF7525 AS PER FREIGHT                 
+               OPS                                                              
+                                                         7034MA3 DATED 28Jul26  
+
+(L - time)                                       1-CPT   1-F/O                  
+                                                                                
+ Date    Flight    Depart    Arrive    Eq    Blk   Grnd    Blk  Duty   Cred     
+05Aug P     470  MEL  1705 SYD  1835  73H   0:00  20:50          ( 1            
+                 Rpt  1635 Rls  1850        SYD   19:35   0:00  2:15   0:45     
+                                                                                
+06Aug      7535  SYD  1525 PVG  0020  33X  10:55  50:20          ( 1            
+                 Rpt  1425 Rls  0035        PVG   49:05  10:55 12:10  10:55     
+                                                                                
+09Aug      7536  PVG  0240 SIN  0830  33X   5:50  15:00          ( 1            
+                 Rpt  0140 Rls  0845        SIN   13:45   5:50  7:05   5:50     
+                                                                                
+09Aug P     038  SIN  2330 MEL  0850  332   0:00                 ( 1            
+                 Rpt  2230 Rls  0920                      0:00  8:50   0:00     
+             TAFB   112:45      Rest   15:00     Total   16:45 30:20  17:30     
+Reason: MT                                                                      
+                                                         7053M DATED 05Aug26    
+
+                             *** End of Report ***
