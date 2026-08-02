@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EFA Standby Coverage</title>
+<style>
+  :root{
+    --bg:#0b1220; --panel:#121b2e; --panel2:#0f1830; --border:#22304d;
+    --text:#e8edf7; --muted:#8ea0c2; --accent:#4fa3ff; --accent2:#ff9f43;
+    --op:#3ddc97; --pax:#ffb454; --red:#ff5d5d;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  #app{max-width:820px;margin:0 auto;padding:0 0 40px;}
+
+  header{padding:14px;background:var(--panel);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5;}
+  header h1{font-size:17px;margin:0;font-weight:700;letter-spacing:.2px;}
+  header .sub{font-size:11px;color:var(--muted);margin-top:3px;}
+
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:12px;margin:14px;padding:14px;}
+  .grp{margin-bottom:14px;}
+  .grp:last-child{margin-bottom:0;}
+  .grp label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:7px;font-weight:700;}
+
+  .btnRow{display:flex;gap:8px;flex-wrap:wrap;}
+  .opt{flex:1;min-width:64px;text-align:center;padding:11px 8px;border-radius:10px;font-size:14px;font-weight:700;
+    background:var(--panel2);color:var(--muted);border:1px solid var(--border);cursor:pointer;user-select:none;
+    transition:background .12s,color .12s,border-color .12s;}
+  .opt small{display:block;font-weight:500;font-size:10px;opacity:.8;margin-top:2px;}
+  .opt.active{background:var(--accent);color:#04101f;border-color:var(--accent);}
+  .opt.day{min-width:0;flex:1;padding:10px 2px;font-size:13px;}
+
+  select{width:100%;background:var(--panel2);border:1px solid var(--border);color:var(--text);
+    padding:12px 10px;border-radius:10px;font-size:15px;outline:none;font-weight:600;}
+
+  .summary{margin:0 14px 4px;padding:12px 14px;border-radius:12px;background:var(--panel2);
+    border:1px solid var(--border);display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:13px;}
+  .summary .k{color:var(--muted);}
+  .summary .v{font-weight:700;}
+  .summary .win{color:var(--accent);font-weight:700;}
+  .summary .n{margin-left:auto;font-weight:800;font-size:15px;}
+  .summary .n.zero{color:var(--muted);}
+
+  #map{margin:14px;border-radius:12px;overflow:hidden;background:#0d1730;border:1px solid var(--border);
+    aspect-ratio:4/3;max-height:52vh;}
+  #map svg{width:100%;height:100%;display:block;}
+  .mapLabel{font-size:9px;fill:#8ea0c2;font-family:inherit;}
+  .mapPort{fill:#2c3f66;stroke:#0d1730;stroke-width:1;}
+  .mapPort.used{fill:#4fa3ff;}
+  .mapPort.home{fill:var(--accent2);stroke:#0d1730;stroke-width:1.5;}
+  .mapGrat{stroke:#16223f;stroke-width:0.5;}
+
+  .flightRow{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:4px;}
+  .rowTop{display:flex;justify-content:space-between;align-items:center;}
+  .flightNo{font-weight:700;font-size:14px;}
+  .badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px;}
+  .badge.op{background:rgba(61,220,151,.15);color:var(--op);}
+  .badge.eq{background:rgba(79,163,255,.14);color:var(--accent);}
+  .route{font-size:15px;font-weight:600;}
+  .meta{font-size:11.5px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;}
+  .listHdr{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.4px;padding:6px 14px;}
+  .empty{padding:26px 14px;text-align:center;color:var(--muted);font-size:13px;line-height:1.5;}
+
+  .legend{display:flex;gap:16px;padding:10px 14px;font-size:11px;color:var(--muted);}
+  .legend span{display:inline-flex;align-items:center;gap:5px;}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
+  .dot.op{background:var(--op);}
+  .dot.home{background:var(--accent2);}
+  .dot.used{background:var(--accent);}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>✈️ EFA Standby Coverage</h1>
+    <div class="sub">Pick your base, fleet, standby code &amp; weekday to see the operating freighters that could be called out.</div>
+  </header>
+
+  <div class="card">
+    <div class="grp">
+      <label>Base</label>
+      <div class="btnRow" id="baseRow">
+        <div class="opt" data-base="MEL">MEL</div>
+        <div class="opt" data-base="SYD">SYD<small>incl. WSI</small></div>
+        <div class="opt" data-base="BNE">BNE</div>
+      </div>
+    </div>
+    <div class="grp">
+      <label>Fleet</label>
+      <div class="btnRow" id="fleetRow">
+        <div class="opt" data-fleet="A330">A330</div>
+        <div class="opt" data-fleet="A321">A320<small>A321 freighter</small></div>
+      </div>
+    </div>
+    <div class="grp">
+      <label>Standby / Reserve code</label>
+      <select id="sbSelect">
+        <option value="">Select standby code…</option>
+      </select>
+    </div>
+    <div class="grp">
+      <label>Day of week</label>
+      <div class="btnRow" id="dayRow"></div>
+    </div>
+  </div>
+
+  <div class="summary" id="summary" style="display:none;"></div>
+
+  <div id="map"><svg id="mapSvg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet"></svg></div>
+
+  <div class="legend">
+    <span><span class="dot home"></span>Your base</span>
+    <span><span class="dot used"></span>Ports served</span>
+    <span><span class="dot op"></span>Operating flight</span>
+  </div>
+
+  <div id="listHdr" class="listHdr"></div>
+  <div id="list"></div>
+</div>
+
+<script>
+// ---------- STANDBY / RESERVE WINDOWS ----------
+const STANDBY = [
+  {code:'V15', start:'00:01', end:'09:00'},
+  {code:'V1',  start:'00:01', end:'06:00'},
+  {code:'V2',  start:'03:00', end:'12:00'},
+  {code:'V4',  start:'04:00', end:'12:00'},
+  {code:'V5',  start:'05:01', end:'13:00'},
+  {code:'V6',  start:'06:00', end:'12:00'},
+  {code:'V65', start:'06:00', end:'14:00'},
+  {code:'V11', start:'07:00', end:'15:00'},
+  {code:'V8',  start:'08:00', end:'16:00'},
+  {code:'V9',  start:'09:00', end:'17:00'},
+  {code:'V63', start:'10:00', end:'15:00'},
+  {code:'V7',  start:'10:00', end:'18:00'},
+  {code:'V10', start:'10:00', end:'20:00'},
+  {code:'V12', start:'12:00', end:'22:00'},
+  {code:'V61', start:'17:00', end:'22:00'},
+  {code:'V3',  start:'17:00', end:'23:59'},
+  {code:'V16', start:'16:00', end:'23:59'},
+  {code:'V30', start:'15:00', end:'22:00'},
+];
+
+// ---------- FREIGHTER SCHEDULE (from Qantas Freight timetable) ----------
+// op = operating (all true for now). days = weekdays the flight departs.
+const M4=['Mon','Tue','Wed','Thu'], T4=['Tue','Wed','Thu','Fri'], T3=['Tue','Wed','Thu'];
+const FLIGHTS = [
+  // A330 domestic
+  {flight:'7301', dep:'SYD', arr:'WSI', fleet:'A330', net:'Domestic',      std:'12:30', sta:'13:15', days:['Mon']},
+  {flight:'7345', dep:'WSI', arr:'MEL', fleet:'A330', net:'Domestic',      std:'22:50', sta:'00:25', days:M4},
+  {flight:'7359', dep:'MEL', arr:'PER', fleet:'A330', net:'Domestic',      std:'01:55', sta:'04:05', days:T4},
+  {flight:'7318', dep:'PER', arr:'WSI', fleet:'A330', net:'Domestic',      std:'13:50', sta:'19:50', days:T3},
+  // A321 domestic
+  {flight:'7313', dep:'CNS', arr:'BNE', fleet:'A321', net:'Domestic',      std:'19:10', sta:'21:25', days:M4},
+  {flight:'7335', dep:'BNE', arr:'MEL', fleet:'A321', net:'Domestic',      std:'22:20', sta:'00:45', days:M4},
+  {flight:'7353', dep:'MEL', arr:'BNE', fleet:'A321', net:'Domestic',      std:'01:40', sta:'03:55', days:T4},
+  {flight:'7332', dep:'BNE', arr:'TSV', fleet:'A321', net:'Domestic',      std:'04:50', sta:'06:55', days:T4},
+  {flight:'7321', dep:'TSV', arr:'CNS', fleet:'A321', net:'Domestic',      std:'07:35', sta:'08:20', days:T4},
+  {flight:'7376', dep:'HBA', arr:'LST', fleet:'A321', net:'Domestic',      std:'20:00', sta:'20:30', days:M4},
+  {flight:'7365', dep:'LST', arr:'MEL', fleet:'A321', net:'Domestic',      std:'21:00', sta:'22:05', days:M4},
+  {flight:'7350', dep:'MEL', arr:'BNE', fleet:'A321', net:'Domestic',      std:'23:00', sta:'01:15', days:M4},
+  {flight:'7305', dep:'BNE', arr:'MEL', fleet:'A321', net:'Domestic',      std:'02:10', sta:'04:35', days:T4},
+  {flight:'7398', dep:'PER', arr:'MEL', fleet:'A321', net:'Domestic',      std:'19:15', sta:'00:45', days:M4},
+  {flight:'7356', dep:'MEL', arr:'LST', fleet:'A321', net:'Domestic',      std:'02:25', sta:'03:30', days:T4},
+  {flight:'7367', dep:'LST', arr:'HBA', fleet:'A321', net:'Domestic',      std:'04:25', sta:'04:55', days:T4},
+  {flight:'7354', dep:'MEL', arr:'WSI', fleet:'A321', net:'Domestic',      std:'20:05', sta:'21:30', days:M4},
+  {flight:'7340', dep:'WSI', arr:'BNE', fleet:'A321', net:'Domestic',      std:'22:25', sta:'00:05', days:M4},
+  {flight:'7330', dep:'BNE', arr:'MEL', fleet:'A321', net:'Domestic',      std:'01:00', sta:'03:25', days:T4},
+  {flight:'7390', dep:'MEL', arr:'PER', fleet:'A321', net:'Domestic',      std:'03:50', sta:'06:00', days:T4},
+  // A330 international
+  {flight:'7525', dep:'SYD', arr:'HKG', fleet:'A330', net:'International',  std:'12:20', sta:'19:50', days:['Wed','Sun']},
+  {flight:'7526', dep:'HKG', arr:'SYD', fleet:'A330', net:'International',  std:'23:45', sta:'11:05', days:['Wed','Fri','Sun']},
+  {flight:'7531', dep:'PER', arr:'HKG', fleet:'A330', net:'International',  std:'14:00', sta:'22:00', days:['Fri']},
+  {flight:'7535', dep:'SYD', arr:'PVG', fleet:'A330', net:'International',  std:'15:25', sta:'00:20', days:['Thu','Sat']},
+  {flight:'7536', dep:'PVG', arr:'SIN', fleet:'A330', net:'International',  std:'02:40', sta:'08:30', days:['Wed','Sun']},
+  {flight:'7536', dep:'SIN', arr:'SYD', fleet:'A330', net:'International',  std:'11:00', sta:'20:40', days:['Wed','Sun']},
+  // A321 international
+  {flight:'7523', dep:'SYD', arr:'AKL', fleet:'A321', net:'International',  std:'22:10', sta:'03:10', days:['Mon','Tue','Wed','Thu','Sat']},
+  {flight:'7523', dep:'AKL', arr:'CHC', fleet:'A321', net:'International',  std:'04:10', sta:'05:25', days:['Tue','Wed','Thu','Fri','Sun']},
+  {flight:'7524', dep:'CHC', arr:'SYD', fleet:'A321', net:'International',  std:'06:25', sta:'07:40', days:['Tue','Wed','Thu','Fri','Sun']},
+];
+
+// A SYD-base standby also covers Western Sydney (WSI) departures.
+const BASE_PORTS = { MEL:['MEL'], SYD:['SYD','WSI'], BNE:['BNE'] };
+
+const AIRPORTS = {
+  SYD:{lat:-33.9399,lon:151.1753,name:"Sydney"},
+  WSI:{lat:-33.9114,lon:150.7406,name:"Western Sydney"},
+  MEL:{lat:-37.6690,lon:144.8410,name:"Melbourne"},
+  BNE:{lat:-27.3842,lon:153.1175,name:"Brisbane"},
+  PER:{lat:-31.9403,lon:115.9669,name:"Perth"},
+  CNS:{lat:-16.8858,lon:145.7554,name:"Cairns"},
+  TSV:{lat:-19.2526,lon:146.7654,name:"Townsville"},
+  HBA:{lat:-42.8361,lon:147.5103,name:"Hobart"},
+  LST:{lat:-41.5453,lon:147.2140,name:"Launceston"},
+  HKG:{lat:22.3080,lon:113.9185,name:"Hong Kong"},
+  PVG:{lat:31.1443,lon:121.8083,name:"Shanghai Pudong"},
+  SIN:{lat:1.3644,lon:103.9915,name:"Singapore Changi"},
+  AKL:{lat:-37.0082,lon:174.7850,name:"Auckland"},
+  CHC:{lat:-43.4894,lon:172.5322,name:"Christchurch"},
+};
+
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const DAY_FULL = {Mon:'Monday',Tue:'Tuesday',Wed:'Wednesday',Thu:'Thursday',Fri:'Friday',Sat:'Saturday',Sun:'Sunday'};
+
+// ---------- state ----------
+const sel = { base:null, fleet:null, sb:null, day:null };
+function toMin(t){ const [h,m]=t.split(':').map(Number); return h*60+m; }
+
+// ---------- populate controls ----------
+const sbSelect = document.getElementById('sbSelect');
+STANDBY.forEach(s=>{
+  const o=document.createElement('option');
+  o.value=s.code; o.textContent=`${s.code}  —  ${s.start} to ${s.end}`;
+  sbSelect.appendChild(o);
+});
+const dayRow = document.getElementById('dayRow');
+DAYS.forEach(d=>{
+  const el=document.createElement('div');
+  el.className='opt day'; el.dataset.day=d; el.textContent=d;
+  dayRow.appendChild(el);
+});
+
+function bindGroup(rowId, key){
+  document.getElementById(rowId).addEventListener('click', e=>{
+    const opt = e.target.closest('.opt'); if(!opt) return;
+    const row = document.getElementById(rowId);
+    row.querySelectorAll('.opt').forEach(o=>o.classList.remove('active'));
+    opt.classList.add('active');
+    sel[key] = opt.dataset[key];
+    update();
+  });
+}
+bindGroup('baseRow','base');
+bindGroup('fleetRow','fleet');
+bindGroup('dayRow','day');
+sbSelect.addEventListener('change', ()=>{ sel.sb = sbSelect.value || null; update(); });
+
+// ---------- coverage ----------
+function coveredFlights(){
+  const sb = STANDBY.find(s=>s.code===sel.sb);
+  const ports = BASE_PORTS[sel.base] || [];
+  const s = toMin(sb.start), e = toMin(sb.end);
+  return FLIGHTS.filter(f =>
+    f.fleet===sel.fleet &&
+    ports.includes(f.dep) &&
+    f.days.includes(sel.day) &&
+    toMin(f.std) >= s && toMin(f.std) <= e
+  ).sort((a,b)=> toMin(a.std)-toMin(b.std));
+}
+
+// ---------- MAP ----------
+const svg = document.getElementById('mapSvg');
+const SVG_NS = "http://www.w3.org/2000/svg";
+const VB_W=800, VB_H=600;
+const PROJ = { lonMin:95, lonMax:180, latMin:-47, latMax:36 };
+function project(lat,lon){
+  const x=(lon-PROJ.lonMin)/(PROJ.lonMax-PROJ.lonMin)*VB_W;
+  const y=(PROJ.latMax-lat)/(PROJ.latMax-PROJ.latMin)*VB_H;
+  return [x,y];
+}
+function el(tag,attrs){ const e=document.createElementNS(SVG_NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); return e; }
+function drawGraticule(g){
+  for(let lon=100; lon<=180; lon+=10){ const [x1,y1]=project(PROJ.latMax,lon), [x2,y2]=project(PROJ.latMin,lon); g.appendChild(el('line',{x1,y1,x2,y2,class:'mapGrat'})); }
+  for(let lat=-40; lat<=30; lat+=10){ const [x1,y1]=project(lat,PROJ.lonMin), [x2,y2]=project(lat,PROJ.lonMax); g.appendChild(el('line',{x1,y1,x2,y2,class:'mapGrat'})); }
+}
+function curvedPath(p1,p2){
+  const [x1,y1]=project(p1[0],p1[1]), [x2,y2]=project(p2[0],p2[1]);
+  const mx=(x1+x2)/2,my=(y1+y2)/2, dx=x2-x1,dy=y2-y1, dist=Math.sqrt(dx*dx+dy*dy);
+  const bulge=Math.min(dist*0.18,60);
+  let offx=-dy/dist*bulge, offy=dx/dist*bulge;
+  if(offy>0){ offx=-offx; offy=-offy; }
+  return `M ${x1} ${y1} Q ${mx+offx} ${my+offy} ${x2} ${y2}`;
+}
+function fmtT(t){ return t; }
+function drawMap(flights){
+  svg.innerHTML='';
+  const grat=el('g',{}); drawGraticule(grat); svg.appendChild(grat);
+  const lines=el('g',{}), ports=el('g',{}), labels=el('g',{});
+  svg.appendChild(lines); svg.appendChild(ports); svg.appendChild(labels);
+
+  const used=new Set();
+  (flights||[]).forEach(r=>{
+    const dep=AIRPORTS[r.dep], arr=AIRPORTS[r.arr]; if(!dep||!arr) return;
+    used.add(r.dep); used.add(r.arr);
+    const path=el('path',{d:curvedPath([dep.lat,dep.lon],[arr.lat,arr.lon]),stroke:'#3ddc97',fill:'none','stroke-width':2.4,'stroke-opacity':.9,'stroke-linecap':'round'});
+    const t=el('title',{}); t.textContent=`QF${r.flight}  ${r.dep} ${r.std} → ${r.arr} ${r.sta}  ·  ${r.fleet}`;
+    path.appendChild(t); lines.appendChild(path);
+  });
+
+  const homePorts = new Set(sel.base ? (BASE_PORTS[sel.base]||[]) : []);
+  Object.keys(AIRPORTS).forEach(code=>{
+    const a=AIRPORTS[code]; const [x,y]=project(a.lat,a.lon);
+    let cls='mapPort';
+    if(homePorts.has(code)) cls='mapPort home';
+    else if(used.has(code)) cls='mapPort used';
+    const r = homePorts.has(code)?6 : (used.has(code)?5:3);
+    const c=el('circle',{cx:x,cy:y,r,class:cls});
+    const tt=el('title',{}); tt.textContent=`${code} — ${a.name}`; c.appendChild(tt);
+    ports.appendChild(c);
+    if(homePorts.has(code)||used.has(code)){
+      const lb=el('text',{x:x+7,y:y-6,class:'mapLabel'}); lb.textContent=code; labels.appendChild(lb);
+    }
+  });
+}
+
+// ---------- render ----------
+const summary=document.getElementById('summary');
+const listHdr=document.getElementById('listHdr');
+const list=document.getElementById('list');
+
+function flightRowHTML(r){
+  const depName=(AIRPORTS[r.dep]||{}).name||r.dep;
+  const arrName=(AIRPORTS[r.arr]||{}).name||r.arr;
+  return `
+    <div class="flightRow">
+      <div class="rowTop">
+        <span class="flightNo">QF${r.flight}</span>
+        <span>
+          <span class="badge op">Operating</span>
+          <span class="badge eq">${r.fleet==='A321'?'A320':r.fleet}</span>
+        </span>
+      </div>
+      <div class="route">${r.dep} ${r.std} → ${r.arr} ${r.sta}</div>
+      <div class="meta"><span>${depName} → ${arrName}</span><span>${r.net}</span></div>
+    </div>`;
+}
+
+function update(){
+  const complete = sel.base && sel.fleet && sel.sb && sel.day;
+  if(!complete){
+    summary.style.display='none';
+    drawMap([]);
+    listHdr.textContent='';
+    list.innerHTML = `<div class="empty">Choose a <b>base</b>, <b>fleet</b>, <b>standby code</b> and <b>day</b> above to see the operating freighters that depart within your standby window.</div>`;
+    return;
+  }
+  const sb = STANDBY.find(s=>s.code===sel.sb);
+  const flights = coveredFlights();
+  const fleetLabel = sel.fleet==='A321'?'A320':sel.fleet;
+
+  summary.style.display='flex';
+  summary.innerHTML =
+    `<span><span class="k">Base</span> <span class="v">${sel.base}</span></span>`+
+    `<span><span class="k">Fleet</span> <span class="v">${fleetLabel}</span></span>`+
+    `<span><span class="k">${sb.code}</span> <span class="win">${sb.start}–${sb.end}</span></span>`+
+    `<span><span class="k">Day</span> <span class="v">${DAY_FULL[sel.day]}</span></span>`+
+    `<span class="n ${flights.length?'':'zero'}">${flights.length} flight${flights.length===1?'':'s'}</span>`;
+
+  drawMap(flights);
+
+  listHdr.textContent = flights.length ? `Covered flights (dep ${sb.start}–${sb.end})` : '';
+  list.innerHTML = flights.length
+    ? flights.map(flightRowHTML).join('')
+    : `<div class="empty">No operating ${fleetLabel} freighters depart <b>${sel.base}</b> within <b>${sb.code}</b> (${sb.start}–${sb.end}) on <b>${DAY_FULL[sel.day]}</b>.</div>`;
+}
+
+// init
+update();
+</script>
+</body>
+</html>
