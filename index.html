@@ -43,14 +43,17 @@
   .summary .n{margin-left:auto;font-weight:800;font-size:15px;}
   .summary .n.zero{color:var(--muted);}
 
-  #map{margin:14px;border-radius:12px;overflow:hidden;background:#0d1730;border:1px solid var(--border);
-    aspect-ratio:4/3;max-height:52vh;}
-  #map svg{width:100%;height:100%;display:block;}
-  .mapLabel{font-size:9px;fill:#8ea0c2;font-family:inherit;}
-  .mapPort{fill:#2c3f66;stroke:#0d1730;stroke-width:1;}
-  .mapPort.used{fill:#4fa3ff;}
-  .mapPort.home{fill:var(--accent2);stroke:#0d1730;stroke-width:1.5;}
-  .mapGrat{stroke:#16223f;stroke-width:0.5;}
+  #map{margin:14px;border-radius:12px;overflow:hidden;height:52vh;min-height:300px;border:1px solid var(--border);z-index:0;}
+  .leaflet-container{background:#0d1730;font-family:inherit;}
+  .portLbl{color:#cfe0ff;font-size:10px;font-weight:700;text-shadow:0 1px 3px #000,0 0 3px #000;white-space:nowrap;}
+  .leaflet-tooltip{background:#121b2e;border:1px solid #2b3d61;color:#e8edf7;font-size:11px;box-shadow:0 2px 8px rgba(0,0,0,.4);}
+  .leaflet-tooltip-top:before{border-top-color:#2b3d61;}
+  .leaflet-tooltip-left:before{border-left-color:#2b3d61;}
+  .leaflet-tooltip-right:before{border-right-color:#2b3d61;}
+  .leaflet-bar a{background:#121b2e;color:#e8edf7;border-bottom-color:#22304d;}
+  .leaflet-bar a:hover{background:#1b2947;}
+  .leaflet-control-attribution{background:rgba(11,18,32,.7)!important;color:#6f83a8!important;}
+  .leaflet-control-attribution a{color:#8ea0c2!important;}
 
   .flightRow{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:4px;}
   .rowTop{display:flex;justify-content:space-between;align-items:center;}
@@ -70,6 +73,8 @@
   .dot.home{background:var(--accent2);}
   .dot.used{background:var(--accent);}
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
 <div id="app">
@@ -108,7 +113,7 @@
 
   <div class="summary" id="summary" style="display:none;"></div>
 
-  <div id="map"><svg id="mapSvg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet"></svg></div>
+  <div id="map"></div>
 
   <div class="legend">
     <span><span class="dot home"></span>Your base</span>
@@ -259,59 +264,55 @@ function coveredFlights(){
   }).sort((a,b)=> toMin(a.std)-toMin(b.std));
 }
 
-// ---------- MAP ----------
-const svg = document.getElementById('mapSvg');
-const SVG_NS = "http://www.w3.org/2000/svg";
-const VB_W=800, VB_H=600;
-const PROJ = { lonMin:95, lonMax:180, latMin:-47, latMax:36 };
-function project(lat,lon){
-  const x=(lon-PROJ.lonMin)/(PROJ.lonMax-PROJ.lonMin)*VB_W;
-  const y=(PROJ.latMax-lat)/(PROJ.latMax-PROJ.latMin)*VB_H;
-  return [x,y];
-}
-function el(tag,attrs){ const e=document.createElementNS(SVG_NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); return e; }
-function drawGraticule(g){
-  for(let lon=100; lon<=180; lon+=10){ const [x1,y1]=project(PROJ.latMax,lon), [x2,y2]=project(PROJ.latMin,lon); g.appendChild(el('line',{x1,y1,x2,y2,class:'mapGrat'})); }
-  for(let lat=-40; lat<=30; lat+=10){ const [x1,y1]=project(lat,PROJ.lonMin), [x2,y2]=project(lat,PROJ.lonMax); g.appendChild(el('line',{x1,y1,x2,y2,class:'mapGrat'})); }
-}
-function curvedPath(p1,p2){
-  const [x1,y1]=project(p1[0],p1[1]), [x2,y2]=project(p2[0],p2[1]);
-  const mx=(x1+x2)/2,my=(y1+y2)/2, dx=x2-x1,dy=y2-y1, dist=Math.sqrt(dx*dx+dy*dy);
-  const bulge=Math.min(dist*0.18,60);
-  let offx=-dy/dist*bulge, offy=dx/dist*bulge;
-  if(offy>0){ offx=-offx; offy=-offy; }
-  return `M ${x1} ${y1} Q ${mx+offx} ${my+offy} ${x2} ${y2}`;
-}
-function fmtT(t){ return t; }
-function drawMap(flights){
-  svg.innerHTML='';
-  const grat=el('g',{}); drawGraticule(grat); svg.appendChild(grat);
-  const lines=el('g',{}), ports=el('g',{}), labels=el('g',{});
-  svg.appendChild(lines); svg.appendChild(ports); svg.appendChild(labels);
+// ---------- MAP (Leaflet + OpenStreetMap / CARTO dark basemap) ----------
+const map = L.map('map', { zoomControl:true, worldCopyJump:true }).setView([-25, 140], 3);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  subdomains:'abcd', maxZoom:19,
+  attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
+}).addTo(map);
+setTimeout(()=>map.invalidateSize(), 200);
+window.addEventListener('resize', ()=>map.invalidateSize());
 
-  const used=new Set();
+const arcLayer = L.layerGroup().addTo(map);
+const portLayer = L.layerGroup().addTo(map);
+
+// quadratic-bezier arc (bulges toward higher latitude) for a great-circle-ish look
+function arcPoints(a,b){
+  const dx=b.lon-a.lon, dy=b.lat-a.lat, dist=Math.sqrt(dx*dx+dy*dy)||1, k=0.15;
+  let ox=-dy/dist*dist*k, oy=dx/dist*dist*k;
+  if(oy<0){ ox=-ox; oy=-oy; }
+  const clat=(a.lat+b.lat)/2+oy, clon=(a.lon+b.lon)/2+ox, pts=[];
+  for(let t=0;t<=1.0001;t+=1/24){ const u=1-t;
+    pts.push([u*u*a.lat+2*u*t*clat+t*t*b.lat, u*u*a.lon+2*u*t*clon+t*t*b.lon]); }
+  return pts;
+}
+
+function addPort(code, kind){
+  const a=AIRPORTS[code]; if(!a) return;
+  const color = kind==='home' ? '#ff9f43' : '#4fa3ff';
+  L.circleMarker([a.lat,a.lon], {radius: kind==='home'?7:5, color:'#0d1730', weight:1.5,
+    fillColor:color, fillOpacity:1}).bindTooltip(`${code} — ${a.name}`,{direction:'top'}).addTo(portLayer);
+  L.marker([a.lat,a.lon], {interactive:false,
+    icon:L.divIcon({className:'', html:`<span class="portLbl">${code}</span>`, iconSize:[0,0], iconAnchor:[-8,4]})}).addTo(portLayer);
+}
+
+function drawMap(flights){
+  arcLayer.clearLayers(); portLayer.clearLayers();
+  const homePorts = new Set(sel.base ? (BASE_PORTS[sel.base]||[]) : []);
+  const used = new Set(); const bounds = [];
   (flights||[]).forEach(r=>{
     const dep=AIRPORTS[r.dep], arr=AIRPORTS[r.arr]; if(!dep||!arr) return;
     used.add(r.dep); used.add(r.arr);
-    const path=el('path',{d:curvedPath([dep.lat,dep.lon],[arr.lat,arr.lon]),stroke:'#3ddc97',fill:'none','stroke-width':2.4,'stroke-opacity':.9,'stroke-linecap':'round'});
-    const t=el('title',{}); t.textContent=`QF${r.flight}  ${r.dep} ${r.std} → ${r.arr} ${r.sta}  ·  ${r.fleet}`;
-    path.appendChild(t); lines.appendChild(path);
+    const pts = arcPoints(dep,arr);
+    L.polyline(pts, {color:'#3ddc97', weight:2.6, opacity:.92})
+      .bindTooltip(`QF${r.flight} · ${r.dep} ${r.std} → ${r.arr} ${r.sta} · ${r.fleet==='A321'?'A320':r.fleet}`)
+      .addTo(arcLayer);
+    pts.forEach(p=>bounds.push(p));
   });
-
-  const homePorts = new Set(sel.base ? (BASE_PORTS[sel.base]||[]) : []);
-  Object.keys(AIRPORTS).forEach(code=>{
-    const a=AIRPORTS[code]; const [x,y]=project(a.lat,a.lon);
-    let cls='mapPort';
-    if(homePorts.has(code)) cls='mapPort home';
-    else if(used.has(code)) cls='mapPort used';
-    const r = homePorts.has(code)?6 : (used.has(code)?5:3);
-    const c=el('circle',{cx:x,cy:y,r,class:cls});
-    const tt=el('title',{}); tt.textContent=`${code} — ${a.name}`; c.appendChild(tt);
-    ports.appendChild(c);
-    if(homePorts.has(code)||used.has(code)){
-      const lb=el('text',{x:x+7,y:y-6,class:'mapLabel'}); lb.textContent=code; labels.appendChild(lb);
-    }
-  });
+  homePorts.forEach(code=> addPort(code,'home'));
+  used.forEach(code=>{ if(!homePorts.has(code)) addPort(code,'used'); });
+  homePorts.forEach(code=>{ const a=AIRPORTS[code]; if(a) bounds.push([a.lat,a.lon]); });
+  if(bounds.length){ map.fitBounds(bounds, {padding:[45,45], maxZoom:6}); }
 }
 
 // ---------- render ----------
