@@ -82,6 +82,37 @@
   .dot.op{background:var(--op);}
   .dot.home{background:var(--accent2);}
   .dot.used{background:var(--accent);}
+
+  .flightRow.tappable{cursor:pointer;}
+  .flightRow.tappable:active{background:#182541;}
+  .tapHint{color:var(--accent);font-weight:700;margin-left:auto;}
+
+  .overlay{position:fixed;inset:0;background:rgba(4,10,20,.62);display:flex;align-items:flex-end;justify-content:center;z-index:1000;}
+  .overlay[hidden]{display:none;}
+  .sheet{background:var(--panel);width:100%;max-width:820px;max-height:88vh;border-radius:16px 16px 0 0;
+    border:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+  @media(min-width:600px){ .overlay{align-items:center;} .sheet{border-radius:16px;} }
+  .sheetHead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:14px;border-bottom:1px solid var(--border);}
+  .sheetTitle{font-size:16px;font-weight:800;}
+  .sheetSub{font-size:11.5px;color:var(--muted);margin-top:2px;}
+  .closeBtn{background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:8px;
+    width:34px;height:34px;font-size:15px;cursor:pointer;flex-shrink:0;}
+  .sheetBody{padding:12px 14px 22px;overflow-y:auto;}
+  .patDay{margin-bottom:16px;}
+  .patDate{font-size:12px;font-weight:800;color:var(--accent);letter-spacing:.4px;margin-bottom:8px;}
+  .patLeg{border:1px solid var(--border);border-left-width:4px;border-radius:8px;padding:9px 11px;margin-bottom:7px;background:var(--panel2);}
+  .patLeg.op{border-left-color:var(--op);}
+  .patLeg.pax{border-left-color:var(--pax);}
+  .patLeg.hi{outline:2px solid var(--accent);outline-offset:-1px;}
+  .plTop{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  .plNo{font-weight:700;font-size:13.5px;}
+  .plEq{font-size:11px;color:var(--muted);white-space:nowrap;}
+  .pTag{font-size:9px;font-weight:800;background:rgba(255,180,84,.18);color:var(--pax);padding:1px 6px;border-radius:10px;letter-spacing:.4px;}
+  .opTag{font-size:9px;font-weight:800;background:rgba(61,220,151,.16);color:var(--op);padding:1px 6px;border-radius:10px;letter-spacing:.4px;}
+  .plRoute{font-size:14px;font-weight:600;margin-top:3px;}
+  .plGrnd{font-size:11px;color:var(--muted);margin-top:2px;}
+  .patDuty{font-size:11px;color:var(--muted);padding:4px 2px 2px;border-top:1px dashed var(--border);margin-top:2px;}
+  .patEmpty{padding:26px 10px;text-align:center;color:var(--muted);font-size:13px;line-height:1.6;}
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -139,6 +170,19 @@
 
   <div id="listHdr" class="listHdr"></div>
   <div id="list"></div>
+</div>
+
+<div id="patternOverlay" class="overlay" hidden>
+  <div class="sheet">
+    <div class="sheetHead">
+      <div>
+        <div class="sheetTitle" id="patTitle"></div>
+        <div class="sheetSub" id="patSub"></div>
+      </div>
+      <button class="closeBtn" id="patClose" aria-label="Close">✕</button>
+    </div>
+    <div class="sheetBody" id="patBody"></div>
+  </div>
 </div>
 
 <script>
@@ -343,7 +387,8 @@ function drawMap(flights){
     used.add(r.dep); used.add(r.arr);
     const pts = arcPoints(dep,arr);
     L.polyline(pts, {color:'#3ddc97', weight:2.6, opacity:.92})
-      .bindTooltip(`QF${r.flight} · ${r.dep} ${r.std} → ${r.arr} ${r.sta} · ${r.fleet==='A321'?'A320':r.fleet}`)
+      .bindTooltip(`QF${r.flight} · ${r.dep} ${r.std} → ${r.arr} ${r.sta} · ${r.fleet==='A321'?'A320':r.fleet} · tap for pattern`)
+      .on('click', ()=>openPattern(r.flight))
       .addTo(arcLayer);
     pts.forEach(p=>bounds.push(p));
   });
@@ -362,7 +407,7 @@ function flightRowHTML(r){
   const depName=(AIRPORTS[r.dep]||{}).name||r.dep;
   const arrName=(AIRPORTS[r.arr]||{}).name||r.arr;
   return `
-    <div class="flightRow">
+    <div class="flightRow tappable" data-flight="${r.flight}">
       <div class="rowTop">
         <span class="flightNo">QF${r.flight}</span>
         <span>
@@ -371,7 +416,7 @@ function flightRowHTML(r){
         </span>
       </div>
       <div class="route">${r.dep} ${r.std} → ${r.arr} ${r.sta}</div>
-      <div class="meta"><span>${depName} → ${arrName}</span><span>${r.net}</span></div>
+      <div class="meta"><span>${depName} → ${arrName}</span><span>${r.net}</span><span class="tapHint">View pattern ›</span></div>
     </div>`;
 }
 
@@ -406,6 +451,64 @@ function update(){
     ? flights.map(flightRowHTML).join('')
     : `<div class="empty">No operating ${fleetLabel} freighters depart <b>${sel.base}</b> between <b>${sb.start}</b> and <b>${reach}</b> (${sb.code} + 5 h lead time) on <b>${DAY_FULL[sel.day]}</b>.</div>`;
 }
+
+// ---------- FLIGHT PATTERNS (full pairings) ----------
+// Keyed pairing sheets; PATTERN_OF maps a flight number to its pairing.
+const PATTERNS = {
+  P7301: {
+    title: 'SYD → WSI → SYD → PER (layover) → WSI → SYD · 2-day pairing',
+    days: [
+      { date:'10 Aug 2026', rpt:'11:30', rls:'19:25', rest:'17:25', restPort:'PER', legs:[
+        {code:'7301',   pax:false, dep:'SYD', depT:'12:30', arr:'WSI', arrT:'13:15', eq:'33X', grnd:'0:30'},
+        {code:'CAR001', pax:true,  dep:'WSI', depT:'13:45', arr:'SYD', arrT:'14:45', eq:'CAR', grnd:'1:25'},
+        {code:'651',    pax:true,  dep:'SYD', depT:'16:10', arr:'PER', arrT:'19:10', eq:'73H', grnd:''},
+      ]},
+      { date:'11 Aug 2026', rpt:'12:50', rls:'21:30', legs:[
+        {code:'7318',   pax:false, dep:'PER', depT:'13:50', arr:'WSI', arrT:'19:50', eq:'33X', grnd:'0:40'},
+        {code:'CAR001', pax:true,  dep:'WSI', depT:'20:30', arr:'SYD', arrT:'21:30', eq:'CAR', grnd:''},
+      ]},
+    ],
+  },
+};
+const PATTERN_OF = { '7301':'P7301', '7318':'P7301' };
+
+const overlay = document.getElementById('patternOverlay');
+function legLabel(c){ return /^[0-9]+$/.test(c) ? 'QF'+c : c; }
+function openPattern(flight){
+  const pat = PATTERNS[PATTERN_OF[flight]];
+  document.getElementById('patTitle').textContent = legLabel(flight)+' — full pattern';
+  const sub = document.getElementById('patSub'), body = document.getElementById('patBody');
+  if(!pat){
+    sub.textContent = '';
+    body.innerHTML = `<div class="patEmpty">The full pattern for <b>${legLabel(flight)}</b> hasn’t been loaded yet.<br>Send its pairing sheet and I’ll add it.</div>`;
+  } else {
+    sub.textContent = pat.title || '';
+    body.innerHTML = pat.days.map(d=>`
+      <div class="patDay">
+        <div class="patDate">${d.date}</div>
+        ${d.legs.map(l=>{
+          const hi = l.code===flight ? ' hi':'';
+          const tag = l.pax ? '<span class="pTag">PAX</span> ' : '<span class="opTag">OP</span> ';
+          return `<div class="patLeg ${l.pax?'pax':'op'}${hi}">
+              <div class="plTop"><span class="plNo">${tag}${legLabel(l.code)}</span><span class="plEq">${l.eq||''}</span></div>
+              <div class="plRoute">${l.dep} ${l.depT} → ${l.arr} ${l.arrT}</div>
+              ${l.grnd?`<div class="plGrnd">Ground ${l.grnd}</div>`:''}
+            </div>`;
+        }).join('')}
+        <div class="patDuty">Sign-on ${d.rpt} · Sign-off ${d.rls}${d.rest?` · Rest ${d.rest} at ${d.restPort}`:''}</div>
+      </div>`).join('');
+  }
+  overlay.hidden = false; document.body.style.overflow = 'hidden';
+}
+function closePattern(){ overlay.hidden = true; document.body.style.overflow = ''; }
+
+document.getElementById('list').addEventListener('click', e=>{
+  const row = e.target.closest('.flightRow[data-flight]'); if(!row) return;
+  openPattern(row.dataset.flight);
+});
+document.getElementById('patClose').addEventListener('click', closePattern);
+overlay.addEventListener('click', e=>{ if(e.target===overlay) closePattern(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !overlay.hidden) closePattern(); });
 
 // init
 update();
