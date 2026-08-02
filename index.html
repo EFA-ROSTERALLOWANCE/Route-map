@@ -44,16 +44,16 @@
   .summary .n.zero{color:var(--muted);}
 
   #map{margin:14px;border-radius:12px;overflow:hidden;height:52vh;min-height:300px;border:1px solid var(--border);z-index:0;}
-  .leaflet-container{background:#0d1730;font-family:inherit;}
-  .portLbl{color:#cfe0ff;font-size:10px;font-weight:700;text-shadow:0 1px 3px #000,0 0 3px #000;white-space:nowrap;}
+  .leaflet-container{background:#e8edf3;font-family:inherit;}
+  .portLbl{color:#0b1a33;font-size:10px;font-weight:700;text-shadow:0 1px 2px #fff,0 0 3px #fff;white-space:nowrap;}
   .leaflet-tooltip{background:#121b2e;border:1px solid #2b3d61;color:#e8edf7;font-size:11px;box-shadow:0 2px 8px rgba(0,0,0,.4);}
   .leaflet-tooltip-top:before{border-top-color:#2b3d61;}
   .leaflet-tooltip-left:before{border-left-color:#2b3d61;}
   .leaflet-tooltip-right:before{border-right-color:#2b3d61;}
   .leaflet-bar a{background:#121b2e;color:#e8edf7;border-bottom-color:#22304d;}
   .leaflet-bar a:hover{background:#1b2947;}
-  .leaflet-control-attribution{background:rgba(11,18,32,.7)!important;color:#6f83a8!important;}
-  .leaflet-control-attribution a{color:#8ea0c2!important;}
+  .leaflet-control-attribution{background:rgba(255,255,255,.8)!important;color:#5b6f95!important;}
+  .leaflet-control-attribution a{color:#365f9c!important;}
 
   .flightRow{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:4px;}
   .rowTop{display:flex;justify-content:space-between;align-items:center;}
@@ -268,7 +268,7 @@ function coveredFlights(){
 let map=null, arcLayer=null, portLayer=null;
 if(typeof L !== 'undefined'){
   map = L.map('map', { zoomControl:true, worldCopyJump:true }).setView([-25, 140], 3);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     subdomains:'abcd', maxZoom:19,
     attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
   }).addTo(map);
