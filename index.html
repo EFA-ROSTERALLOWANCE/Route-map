@@ -112,6 +112,7 @@
   .plRoute{font-size:14px;font-weight:600;margin-top:3px;}
   .plGrnd{font-size:11px;color:var(--muted);margin-top:2px;}
   .patDuty{font-size:11px;color:var(--muted);padding:4px 2px 2px;border-top:1px dashed var(--border);margin-top:2px;}
+  .patFooter{font-size:11.5px;color:var(--muted);font-weight:700;padding:8px 2px 0;border-top:1px solid var(--border);margin-top:4px;}
   .patEmpty{padding:26px 10px;text-align:center;color:var(--muted);font-size:13px;line-height:1.6;}
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -388,7 +389,7 @@ function drawMap(flights){
     const pts = arcPoints(dep,arr);
     L.polyline(pts, {color:'#3ddc97', weight:2.6, opacity:.92})
       .bindTooltip(`QF${r.flight} · ${r.dep} ${r.std} → ${r.arr} ${r.sta} · ${r.fleet==='A321'?'A320':r.fleet} · tap for pattern`)
-      .on('click', ()=>openPattern(r.flight))
+      .on('click', ()=>openPattern(r.flight, sel.day))
       .addTo(arcLayer);
     pts.forEach(p=>bounds.push(p));
   });
@@ -453,34 +454,54 @@ function update(){
 }
 
 // ---------- FLIGHT PATTERNS (full pairings) ----------
-// Keyed pairing sheets; PATTERN_OF maps a flight number to its pairing.
+// Pairings can differ by weekday, so they're keyed by "<flight>|<day>"
+// (use "<flight>|*" for a day-independent pairing).
 const PATTERNS = {
   P7301: {
     title: 'SYD → WSI → SYD → PER (layover) → WSI → SYD · 2-day pairing',
     days: [
-      { date:'10 Aug 2026', rpt:'11:30', rls:'19:25', rest:'17:25', restPort:'PER', legs:[
-        {code:'7301',   pax:false, dep:'SYD', depT:'12:30', arr:'WSI', arrT:'13:15', eq:'33X', grnd:'0:30'},
+      { date:'10 Aug 2026 (Mon)', rpt:'11:30', rls:'19:25', rest:'17:25', restPort:'PER', legs:[
+        {code:'7301',   pax:false, dep:'SYD', depT:'12:30', arr:'WSI', arrT:'13:15', eq:'33X', blk:'0:45', grnd:'0:30'},
         {code:'CAR001', pax:true,  dep:'WSI', depT:'13:45', arr:'SYD', arrT:'14:45', eq:'CAR', grnd:'1:25'},
         {code:'651',    pax:true,  dep:'SYD', depT:'16:10', arr:'PER', arrT:'19:10', eq:'73H', grnd:''},
       ]},
-      { date:'11 Aug 2026', rpt:'12:50', rls:'21:30', legs:[
-        {code:'7318',   pax:false, dep:'PER', depT:'13:50', arr:'WSI', arrT:'19:50', eq:'33X', grnd:'0:40'},
+      { date:'11 Aug 2026 (Tue)', rpt:'12:50', rls:'21:30', legs:[
+        {code:'7318',   pax:false, dep:'PER', depT:'13:50', arr:'WSI', arrT:'19:50', eq:'33X', blk:'4:00', grnd:'0:40'},
         {code:'CAR001', pax:true,  dep:'WSI', depT:'20:30', arr:'SYD', arrT:'21:30', eq:'CAR', grnd:''},
       ]},
     ],
   },
+  P7345MON: {
+    title: 'WSI → MEL → PER (layover) → WSI · Mondays · TAFB 46:15',
+    footer: 'TAFB 46:15 · Minimum rest 15:00',
+    days: [
+      { date:'10 Aug 2026 (Mon)', rpt:'21:50', rls:'04:20', rest:'32:30', restPort:'PER', legs:[
+        {code:'7345', pax:false, dep:'WSI', depT:'22:50', arr:'MEL', arrT:'00:25', eq:'33X', blk:'1:35', grnd:'1:30'},
+        {code:'7359', pax:false, dep:'MEL', depT:'01:55', arr:'PER', arrT:'04:05', eq:'33X', blk:'4:10', grnd:''},
+      ]},
+      { date:'12 Aug 2026 (Wed)', rpt:'12:50', rls:'20:05', legs:[
+        {code:'7318', pax:false, dep:'PER', depT:'13:50', arr:'WSI', arrT:'19:50', eq:'33X', blk:'4:00', grnd:''},
+      ]},
+    ],
+  },
 };
-const PATTERN_OF = { '7301':'P7301', '7318':'P7301' };
+const PATTERN_OF = {
+  '7301|Mon':'P7301',
+  '7345|Mon':'P7345MON',
+};
 
 const overlay = document.getElementById('patternOverlay');
 function legLabel(c){ return /^[0-9]+$/.test(c) ? 'QF'+c : c; }
-function openPattern(flight){
-  const pat = PATTERNS[PATTERN_OF[flight]];
+function patternFor(flight, day){
+  return PATTERNS[ PATTERN_OF[flight+'|'+day] || PATTERN_OF[flight+'|*'] ];
+}
+function openPattern(flight, day){
+  const pat = patternFor(flight, day);
   document.getElementById('patTitle').textContent = legLabel(flight)+' — full pattern';
   const sub = document.getElementById('patSub'), body = document.getElementById('patBody');
   if(!pat){
     sub.textContent = '';
-    body.innerHTML = `<div class="patEmpty">The full pattern for <b>${legLabel(flight)}</b> hasn’t been loaded yet.<br>Send its pairing sheet and I’ll add it.</div>`;
+    body.innerHTML = `<div class="patEmpty">The full pattern for <b>${legLabel(flight)}</b>${day?` on <b>${day}</b>`:''} hasn’t been loaded yet.<br>Send its pairing sheet and I’ll add it.</div>`;
   } else {
     sub.textContent = pat.title || '';
     body.innerHTML = pat.days.map(d=>`
@@ -489,14 +510,17 @@ function openPattern(flight){
         ${d.legs.map(l=>{
           const hi = l.code===flight ? ' hi':'';
           const tag = l.pax ? '<span class="pTag">PAX</span> ' : '<span class="opTag">OP</span> ';
+          const bits = [];
+          if(l.blk && !l.pax) bits.push('Blk '+l.blk);
+          if(l.grnd) bits.push('Grnd '+l.grnd);
           return `<div class="patLeg ${l.pax?'pax':'op'}${hi}">
               <div class="plTop"><span class="plNo">${tag}${legLabel(l.code)}</span><span class="plEq">${l.eq||''}</span></div>
               <div class="plRoute">${l.dep} ${l.depT} → ${l.arr} ${l.arrT}</div>
-              ${l.grnd?`<div class="plGrnd">Ground ${l.grnd}</div>`:''}
+              ${bits.length?`<div class="plGrnd">${bits.join(' · ')}</div>`:''}
             </div>`;
         }).join('')}
         <div class="patDuty">Sign-on ${d.rpt} · Sign-off ${d.rls}${d.rest?` · Rest ${d.rest} at ${d.restPort}`:''}</div>
-      </div>`).join('');
+      </div>`).join('') + (pat.footer?`<div class="patFooter">${pat.footer}</div>`:'');
   }
   overlay.hidden = false; document.body.style.overflow = 'hidden';
 }
@@ -504,7 +528,7 @@ function closePattern(){ overlay.hidden = true; document.body.style.overflow = '
 
 document.getElementById('list').addEventListener('click', e=>{
   const row = e.target.closest('.flightRow[data-flight]'); if(!row) return;
-  openPattern(row.dataset.flight);
+  openPattern(row.dataset.flight, sel.day);
 });
 document.getElementById('patClose').addEventListener('click', closePattern);
 overlay.addEventListener('click', e=>{ if(e.target===overlay) closePattern(); });
