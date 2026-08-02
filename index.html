@@ -75,7 +75,7 @@
 <div id="app">
   <header>
     <h1>✈️ EFA Standby Coverage</h1>
-    <div class="sub">Pick your base, fleet, standby code &amp; weekday to see the operating freighters that could be called out.</div>
+    <div class="sub">Pick your base, fleet, standby code &amp; weekday to see the operating freighters that could be called out (incl. a 5 h call-out lead time).</div>
   </header>
 
   <div class="card">
@@ -207,7 +207,10 @@ const DAY_FULL = {Mon:'Monday',Tue:'Tuesday',Wed:'Wednesday',Thu:'Thursday',Fri:
 
 // ---------- state ----------
 const sel = { base:null, fleet:null, sb:null, day:null };
+const LEAD_MIN = 300; // 5-hour call-out lead time: standby reaches this far past its end
 function toMin(t){ const [h,m]=t.split(':').map(Number); return h*60+m; }
+function fmtMin(m){ const nd = m>=1440?' +1':''; m=((m%1440)+1440)%1440;
+  return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')+nd; }
 
 // ---------- populate controls ----------
 const sbSelect = document.getElementById('sbSelect');
@@ -242,13 +245,18 @@ sbSelect.addEventListener('change', ()=>{ sel.sb = sbSelect.value || null; updat
 function coveredFlights(){
   const sb = STANDBY.find(s=>s.code===sel.sb);
   const ports = BASE_PORTS[sel.base] || [];
-  const s = toMin(sb.start), e = toMin(sb.end);
-  return FLIGHTS.filter(f =>
-    f.fleet===sel.fleet &&
-    ports.includes(f.dep) &&
-    f.days.includes(sel.day) &&
-    toMin(f.std) >= s && toMin(f.std) <= e
-  ).sort((a,b)=> toMin(a.std)-toMin(b.std));
+  const s = toMin(sb.start), e = toMin(sb.end) + LEAD_MIN; // extend reach by lead time
+  const di = DAYS.indexOf(sel.day), nextDay = DAYS[(di+1)%7];
+  return FLIGHTS.filter(f => {
+    if(f.fleet!==sel.fleet) return false;
+    if(!ports.includes(f.dep)) return false;
+    const std = toMin(f.std);
+    // departs on the standby day, within [start, end+lead]
+    if(f.days.includes(sel.day) && std>=s && std<=e) return true;
+    // early next-day departure caught when the window extends past midnight
+    if(f.days.includes(nextDay) && (std+1440)>=s && (std+1440)<=e) return true;
+    return false;
+  }).sort((a,b)=> toMin(a.std)-toMin(b.std));
 }
 
 // ---------- MAP ----------
@@ -334,12 +342,14 @@ function update(){
     summary.style.display='none';
     drawMap([]);
     listHdr.textContent='';
-    list.innerHTML = `<div class="empty">Choose a <b>base</b>, <b>fleet</b>, <b>standby code</b> and <b>day</b> above to see the operating freighters that depart within your standby window.</div>`;
+    list.innerHTML = `<div class="empty">Choose a <b>base</b>, <b>fleet</b>, <b>standby code</b> and <b>day</b> above to see the operating freighters that depart within your standby window, plus a 5 h call-out lead time.</div>`;
     return;
   }
   const sb = STANDBY.find(s=>s.code===sel.sb);
   const flights = coveredFlights();
   const fleetLabel = sel.fleet==='A321'?'A320':sel.fleet;
+
+  const reach = fmtMin(toMin(sb.end)+LEAD_MIN); // effective latest departure
 
   summary.style.display='flex';
   summary.innerHTML =
@@ -347,14 +357,15 @@ function update(){
     `<span><span class="k">Fleet</span> <span class="v">${fleetLabel}</span></span>`+
     `<span><span class="k">${sb.code}</span> <span class="win">${sb.start}–${sb.end}</span></span>`+
     `<span><span class="k">Day</span> <span class="v">${DAY_FULL[sel.day]}</span></span>`+
+    `<span><span class="k">+5 h lead → dep by</span> <span class="win">${reach}</span></span>`+
     `<span class="n ${flights.length?'':'zero'}">${flights.length} flight${flights.length===1?'':'s'}</span>`;
 
   drawMap(flights);
 
-  listHdr.textContent = flights.length ? `Covered flights (dep ${sb.start}–${sb.end})` : '';
+  listHdr.textContent = flights.length ? `Covered flights (dep ${sb.start}–${reach}, incl. 5 h lead time)` : '';
   list.innerHTML = flights.length
     ? flights.map(flightRowHTML).join('')
-    : `<div class="empty">No operating ${fleetLabel} freighters depart <b>${sel.base}</b> within <b>${sb.code}</b> (${sb.start}–${sb.end}) on <b>${DAY_FULL[sel.day]}</b>.</div>`;
+    : `<div class="empty">No operating ${fleetLabel} freighters depart <b>${sel.base}</b> between <b>${sb.start}</b> and <b>${reach}</b> (${sb.code} + 5 h lead time) on <b>${DAY_FULL[sel.day]}</b>.</div>`;
 }
 
 // init
