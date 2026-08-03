@@ -253,6 +253,8 @@ const FLIGHTS = [
   {flight:'7523', dep:'SYD', arr:'AKL', fleet:'A321', net:'International',  std:'22:10', sta:'03:10', days:['Mon','Tue','Wed','Thu','Sat']},
   {flight:'7523', dep:'AKL', arr:'CHC', fleet:'A321', net:'International',  std:'04:10', sta:'05:25', days:['Tue','Wed','Thu','Fri','Sun']},
   {flight:'7524', dep:'CHC', arr:'SYD', fleet:'A321', net:'International',  std:'06:25', sta:'07:40', days:['Tue','Wed','Thu','Fri','Sun']},
+  // Positioning start for MEL-based A330 crew (Wed): position MEL->SYD, then operate QF7535 (see pattern).
+  {flight:'470', dep:'MEL', arr:'SYD', fleet:'A330', net:'Positioning start', std:'17:05', sta:'18:35', days:['Wed'], pax:true, ac:'73H'},
 ];
 
 // A SYD-base standby also covers Western Sydney (WSI) departures.
@@ -394,8 +396,8 @@ function drawMap(flights){
     const dep=AIRPORTS[r.dep], arr=AIRPORTS[r.arr]; if(!dep||!arr) return;
     used.add(r.dep); used.add(r.arr);
     const pts = arcPoints(dep,arr);
-    L.polyline(pts, {color:'#3ddc97', weight:2.6, opacity:.92})
-      .bindTooltip(`QF${r.flight} · ${r.dep} ${r.std} → ${r.arr} ${r.sta} · ${r.fleet==='A321'?'A320':r.fleet} · tap for pattern`)
+    L.polyline(pts, {color:(r.pax?'#ffb454':'#3ddc97'), weight:2.6, opacity:.92, dashArray:(r.pax?'6 5':null)})
+      .bindTooltip(`QF${r.flight} · ${r.dep} ${r.std} → ${r.arr} ${r.sta} · ${r.ac || (r.fleet==='A321'?'A320':r.fleet)} · tap for pattern`)
       .on('click', ()=>openPattern(r.flight, sel.day))
       .addTo(arcLayer);
     pts.forEach(p=>bounds.push(p));
@@ -419,8 +421,8 @@ function flightRowHTML(r){
       <div class="rowTop">
         <span class="flightNo">QF${r.flight}</span>
         <span>
-          <span class="badge op">Operating</span>
-          <span class="badge eq">${r.fleet==='A321'?'A320':r.fleet}</span>
+          <span class="badge ${r.pax?'pax':'op'}">${r.pax?'Positioning':'Operating'}</span>
+          <span class="badge eq">${r.ac || (r.fleet==='A321'?'A320':r.fleet)}</span>
         </span>
       </div>
       <div class="route">${r.dep} ${r.std} → ${r.arr} ${r.sta}</div>
@@ -581,8 +583,26 @@ const PATTERNS = {
       ]},
     ],
   },
+  P7535WED_MEL: {
+    title: 'MEL crew · position MEL→SYD, then SYD → PVG → SIN → MEL',
+    days: [
+      { wd:'Wednesday', rpt:'16:35', rls:'18:50', restPort:'SYD', legs:[
+        {code:'470', pax:true, dep:'MEL', depT:'17:05', arr:'SYD', arrT:'18:35', eq:'73H', grnd:''},
+      ]},
+      { wd:'Thursday', rpt:'14:25', rls:'00:35', restPort:'PVG', legs:[
+        {code:'7535', pax:false, dep:'SYD', depT:'15:25', arr:'PVG', arrT:'00:20', eq:'33X', grnd:''},
+      ]},
+      { wd:'Sunday', rpt:'01:40', rls:'08:45', restPort:'SIN', legs:[
+        {code:'7536', pax:false, dep:'PVG', depT:'02:40', arr:'SIN', arrT:'08:30', eq:'33X', grnd:''},
+      ]},
+      { wd:'Sunday', rpt:'22:30', rls:'09:20', legs:[
+        {code:'038', pax:true, dep:'SIN', depT:'23:30', arr:'MEL', arrT:'08:50', eq:'332', grnd:''},
+      ]},
+    ],
+  },
 };
 const PATTERN_OF = {
+  '470|Wed':'P7535WED_MEL',
   '7301|Mon':'P7301',
   '7345|Mon':'P7345MON',
   '7345|Tue':'P7345TUE',
