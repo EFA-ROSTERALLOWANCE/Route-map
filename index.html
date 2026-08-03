@@ -257,6 +257,8 @@ const FLIGHTS = [
   {flight:'470', dep:'MEL', arr:'SYD', fleet:'A330', net:'Positioning start', std:'17:05', sta:'18:35', days:['Wed','Thu'], pax:true, ac:'73H'},
   // Positioning start for SYD-based A330 crew (Wed): pos SYD->HKG->PVG, then operate QF7536 (see pattern).
   {flight:'127', dep:'SYD', arr:'HKG', fleet:'A330', net:'Positioning start', std:'10:17', sta:'18:16', days:['Wed'], pax:true, ac:'333'},
+  // Positioning start for SYD-based A330 crew (Thu): pos SYD->SIN, then operate QF7536 SIN->SYD (see pattern).
+  {flight:'81', dep:'SYD', arr:'SIN', fleet:'A330', net:'Positioning start', std:'10:20', sta:'16:55', days:['Thu'], pax:true, ac:'330'},
 ];
 
 // A SYD-base standby also covers Western Sydney (WSI) departures.
@@ -632,11 +634,23 @@ const PATTERNS = {
       ]},
     ],
   },
+  P81THU: {
+    title: 'SYD crew · position SYD→SIN, then SIN → SYD',
+    days: [
+      { wd:'Thursday', rpt:'09:20', rls:'17:25', restPort:'SIN', legs:[
+        {code:'81', pax:true, dep:'SYD', depT:'10:20', arr:'SIN', arrT:'16:55', eq:'330', grnd:''},
+      ]},
+      { wd:'Friday', rpt:'10:00', rls:'20:55', legs:[
+        {code:'7536', pax:false, dep:'SIN', depT:'11:00', arr:'SYD', arrT:'20:40', eq:'33X', grnd:''},
+      ]},
+    ],
+  },
 };
 const PATTERN_OF = {
   '470|Wed':'P7535WED_MEL',
   '470|Thu':'P7525_MEL_THU',
   '127|Wed':'P127WED',
+  '81|Thu':'P81THU',
   '7301|Mon':'P7301',
   '7345|Mon':'P7345MON',
   '7345|Tue':'P7345TUE',
