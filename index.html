@@ -535,6 +535,17 @@ const PATTERNS = {
       ]},
     ],
   },
+  P7525SUN: {
+    title: 'SYD → HKG (layover) → SYD',
+    days: [
+      { wd:'Sunday', rpt:'12:20', rls:'21:05', restPort:'HKG', legs:[
+        {code:'7525', pax:false, dep:'SYD', depT:'13:20', arr:'HKG', arrT:'20:50', eq:'33X', grnd:''},
+      ]},
+      { wd:'Wednesday', legs:[
+        {code:'7526', pax:false, dep:'HKG', depT:'23:45', arr:'SYD', arrT:'11:05', eq:'33X', grnd:''},
+      ]},
+    ],
+  },
 };
 const PATTERN_OF = {
   '7301|Mon':'P7301',
@@ -543,6 +554,7 @@ const PATTERN_OF = {
   '7345|Wed':'P7345WED',
   '7345|Thu':'P7345THU',
   '7525|Wed':'P7525WED',
+  '7525|Sun':'P7525SUN',
 };
 
 const overlay = document.getElementById('patternOverlay');
