@@ -645,12 +645,25 @@ const PATTERNS = {
       ]},
     ],
   },
+  P7535SAT: {
+    title: 'SYD crew · SYD → PVG, then position PVG→HKG→SYD',
+    days: [
+      { wd:'Saturday', rpt:'14:25', rls:'00:35', restPort:'PVG', legs:[
+        {code:'7535', pax:false, dep:'SYD', depT:'15:25', arr:'PVG', arrT:'00:20', eq:'33X', grnd:''},
+      ]},
+      { wd:'Sunday', rpt:'13:30', rls:'07:15', legs:[
+        {code:'CX377', pax:true, dep:'PVG', depT:'14:30', arr:'HKG', arrT:'17:25', eq:'', grnd:''},
+        {code:'128',   pax:true, dep:'HKG', depT:'19:30', arr:'SYD', arrT:'06:45', eq:'333', grnd:''},
+      ]},
+    ],
+  },
 };
 const PATTERN_OF = {
   '470|Wed':'P7535WED_MEL',
   '470|Thu':'P7525_MEL_THU',
   '127|Wed':'P127WED',
   '81|Thu':'P81THU',
+  '7535|Sat':'P7535SAT',
   '7301|Mon':'P7301',
   '7345|Mon':'P7345MON',
   '7345|Tue':'P7345TUE',
