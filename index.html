@@ -64,6 +64,7 @@
   .msOpt{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;background:var(--panel2);color:var(--muted);
     border:1px solid var(--border);cursor:pointer;user-select:none;}
   .msOpt.active{background:var(--accent);color:#04101f;border-color:var(--accent);}
+  .crewToggle{display:flex;align-items:center;gap:6px;padding:12px 14px 0;}
 
   .flightRow{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:4px;}
   .rowTop{display:flex;justify-content:space-between;align-items:center;}
@@ -181,6 +182,11 @@
         <div class="sheetSub" id="patSub"></div>
       </div>
       <button class="closeBtn" id="patClose" aria-label="Close">✕</button>
+    </div>
+    <div id="crewToggle" class="crewToggle" hidden>
+      <span class="msLbl">Crew</span>
+      <div class="msOpt active" data-crew="normal">Normal</div>
+      <div class="msOpt" data-crew="z">Z crew</div>
     </div>
     <div class="sheetBody" id="patBody"></div>
   </div>
@@ -546,6 +552,34 @@ const PATTERNS = {
       ]},
     ],
   },
+  P7535THU: {
+    title: 'SYD → PVG → SIN → SYD (positions home)',
+    days: [
+      { wd:'Thursday', rpt:'14:25', rls:'00:35', restPort:'PVG', legs:[
+        {code:'7535', pax:false, dep:'SYD', depT:'15:25', arr:'PVG', arrT:'00:20', eq:'33X', grnd:''},
+      ]},
+      { wd:'Sunday', rpt:'01:40', rls:'08:45', restPort:'SIN', legs:[
+        {code:'7536', pax:false, dep:'PVG', depT:'02:40', arr:'SIN', arrT:'08:30', eq:'33X', grnd:''},
+      ]},
+      { wd:'Sunday', legs:[
+        {code:'082', pax:true, dep:'SIN', depT:'21:00', arr:'SYD', arrT:'06:45', eq:'', grnd:''},
+      ]},
+    ],
+  },
+  P7535THU_Z: {
+    title: 'SYD → PVG → HKG (pax) → SYD · Z crew (3rd pilot)',
+    days: [
+      { wd:'Thursday', rpt:'14:25', rls:'00:35', restPort:'PVG', legs:[
+        {code:'7535', pax:false, dep:'SYD', depT:'15:25', arr:'PVG', arrT:'00:20', eq:'33X', grnd:''},
+      ]},
+      { wd:'Saturday', rpt:'12:20', rls:'16:30', restPort:'HKG', legs:[
+        {code:'CX367', pax:true, dep:'PVG', depT:'13:20', arr:'HKG', arrT:'16:15', eq:'', grnd:''},
+      ]},
+      { wd:'Sunday', legs:[
+        {code:'7526', pax:false, dep:'HKG', depT:'23:40', arr:'SYD', arrT:'11:00', eq:'33X', grnd:''},
+      ]},
+    ],
+  },
 };
 const PATTERN_OF = {
   '7301|Mon':'P7301',
@@ -555,44 +589,64 @@ const PATTERN_OF = {
   '7345|Thu':'P7345THU',
   '7525|Wed':'P7525WED',
   '7525|Sun':'P7525SUN',
+  '7535|Thu':'P7535THU',
+};
+// Z crew (3rd pilot) variants, shown via the in-pattern Crew toggle
+const PATTERN_Z_OF = {
+  '7535|Thu':'P7535THU_Z',
 };
 
 const overlay = document.getElementById('patternOverlay');
-function legLabel(c){ return /^[0-9]+$/.test(c) ? 'QF'+c : c; }
-function patternFor(flight, day){
-  return PATTERNS[ PATTERN_OF[flight+'|'+day] || PATTERN_OF[flight+'|*'] ];
-}
+function legLabel(c){ return /^[0-9]+$/.test(c) ? 'QF'+String(parseInt(c,10)) : c; }
+function keyFor(map, flight, day){ return map[flight+'|'+day] || map[flight+'|*']; }
+let curFlight=null, curDay=null, curZ=false;
 function openPattern(flight, day){
-  const pat = patternFor(flight, day);
-  document.getElementById('patTitle').textContent = legLabel(flight)+' — full pattern';
+  curFlight = flight; curDay = day; curZ = false;
+  renderPattern();
+  overlay.hidden = false; document.body.style.overflow = 'hidden';
+}
+function renderPattern(){
+  const flight = curFlight, day = curDay;
+  const zKey = keyFor(PATTERN_Z_OF, flight, day);
+  const normKey = keyFor(PATTERN_OF, flight, day);
+  const ct = document.getElementById('crewToggle');
+  if(zKey){
+    ct.hidden = false;
+    ct.querySelectorAll('.msOpt').forEach(o=>o.classList.toggle('active', (o.dataset.crew==='z')===curZ));
+  } else { ct.hidden = true; curZ = false; }
+  const pat = PATTERNS[ (curZ && zKey) ? zKey : normKey ];
+  document.getElementById('patTitle').textContent = legLabel(flight)+' — full pattern'+((curZ&&zKey)?' · Z crew':'');
   const sub = document.getElementById('patSub'), body = document.getElementById('patBody');
   if(!pat){
     sub.textContent = '';
     body.innerHTML = `<div class="patEmpty">The full pattern for <b>${legLabel(flight)}</b>${day?` on <b>${day}</b>`:''} hasn’t been loaded yet.<br>Send its pairing sheet and I’ll add it.</div>`;
-  } else {
-    sub.textContent = pat.title || '';
-    body.innerHTML = pat.days.map(d=>{
-      const legsHtml = d.legs.map(l=>{
-        const hi = l.code===flight ? ' hi':'';
-        const tag = l.pax ? '<span class="pTag">PAX</span> ' : '<span class="opTag">OP</span> ';
-        const bits = [];
-        if(l.blk && !l.pax) bits.push('Blk '+l.blk);
-        if(l.grnd) bits.push('Grnd '+l.grnd);
-        return `<div class="patLeg ${l.pax?'pax':'op'}${hi}">
-            <div class="plTop"><span class="plNo">${tag}${legLabel(l.code)}</span><span class="plEq">${l.eq||''}</span></div>
-            <div class="plRoute">${l.dep} ${l.depT} → ${l.arr} ${l.arrT}</div>
-            ${bits.length?`<div class="plGrnd">${bits.join(' · ')}</div>`:''}
-          </div>`;
-      }).join('');
-      let duty = d.rpt ? `Sign-on ${d.rpt} · Sign-off ${d.rls}` : '';
-      if(d.rest) duty += (duty?' · ':'') + `Rest ${d.rest} at ${d.restPort}`;
-      else if(d.restPort) duty += (duty?' · ':'') + `Layover at ${d.restPort}`;
-      return `<div class="patDay"><div class="patDate">${d.wd}</div>${legsHtml}${duty?`<div class="patDuty">${duty}</div>`:''}</div>`;
-    }).join('') + (pat.footer?`<div class="patFooter">${pat.footer}</div>`:'');
+    return;
   }
-  overlay.hidden = false; document.body.style.overflow = 'hidden';
+  sub.textContent = pat.title || '';
+  body.innerHTML = pat.days.map(d=>{
+    const legsHtml = d.legs.map(l=>{
+      const hi = l.code===flight ? ' hi':'';
+      const tag = l.pax ? '<span class="pTag">PAX</span> ' : '<span class="opTag">OP</span> ';
+      const bits = [];
+      if(l.blk && !l.pax) bits.push('Blk '+l.blk);
+      if(l.grnd) bits.push('Grnd '+l.grnd);
+      return `<div class="patLeg ${l.pax?'pax':'op'}${hi}">
+          <div class="plTop"><span class="plNo">${tag}${legLabel(l.code)}</span><span class="plEq">${l.eq||''}</span></div>
+          <div class="plRoute">${l.dep} ${l.depT} → ${l.arr} ${l.arrT}</div>
+          ${bits.length?`<div class="plGrnd">${bits.join(' · ')}</div>`:''}
+        </div>`;
+    }).join('');
+    let duty = d.rpt ? `Sign-on ${d.rpt} · Sign-off ${d.rls}` : '';
+    if(d.rest) duty += (duty?' · ':'') + `Rest ${d.rest} at ${d.restPort}`;
+    else if(d.restPort) duty += (duty?' · ':'') + `Layover at ${d.restPort}`;
+    return `<div class="patDay"><div class="patDate">${d.wd}</div>${legsHtml}${duty?`<div class="patDuty">${duty}</div>`:''}</div>`;
+  }).join('') + (pat.footer?`<div class="patFooter">${pat.footer}</div>`:'');
 }
 function closePattern(){ overlay.hidden = true; document.body.style.overflow = ''; }
+document.getElementById('crewToggle').addEventListener('click', e=>{
+  const opt = e.target.closest('.msOpt'); if(!opt) return;
+  curZ = (opt.dataset.crew==='z'); renderPattern();
+});
 
 document.getElementById('list').addEventListener('click', e=>{
   const row = e.target.closest('.flightRow[data-flight]'); if(!row) return;
