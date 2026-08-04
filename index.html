@@ -195,25 +195,26 @@
 
 <script>
 // ---------- STANDBY / RESERVE WINDOWS ----------
+// Listed in V-number order — that's the order they appear in the picker.
 const STANDBY = [
-  {code:'V15', start:'00:01', end:'09:00'},
   {code:'V1',  start:'00:01', end:'06:00'},
   {code:'V2',  start:'03:00', end:'12:00'},
+  {code:'V3',  start:'17:00', end:'23:59'},
   {code:'V4',  start:'04:00', end:'12:00'},
   {code:'V5',  start:'05:01', end:'13:00'},
   {code:'V6',  start:'06:00', end:'12:00'},
-  {code:'V65', start:'06:00', end:'14:00'},
-  {code:'V11', start:'07:00', end:'15:00'},
+  {code:'V7',  start:'10:00', end:'18:00'},
   {code:'V8',  start:'08:00', end:'16:00'},
   {code:'V9',  start:'09:00', end:'17:00'},
-  {code:'V63', start:'10:00', end:'15:00'},
-  {code:'V7',  start:'10:00', end:'18:00'},
   {code:'V10', start:'10:00', end:'20:00'},
+  {code:'V11', start:'07:00', end:'15:00'},
   {code:'V12', start:'12:00', end:'22:00'},
-  {code:'V61', start:'17:00', end:'22:00'},
-  {code:'V3',  start:'17:00', end:'23:59'},
+  {code:'V15', start:'00:01', end:'09:00'},
   {code:'V16', start:'16:00', end:'23:59'},
   {code:'V30', start:'15:00', end:'22:00'},
+  {code:'V61', start:'17:00', end:'22:00'},
+  {code:'V63', start:'10:00', end:'15:00'},
+  {code:'V65', start:'06:00', end:'14:00'},
 ];
 
 // ---------- FREIGHTER SCHEDULE (from Qantas Freight timetable) ----------
