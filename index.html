@@ -84,22 +84,21 @@
   .dot.op{background:var(--op);}
   .dot.home{background:var(--accent2);}
   .dot.used{background:var(--accent);}
+  .dot.pax{background:var(--pax);}
 
   .flightRow.tappable{cursor:pointer;}
   .flightRow.tappable:active{background:#182541;}
+  .flightRow.sel{background:#16223c;box-shadow:inset 3px 0 0 var(--accent);}
   .tapHint{color:var(--accent);font-weight:700;margin-left:auto;}
 
-  .overlay{position:fixed;inset:0;background:rgba(4,10,20,.62);display:flex;align-items:flex-end;justify-content:center;z-index:1000;}
-  .overlay[hidden]{display:none;}
-  .sheet{background:var(--panel);width:100%;max-width:820px;max-height:88vh;border-radius:16px 16px 0 0;
-    border:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
-  @media(min-width:600px){ .overlay{align-items:center;} .sheet{border-radius:16px;} }
+  .patPanel{background:var(--panel);border:1px solid var(--border);border-radius:12px;margin:14px;overflow:hidden;}
+  .patPanel[hidden]{display:none;}
   .sheetHead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:14px;border-bottom:1px solid var(--border);}
   .sheetTitle{font-size:16px;font-weight:800;}
   .sheetSub{font-size:11.5px;color:var(--muted);margin-top:2px;}
   .closeBtn{background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:8px;
     width:34px;height:34px;font-size:15px;cursor:pointer;flex-shrink:0;}
-  .sheetBody{padding:12px 14px 22px;overflow-y:auto;}
+  .sheetBody{padding:12px 14px 16px;}
   .patDay{margin-bottom:16px;}
   .patDate{font-size:12px;font-weight:800;color:var(--accent);letter-spacing:.4px;margin-bottom:8px;}
   .patLeg{border:1px solid var(--border);border-left-width:4px;border-radius:8px;padding:9px 11px;margin-bottom:7px;background:var(--panel2);}
@@ -168,21 +167,17 @@
   <div class="legend">
     <span><span class="dot home"></span>Your base</span>
     <span><span class="dot used"></span>Ports served</span>
-    <span><span class="dot op"></span>Operating flight</span>
+    <span><span class="dot op"></span>Operating</span>
+    <span><span class="dot pax"></span>Positioning</span>
   </div>
 
-  <div id="listHdr" class="listHdr"></div>
-  <div id="list"></div>
-</div>
-
-<div id="patternOverlay" class="overlay" hidden>
-  <div class="sheet">
+  <div id="patternPanel" class="patPanel" hidden>
     <div class="sheetHead">
       <div>
         <div class="sheetTitle" id="patTitle"></div>
         <div class="sheetSub" id="patSub"></div>
       </div>
-      <button class="closeBtn" id="patClose" aria-label="Close">✕</button>
+      <button class="closeBtn" id="patClose" aria-label="Close pattern">✕</button>
     </div>
     <div id="crewToggle" class="crewToggle" hidden>
       <span class="msLbl">Crew</span>
@@ -191,6 +186,9 @@
     </div>
     <div class="sheetBody" id="patBody"></div>
   </div>
+
+  <div id="listHdr" class="listHdr"></div>
+  <div id="list"></div>
 </div>
 
 <script>
@@ -392,25 +390,45 @@ function addPort(code, kind){
     icon:L.divIcon({className:'', html:`<span class="portLbl">${code}</span>`, iconSize:[0,0], iconAnchor:[-8,4]})}).addTo(portLayer);
 }
 
-function drawMap(flights){
+// segments are {dep, arr, pax, tip, hi, onClick} — both views feed this.
+function drawSegments(segs){
   if(!map) return;
   arcLayer.clearLayers(); portLayer.clearLayers();
   const homePorts = new Set(sel.base ? (BASE_PORTS[sel.base]||[]) : []);
   const used = new Set(); const bounds = [];
-  (flights||[]).forEach(r=>{
-    const dep=AIRPORTS[r.dep], arr=AIRPORTS[r.arr]; if(!dep||!arr) return;
-    used.add(r.dep); used.add(r.arr);
+  (segs||[]).forEach(s=>{
+    const dep=AIRPORTS[s.dep], arr=AIRPORTS[s.arr]; if(!dep||!arr) return;
+    used.add(s.dep); used.add(s.arr);
     const pts = arcPoints(dep,arr);
-    L.polyline(pts, {color:(r.pax?'#ffb454':'#3ddc97'), weight:2.6, opacity:.92, dashArray:(r.pax?'6 5':null)})
-      .bindTooltip(`QF${r.flight} · ${r.dep} ${r.std} → ${r.arr} ${r.sta} · ${r.ac || (r.fleet==='A321'?'A320':r.fleet)} · tap for pattern`)
-      .on('click', ()=>openPattern(r.flight, sel.day))
-      .addTo(arcLayer);
+    const line = L.polyline(pts, {color:(s.pax?'#ffb454':'#3ddc97'), weight:(s.hi?4.5:2.6),
+      opacity:(s.hi?1:.92), dashArray:(s.pax?'6 5':null)}).bindTooltip(s.tip);
+    if(s.onClick) line.on('click', s.onClick);
+    line.addTo(arcLayer);
     pts.forEach(p=>bounds.push(p));
   });
   homePorts.forEach(code=> addPort(code,'home'));
   used.forEach(code=>{ if(!homePorts.has(code)) addPort(code,'used'); });
   homePorts.forEach(code=>{ const a=AIRPORTS[code]; if(a) bounds.push([a.lat,a.lon]); });
   if(bounds.length){ map.fitBounds(bounds, {padding:[45,45], maxZoom:6}); }
+}
+
+// default view: the flights this standby could be called out for
+function drawCoverage(flights){
+  drawSegments((flights||[]).map(r=>({
+    dep:r.dep, arr:r.arr, pax:!!r.pax,
+    tip:`QF${r.flight} · ${r.dep} ${r.std} → ${r.arr} ${r.sta} · ${r.ac || (r.fleet==='A321'?'A320':r.fleet)} · tap for pattern`,
+    onClick:()=>openPattern(r.flight, sel.day),
+  })));
+}
+
+// pattern view: every leg of the pairing, operating and positioning alike
+function drawPatternMap(pat, flight){
+  const segs = [];
+  pat.days.forEach(d=> d.legs.forEach(l=> segs.push({
+    dep:l.dep, arr:l.arr, pax:!!l.pax, hi:(l.code===flight),
+    tip:`${d.wd} · ${legLabel(l.code)} · ${l.dep} ${l.depT} → ${l.arr} ${l.arrT}${l.eq?' · '+l.eq:''}`,
+  })));
+  drawSegments(segs);
 }
 
 // ---------- render ----------
@@ -435,17 +453,23 @@ function flightRowHTML(r){
     </div>`;
 }
 
+let lastFlights = []; // what the coverage view shows; restored when a pattern is closed
+
 function update(){
   const complete = sel.base && sel.fleet && sel.sb && sel.day;
   if(!complete){
     summary.style.display='none';
-    drawMap([]);
+    lastFlights = [];
+    clearPattern();
+    drawCoverage([]);
     listHdr.textContent='';
     list.innerHTML = `<div class="empty">Choose a <b>base</b>, <b>fleet</b>, <b>standby code</b> and <b>day</b> above to see the operating freighters that depart within your standby window, plus a 5 h call-out lead time.</div>`;
     return;
   }
   const sb = STANDBY.find(s=>s.code===sel.sb);
   const flights = coveredFlights();
+  lastFlights = flights;
+  clearPattern();
   const fleetLabel = sel.fleet==='A321'?'A320':sel.fleet;
 
   const reach = fmtMin(toMin(sb.end)+LEAD_MIN); // effective latest departure
@@ -459,7 +483,7 @@ function update(){
     `<span><span class="k">+5 h lead → dep by</span> <span class="win">${reach}</span></span>`+
     `<span class="n ${flights.length?'':'zero'}">${flights.length} flight${flights.length===1?'':'s'}</span>`;
 
-  drawMap(flights);
+  drawCoverage(flights);
 
   listHdr.textContent = flights.length ? `Covered flights (dep ${sb.start}–${reach}, incl. 5 h lead time)` : '';
   list.innerHTML = flights.length
@@ -679,14 +703,19 @@ const PATTERN_Z_OF = {
   '7535|Thu':'P7535THU_Z',
 };
 
-const overlay = document.getElementById('patternOverlay');
+const patPanel = document.getElementById('patternPanel');
 function legLabel(c){ return /^[0-9]+$/.test(c) ? 'QF'+String(parseInt(c,10)) : c; }
 function keyFor(map, flight, day){ return map[flight+'|'+day] || map[flight+'|*']; }
 let curFlight=null, curDay=null, curZ=false;
+function markSelectedRow(flight){
+  list.querySelectorAll('.flightRow').forEach(r=>r.classList.toggle('sel', r.dataset.flight===flight));
+}
 function openPattern(flight, day){
   curFlight = flight; curDay = day; curZ = false;
   renderPattern();
-  overlay.hidden = false; document.body.style.overflow = 'hidden';
+  patPanel.hidden = false;
+  markSelectedRow(flight);
+  patPanel.scrollIntoView({behavior:'smooth', block:'nearest'});
 }
 function renderPattern(){
   const flight = curFlight, day = curDay;
@@ -706,6 +735,7 @@ function renderPattern(){
     return;
   }
   sub.textContent = pat.title || '';
+  drawPatternMap(pat, flight);
   body.innerHTML = pat.days.map(d=>{
     const legsHtml = d.legs.map(l=>{
       const hi = l.code===flight ? ' hi':'';
@@ -725,7 +755,13 @@ function renderPattern(){
     return `<div class="patDay"><div class="patDate">${d.wd}</div>${legsHtml}${duty?`<div class="patDuty">${duty}</div>`:''}</div>`;
   }).join('') + (pat.footer?`<div class="patFooter">${pat.footer}</div>`:'');
 }
-function closePattern(){ overlay.hidden = true; document.body.style.overflow = ''; }
+// hide the panel without touching the map (update() redraws it anyway)
+function clearPattern(){
+  curFlight=null; curDay=null; curZ=false;
+  patPanel.hidden = true;
+  markSelectedRow(null);
+}
+function closePattern(){ clearPattern(); drawCoverage(lastFlights); }
 document.getElementById('crewToggle').addEventListener('click', e=>{
   const opt = e.target.closest('.msOpt'); if(!opt) return;
   curZ = (opt.dataset.crew==='z'); renderPattern();
@@ -736,8 +772,7 @@ document.getElementById('list').addEventListener('click', e=>{
   openPattern(row.dataset.flight, sel.day);
 });
 document.getElementById('patClose').addEventListener('click', closePattern);
-overlay.addEventListener('click', e=>{ if(e.target===overlay) closePattern(); });
-document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !overlay.hidden) closePattern(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !patPanel.hidden) closePattern(); });
 
 // init
 update();
