@@ -106,7 +106,13 @@ day it flies. The row carries `data-day` for the same reason, and a next-day row
 ## Network, and what happens without it
 
 This is the only EFA app that needs a connection. Leaflet 1.9.4 comes from unpkg, and the basemap tiles
-from CARTO (`light_all` / `dark_all`, OpenStreetMap data). **The map is optional by design**: if `L` is
+from CARTO (`light_all` / `dark_all`, OpenStreetMap data), requested from the **keyed** endpoint
+`basemaps.cartocdn.com/rastertiles/<style>/…?key=` with the key in `CARTO_KEY`. Without the key, CARTO
+draws "API KEY REQUIRED" across every tile. **The key is public by nature**: it travels in every tile
+request from every visitor's browser, so there is nothing to hide, and moving it anywhere else in this
+file does not help. Its protection is a domain restriction in the CARTO dashboard. If the watermark
+comes back, suspect the key (revoked, over quota, or the domain restriction not matching the Pages URL)
+before the code. **The map is optional by design**: if `L` is
 undefined, the map box shows a notice and the coverage list and pattern panel still work. Keep it that
 way. Anything that depends on Leaflet goes behind the `if(!map) return` guard.
 
