@@ -96,6 +96,13 @@ sheet. That is the intended state for flights nobody has sent a sheet for yet, n
 shifted by 24 h, so a window that runs past midnight still catches an early departure. All times are
 local wall-clock `HH:MM`, with no dates or time zones: the timetable repeats every week.
 
+Each flight it returns is a copy carrying `depDay` (the weekday it actually departs) and `depMin` (minutes
+from the start of the standby day, so a next-morning departure is `1440` or more). **Sort, display and
+pattern lookup all use those, never `std` and `sel.day`.** Sorting on `std` put a 01:55 next-morning
+flight at the top of the list, and opening it with `sel.day` looked up the standby day's pairing, not the
+day it flies. The row carries `data-day` for the same reason, and a next-day row shows its departure as
+`+1` with the weekday on a badge.
+
 ## Network, and what happens without it
 
 This is the only EFA app that needs a connection. Leaflet 1.9.4 comes from unpkg, and the basemap tiles

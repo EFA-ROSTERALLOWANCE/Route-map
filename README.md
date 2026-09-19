@@ -23,9 +23,9 @@ A flight is on the list if it departs your base on that day **between the start 
 five hours after its end**. The five hours are the call-out lead time: a standby ending at 17:00 can
 still be called for a flight that pushes at 22:00. The header shows that reach as **dep by**.
 
-A window whose reach runs past midnight also catches the next morning's early departures. The **dep
-by** figure carries a `+1` when that happens, but the flights themselves are listed under their plain
-departure time, so an `02:00` on the list is the following morning.
+A window whose reach runs past midnight also catches the next morning's early departures. Those are
+listed **after** the evening's flights, with a `+1` on the departure time and the day they fly on a
+badge, and tapping one opens that day's pairing.
 
 ## Patterns
 

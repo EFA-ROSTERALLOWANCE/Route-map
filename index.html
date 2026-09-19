@@ -73,6 +73,7 @@
   .badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px;}
   .badge.op{background:rgba(61,220,151,.15);color:var(--op);}
   .badge.eq{background:rgba(79,163,255,.14);color:var(--accent);}
+  .badge.nx{background:rgba(255,159,67,.15);color:var(--accent2);}
   .route{font-size:15px;font-weight:600;}
   .meta{font-size:11.5px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;}
   .listHdr{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.4px;padding:6px 14px;}
@@ -325,16 +326,20 @@ function coveredFlights(){
   const ports = BASE_PORTS[sel.base] || [];
   const s = toMin(sb.start), e = toMin(sb.end) + LEAD_MIN; // extend reach by lead time
   const di = DAYS.indexOf(sel.day), nextDay = DAYS[(di+1)%7];
-  return FLIGHTS.filter(f => {
-    if(f.fleet!==sel.fleet) return false;
-    if(!ports.includes(f.dep)) return false;
+  // Each hit carries the day it actually departs and its minutes from the start of
+  // the standby day, so a next-morning departure sorts after the evening ones and
+  // opens that day's pairing rather than the standby day's.
+  const out = [];
+  FLIGHTS.forEach(f => {
+    if(f.fleet!==sel.fleet) return;
+    if(!ports.includes(f.dep)) return;
     const std = toMin(f.std);
     // departs on the standby day, within [start, end+lead]
-    if(f.days.includes(sel.day) && std>=s && std<=e) return true;
+    if(f.days.includes(sel.day) && std>=s && std<=e) out.push({...f, depDay:sel.day, depMin:std});
     // early next-day departure caught when the window extends past midnight
-    if(f.days.includes(nextDay) && (std+1440)>=s && (std+1440)<=e) return true;
-    return false;
-  }).sort((a,b)=> toMin(a.std)-toMin(b.std));
+    else if(f.days.includes(nextDay) && (std+1440)>=s && (std+1440)<=e) out.push({...f, depDay:nextDay, depMin:std+1440});
+  });
+  return out.sort((a,b)=> a.depMin-b.depMin);
 }
 
 // ---------- MAP (Leaflet + OpenStreetMap / CARTO basemap, light or dark) ----------
@@ -416,8 +421,8 @@ function drawSegments(segs){
 function drawCoverage(flights){
   drawSegments((flights||[]).map(r=>({
     dep:r.dep, arr:r.arr, pax:!!r.pax,
-    tip:`QF${r.flight} · ${r.dep} ${r.std} → ${r.arr} ${r.sta} · ${r.ac || (r.fleet==='A321'?'A320':r.fleet)} · tap for pattern`,
-    onClick:()=>openPattern(r.flight, sel.day),
+    tip:`QF${r.flight} · ${r.dep} ${fmtMin(r.depMin)} → ${r.arr} ${r.sta} · ${r.ac || (r.fleet==='A321'?'A320':r.fleet)} · tap for pattern`,
+    onClick:()=>openPattern(r.flight, r.depDay),
   })));
 }
 
@@ -440,15 +445,16 @@ function flightRowHTML(r){
   const depName=(AIRPORTS[r.dep]||{}).name||r.dep;
   const arrName=(AIRPORTS[r.arr]||{}).name||r.arr;
   return `
-    <div class="flightRow tappable" data-flight="${r.flight}">
+    <div class="flightRow tappable" data-flight="${r.flight}" data-day="${r.depDay}">
       <div class="rowTop">
         <span class="flightNo">QF${r.flight}</span>
         <span>
           <span class="badge ${r.pax?'pax':'op'}">${r.pax?'Positioning':'Operating'}</span>
+          ${r.depMin>=1440?`<span class="badge nx">${DAY_FULL[r.depDay]}</span>`:''}
           <span class="badge eq">${r.ac || (r.fleet==='A321'?'A320':r.fleet)}</span>
         </span>
       </div>
-      <div class="route">${r.dep} ${r.std} → ${r.arr} ${r.sta}</div>
+      <div class="route">${r.dep} ${fmtMin(r.depMin)} → ${r.arr} ${r.sta}</div>
       <div class="meta"><span>${depName} → ${arrName}</span><span>${r.net}</span><span class="tapHint">View pattern ›</span></div>
     </div>`;
 }
@@ -769,7 +775,7 @@ document.getElementById('crewToggle').addEventListener('click', e=>{
 
 document.getElementById('list').addEventListener('click', e=>{
   const row = e.target.closest('.flightRow[data-flight]'); if(!row) return;
-  openPattern(row.dataset.flight, sel.day);
+  openPattern(row.dataset.flight, row.dataset.day);
 });
 document.getElementById('patClose').addEventListener('click', closePattern);
 document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !patPanel.hidden) closePattern(); });
