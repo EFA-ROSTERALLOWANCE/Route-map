@@ -378,7 +378,35 @@ function coveredFlights(){
       if(fdp.min <= limit) out.push({...f, ...c, fdpMin:fdp.min, fdpEst:fdp.est});
     });
   });
+  // A pairing can come back through a base port partway through its first day and
+  // position on from there: P7301 flies QF7301 SYD–WSI, cars back to SYD, then paxes
+  // QF651 to PER. If a pilot goes sick after the first sector, a standby may be sent
+  // down that later pax leg to take over, so it is listed like any positioning start.
+  midPatternJoins(ports, s).forEach(j => { if(!out.some(o => o.flight===j.flight && o.depMin===j.depMin)) out.push(j); });
   return out.sort((a,b)=> a.depMin-b.depMin);
+}
+// Later pax legs of a pairing's first day that leave one of the base's ports on the
+// standby day. Car transfers are left out. Each carries `patFlight`, the flight whose
+// pairing it belongs to, so tapping it opens that pairing with this leg highlighted.
+function midPatternJoins(ports, s){
+  const out = [];
+  Object.keys(PATTERN_OF).forEach(key => {
+    const [flight, day] = key.split('|');
+    if(day!==sel.day) return;
+    const f = FLIGHTS.find(x => x.flight===flight);
+    const pat = PATTERNS[PATTERN_OF[key]];
+    if(!f || !pat || f.fleet!==sel.fleet) return;
+    const legs = pat.days[0].legs, first = toMin(legs[0].depT);
+    legs.slice(1).forEach(l => {
+      if(!l.pax || /^CAR/.test(l.code) || !ports.includes(l.dep)) return;
+      const std = toMin(l.depT);
+      if(std < first || std < s) return; // a leg past midnight is not on the standby day
+      out.push({flight:l.code, dep:l.dep, arr:l.arr, fleet:f.fleet, std:l.depT, sta:l.arrT,
+        days:[day], pax:true, ac:l.eq, net:`Joins QF${flight} pattern`,
+        depDay:day, depMin:std, patFlight:flight});
+    });
+  });
+  return out;
 }
 
 // ---------- MAP (Leaflet + OpenStreetMap / CARTO basemap, light or dark) ----------
@@ -465,7 +493,7 @@ function drawCoverage(flights){
   drawSegments((flights||[]).map(r=>({
     dep:r.dep, arr:r.arr, pax:!!r.pax,
     tip:`QF${r.flight} · ${r.dep} ${fmtMin(r.depMin)} → ${r.arr} ${r.sta} · ${r.ac || (r.fleet==='A321'?'A320':r.fleet)} · tap for pattern`,
-    onClick:()=>openPattern(r.flight, r.depDay),
+    onClick:()=>openPattern(r.patFlight||r.flight, r.depDay, r.flight),
   })));
 }
 
@@ -492,9 +520,9 @@ function flightRowHTML(r){
   const fdp = r.pax ? ''
     : `<span class="${r.fdpEst?'fdpEst':''}">FDP ends ${fmtMin(r.fdpMin)}${r.fdpEst?' (est)':''}</span>`;
   return `
-    <div class="flightRow tappable" data-flight="${r.flight}" data-day="${r.depDay}">
+    <div class="flightRow tappable" data-flight="${r.flight}" data-day="${r.depDay}" data-pat="${r.patFlight||r.flight}">
       <div class="rowTop">
-        <span class="flightNo">QF${r.flight}</span>
+        <span class="flightNo">${legLabel(r.flight)}</span>
         <span class="badges">
           <span class="badge ${r.pax?'pax':'op'}">${r.pax?'Positioning':'Operating'}</span>
           ${r.crew===3?'<span class="badge z">3 crew</span>':''}
@@ -767,15 +795,15 @@ const PATTERN_Z_OF = {
 const patPanel = document.getElementById('patternPanel');
 function legLabel(c){ return /^[0-9]+$/.test(c) ? 'QF'+String(parseInt(c,10)) : c; }
 function keyFor(map, flight, day){ return map[flight+'|'+day] || map[flight+'|*']; }
-let curFlight=null, curDay=null, curZ=false;
+let curFlight=null, curDay=null, curZ=false, curLeg=null; // curLeg: the leg to highlight
 function markSelectedRow(flight){
   list.querySelectorAll('.flightRow').forEach(r=>r.classList.toggle('sel', r.dataset.flight===flight));
 }
-function openPattern(flight, day){
-  curFlight = flight; curDay = day; curZ = false;
+function openPattern(flight, day, leg){
+  curFlight = flight; curDay = day; curZ = false; curLeg = leg || flight;
   renderPattern();
   patPanel.hidden = false;
-  markSelectedRow(flight);
+  markSelectedRow(curLeg);
   patPanel.scrollIntoView({behavior:'smooth', block:'nearest'});
 }
 function renderPattern(){
@@ -796,10 +824,10 @@ function renderPattern(){
     return;
   }
   sub.textContent = pat.title || '';
-  drawPatternMap(pat, flight);
+  drawPatternMap(pat, curLeg);
   body.innerHTML = pat.days.map(d=>{
     const legsHtml = d.legs.map(l=>{
-      const hi = l.code===flight ? ' hi':'';
+      const hi = l.code===curLeg ? ' hi':'';
       const tag = l.pax ? '<span class="pTag">PAX</span> ' : '<span class="opTag">OP</span> ';
       const bits = [];
       if(l.blk && !l.pax) bits.push('Blk '+l.blk);
@@ -818,7 +846,7 @@ function renderPattern(){
 }
 // hide the panel without touching the map (update() redraws it anyway)
 function clearPattern(){
-  curFlight=null; curDay=null; curZ=false;
+  curFlight=null; curDay=null; curZ=false; curLeg=null;
   patPanel.hidden = true;
   markSelectedRow(null);
 }
@@ -830,7 +858,7 @@ document.getElementById('crewToggle').addEventListener('click', e=>{
 
 document.getElementById('list').addEventListener('click', e=>{
   const row = e.target.closest('.flightRow[data-flight]'); if(!row) return;
-  openPattern(row.dataset.flight, row.dataset.day);
+  openPattern(row.dataset.pat, row.dataset.day, row.dataset.flight);
 });
 document.getElementById('patClose').addEventListener('click', closePattern);
 document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !patPanel.hidden) closePattern(); });
