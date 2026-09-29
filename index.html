@@ -408,13 +408,17 @@ function midPatternJoins(ports, s){
     const pat = PATTERNS[PATTERN_OF[key]];
     if(!f || !pat || f.fleet!==sel.fleet) return;
     const legs = pat.days[0].legs, first = toMin(legs[0].depT);
+    const allLegs = pat.days.flatMap(d => d.legs);
     legs.slice(1).forEach(l => {
       if(!l.pax || /^CAR/.test(l.code) || !ports.includes(l.dep)) return;
       const std = toMin(l.depT);
       if(std < first) return; // a leg past midnight is not on the standby day
+      // the operating sector this positioning is getting the standby to
+      const nextOp = allLegs.slice(allLegs.indexOf(l)+1).find(x => !x.pax);
       out.push({flight:l.code, dep:l.dep, arr:l.arr, fleet:f.fleet, std:l.depT, sta:l.arrT,
         days:[day], pax:true, ac:l.eq, net:`Joins QF${flight} pattern`,
-        depDay:day, depMin:std, patFlight:flight, laterFlight:std < s});
+        depDay:day, depMin:std, patFlight:flight, laterFlight:std < s,
+        nextOp: nextOp && nextOp.code});
     });
   });
   return out;
@@ -544,7 +548,7 @@ function flightRowHTML(r){
       <div class="route">${r.dep} ${fmtMin(r.depMin)} → ${r.arr} ${r.sta}</div>
       <div class="meta"><span>${depName} → ${arrName}</span><span>${r.net}</span>${fdp}<span class="tapHint">View pattern ›</span></div>
       ${!r.patFlight ? '' : r.laterFlight
-        ? `<div class="rowNote">Leaves before this standby starts — crewing would put you on a later flight to ${r.arr}.</div>`
+        ? `<div class="rowNote">Leaves before this standby starts — crewing would put you on a later flight to ${r.arr}${r.nextOp?` if needed to cover ${legLabel(r.nextOp)} later in the pattern`:''}.</div>`
         : `<div class="rowNote">Confirm with crewing — they may put you on a later flight to ${r.arr} instead.</div>`}
     </div>`;
 }
