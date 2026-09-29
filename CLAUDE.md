@@ -118,7 +118,8 @@ instead and is gone.
   excluded), under the same positioning rule. If a pilot goes sick after QF7301 SYD–WSI on Monday, a
   standby can be sent down QF651 SYD–PER 16:10 to take over, so QF651 is listed for standbys starting
   after 7301 has gone. The row carries `patFlight` (`data-pat`), so tapping it opens the parent
-  pairing with that leg highlighted. It is derived from `PATTERNS`, so nothing needs adding to
+  pairing with that leg highlighted, and it carries a note to confirm the positioning with crewing,
+  who may send the standby on a later flight to the same port. It is derived from `PATTERNS`, so nothing needs adding to
   `FLIGHTS` or `PATTERN_OF` (a `PATTERN_OF` key would tell Live-duty-limits the leg starts a pairing).
 - The next-weekday test (shifted 24 h) still runs for operating flights, because 16 h from a 17:00
   standby reaches 09:00 the following morning. Being 24 h apart, the two copies of a weekly flight can
