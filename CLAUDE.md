@@ -115,9 +115,10 @@ instead and is gone.
   is not tested against the next weekday either — only the standby day itself.
 - **A pairing's later pax legs are joining points too.** `midPatternJoins()` lists any pax leg after
   the first on a pairing's first day that leaves a base port on the standby day (car transfers
-  excluded), under the same positioning rule. If a pilot goes sick after QF7301 SYD–WSI on Monday, a
-  standby can be sent down QF651 SYD–PER 16:10 to take over, so QF651 is listed for standbys starting
-  after 7301 has gone. The row carries `patFlight` (`data-pat`), so tapping it opens the parent
+  excluded). If a pilot goes sick after QF7301 SYD–WSI on Monday, a standby can be sent down QF651
+  SYD–PER 16:10 to take over, so QF651 is listed. Unlike other positioning it is listed for **every**
+  standby that day, even one starting after 16:10, because crewing can put the standby on a later
+  flight to the same port; such a row is flagged `laterFlight` and its note says so. The row carries `patFlight` (`data-pat`), so tapping it opens the parent
   pairing with that leg highlighted, and it carries a note to confirm the positioning with crewing,
   who may send the standby on a later flight to the same port. It is derived from `PATTERNS`, so nothing needs adding to
   `FLIGHTS` or `PATTERN_OF` (a `PATTERN_OF` key would tell Live-duty-limits the leg starts a pairing).
