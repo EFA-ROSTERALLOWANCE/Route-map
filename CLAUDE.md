@@ -56,7 +56,7 @@ code, about two-thirds of the way down.
 | Table | What it holds |
 |---|---|
 | `STANDBY` | V-code windows `{code, start, end}`. **Kept in V-number order**, because that is the picker's order. |
-| `FLIGHTS` | The freighter timetable: `{flight, dep, arr, fleet, net, std, sta, days}`. `M4`/`T4`/`T3` are weekday shorthands defined just above it. |
+| `FLIGHTS` | The freighter timetable: `{flight, dep, arr, fleet, net, std, sta, days}`, plus `pax`/`ac` on a positioning start and `crew:3` on an augmented flight. `M4`/`T4`/`T3` are weekday shorthands defined just above it. |
 | `BASE_PORTS` | Which departure ports a base's standby covers. A SYD standby also covers WSI. |
 | `AIRPORTS` | Lat/lon and name for every port drawn. A port missing here is silently not drawn. |
 | `PATTERNS` | Full pairings, keyed `P<flight><DAY>` (e.g. `P7345WED`), with suffixes for crew-base and Z variants (`P7535WED_MEL`, `P7535THU_Z`). |
@@ -90,11 +90,37 @@ sheet. That is the intended state for flights nobody has sent a sheet for yet, n
 
 ## The coverage rule
 
-`coveredFlights()`: a flight counts if it is on the chosen fleet, departs one of the base's
-`BASE_PORTS`, and has its `std` inside `[standby start, standby end + LEAD_MIN]` on the chosen day.
-`LEAD_MIN = 300` is the 5-hour call-out lead time. The same test runs again against the next weekday,
-shifted by 24 h, so a window that runs past midnight still catches an early departure. All times are
-local wall-clock `HH:MM`, with no dates or time zones: the timetable repeats every week.
+`coveredFlights()`: a flight counts if it is on the chosen fleet and departs one of the base's
+`BASE_PORTS`. What bounds it after that is **the call-out limit, which runs from the START of standby to
+the END of the FDP it assigns** — 16 h on two crew, 20 h on three (`CALLOUT_MAX`). The standby's own end
+time does not bound anything: a V-code running 12:00–15:00 still reaches a duty signing off at 04:00 the
+next morning. There is no lead-time term; the old `LEAD_MIN = 300` reached past the standby's *end*
+instead and is gone.
+
+- **The ceiling is the FDP end, not the arrival.** `fdpEndOf()` takes the day-1 `rls` of the pairing
+  `PATTERN_OF` gives for `<flight>|<departure day>`, because that is when the duty actually signs off:
+  QF7345 lands MEL 00:25 but signs off PER 04:20, and testing the arrival would wrongly admit it. Where
+  no pairing is loaded there is only `sta`, which under-reads any multi-sector duty, so the row prints
+  **`(est)`** rather than being trusted silently. Twelve flights currently fall back that way.
+- **The floor is the standby start, tested on the departure — not on the pairing's `rpt`.** A standby
+  call-out carries no 1 h before-departure report, so a pairing printing `rpt` before the standby window
+  even opened is still callable: QF7525 Wed reports 11:20 against a 12:20 push and is correctly listed
+  for a standby starting 12:00. Do not "tighten" this to report time.
+- **Positioning is unlimited.** A pax sector carries no FDP, so nothing caps how late it can be: every
+  `pax:true` flight leaving a base port on the chosen day, at or after the standby starts, is listed. It
+  is not tested against the next weekday either — only the standby day itself.
+- The next-weekday test (shifted 24 h) still runs for operating flights, because 16 h from a 17:00
+  standby reaches 09:00 the following morning. Being 24 h apart, the two copies of a weekly flight can
+  never both pass the ceiling, so no de-duplication is needed.
+
+All times are local wall-clock `HH:MM`, with no dates or time zones: the timetable repeats every week.
+
+**Crew complement lives on the `FLIGHTS` row** as `crew:3`, and QF7525, QF7526 and QF7535 are the only
+flights EFA operates augmented. It is what buys them the 20 h limit instead of 16 h — a V2 standby
+(03:00) reaches 19:00 on two crew and 23:00 on three, and QF7525 signs off at 20:05, so dropping the flag
+silently removes it. The generator downstream does **not** read `FLIGHTS`, so this does not reach
+Live-duty-limits; its `AUGMENTED_ONLY` table still carries the same three flights as a local correction.
+Registering real Z pairings in `PATTERN_Z_OF` remains the durable fix that would retire it.
 
 Each flight it returns is a copy carrying `depDay` (the weekday it actually departs) and `depMin` (minutes
 from the start of the standby day, so a next-morning departure is `1440` or more). **Sort, display and

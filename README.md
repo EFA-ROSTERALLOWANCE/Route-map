@@ -19,13 +19,23 @@ would be flying.
 
 ## What counts as covered
 
-A flight is on the list if it departs your base on that day **between the start of your standby and
-five hours after its end**. The five hours are the call-out lead time: a standby ending at 17:00 can
-still be called for a flight that pushes at 22:00. The header shows that reach as **dep by**.
+A call-out is bounded **from the start of your standby to the end of the duty it gives you** — 16 hours
+on two crew, 20 on three. Your standby's own end time does not come into it. A V-code running
+12:00–15:00 still reaches a duty signing off at 04:00 the next morning, and the header shows both
+ceilings as **FDP by**.
 
-A window whose reach runs past midnight also catches the next morning's early departures. Those are
-listed **after** the evening's flights, with a `+1` on the departure time and the day they fly on a
-badge, and tapping one opens that day's pairing.
+The limit is measured against the pairing's **sign-off**, not the flight's arrival, because that is when
+the duty actually ends: QF7345 lands Melbourne at 00:25 but signs off in Perth at 04:20, nearly four
+hours later. Each flight shows the sign-off it was judged against. Where no pairing has been loaded yet
+there is only the scheduled arrival, which under-reads any duty with more than one sector, so those read
+**(est)** rather than being quietly trusted.
+
+**Positioning has no limit.** A pax sector carries no duty of its own, so every positioning flight
+leaving your base that day, from the moment your standby starts, is listed.
+
+The 16 hours reach into the next morning, so early departures the day after are listed too — **after**
+the evening's flights, with a `+1` on the departure time and the day they fly on a badge. Tapping one
+opens that day's pairing.
 
 ## Patterns
 
@@ -36,6 +46,8 @@ Operating legs are marked **OP** and positioning legs **PAX**.
 
 Thirteen pairings are loaded, covering the SYD and MEL A330 international and domestic flying. Where a
 pairing has a **Z crew** (3rd pilot) variant, a Crew toggle in the panel switches between the two.
+QF7525, QF7526 and QF7535 are the flights operated augmented, marked **3 crew** in the list — that is
+what gives them the 20-hour limit rather than 16.
 Some pairings begin by positioning, such as QF470 MEL–SYD, QF127 SYD–HKG or QF81 SYD–SIN, so those
 positioning flights appear in the list too and open the same way. A flight without a loaded pairing
 still opens the panel, which says so.

@@ -68,12 +68,17 @@
   .crewToggle[hidden]{display:none;}
 
   .flightRow{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:4px;}
-  .rowTop{display:flex;justify-content:space-between;align-items:center;}
+  .rowTop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
   .flightNo{font-weight:700;font-size:14px;}
+  /* Four badges overflow a 360px phone on one line, so the group wraps under itself. */
+  .badges{display:inline-flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;}
   .badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px;}
   .badge.op{background:rgba(61,220,151,.15);color:var(--op);}
+  .badge.pax{background:rgba(255,180,84,.18);color:var(--pax);}
   .badge.eq{background:rgba(79,163,255,.14);color:var(--accent);}
   .badge.nx{background:rgba(255,159,67,.15);color:var(--accent2);}
+  .badge.z{background:rgba(255,93,93,.15);color:var(--red);}
+  .fdpEst{opacity:.75;font-style:italic;}
   .route{font-size:15px;font-weight:600;}
   .meta{font-size:11.5px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;}
   .listHdr{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.4px;padding:6px 14px;}
@@ -124,7 +129,7 @@
 <div id="app">
   <header>
     <h1>✈️ EFA Standby Coverage</h1>
-    <div class="sub">Pick your base, fleet, standby code &amp; weekday to see the operating freighters that could be called out (incl. a 5 h call-out lead time).</div>
+    <div class="sub">Pick your base, fleet, standby code &amp; weekday to see what you could be called out for — 16 h from the start of standby to the end of the FDP, 20 h on three crew.</div>
   </header>
 
   <div class="card">
@@ -243,10 +248,13 @@ const FLIGHTS = [
   {flight:'7330', dep:'BNE', arr:'MEL', fleet:'A321', net:'Domestic',      std:'01:00', sta:'03:25', days:T4},
   {flight:'7390', dep:'MEL', arr:'PER', fleet:'A321', net:'Domestic',      std:'03:50', sta:'06:00', days:T4},
   // A330 international
-  {flight:'7525', dep:'SYD', arr:'HKG', fleet:'A330', net:'International',  std:'12:20', sta:'19:50', days:['Wed','Sun']},
-  {flight:'7526', dep:'HKG', arr:'SYD', fleet:'A330', net:'International',  std:'23:45', sta:'11:05', days:['Wed','Fri','Sun']},
+  // crew:3 marks the augmented (Z crew, 3rd pilot) flights, and these three are the
+  // only ones EFA flies augmented. It is what buys them the 20 h call-out limit
+  // instead of 16 h, so leaving it off quietly narrows their coverage.
+  {flight:'7525', dep:'SYD', arr:'HKG', fleet:'A330', net:'International',  std:'12:20', sta:'19:50', days:['Wed','Sun'], crew:3},
+  {flight:'7526', dep:'HKG', arr:'SYD', fleet:'A330', net:'International',  std:'23:45', sta:'11:05', days:['Wed','Fri','Sun'], crew:3},
   {flight:'7531', dep:'PER', arr:'HKG', fleet:'A330', net:'International',  std:'14:00', sta:'22:00', days:['Fri']},
-  {flight:'7535', dep:'SYD', arr:'PVG', fleet:'A330', net:'International',  std:'15:25', sta:'00:20', days:['Thu','Sat']},
+  {flight:'7535', dep:'SYD', arr:'PVG', fleet:'A330', net:'International',  std:'15:25', sta:'00:20', days:['Thu','Sat'], crew:3},
   {flight:'7536', dep:'PVG', arr:'SIN', fleet:'A330', net:'International',  std:'02:40', sta:'08:30', days:['Wed','Sun']},
   {flight:'7536', dep:'SIN', arr:'SYD', fleet:'A330', net:'International',  std:'11:00', sta:'20:40', days:['Wed','Sun']},
   // A321 international
@@ -286,7 +294,11 @@ const DAY_FULL = {Mon:'Monday',Tue:'Tuesday',Wed:'Wednesday',Thu:'Thursday',Fri:
 
 // ---------- state ----------
 const sel = { base:null, fleet:null, sb:null, day:null };
-const LEAD_MIN = 300; // 5-hour call-out lead time: standby reaches this far past its end
+// A call-out is bounded from the START of standby to the END of the FDP it assigns:
+// 16 h on two crew, 20 h on three. The standby's own end time does not bound it, so a
+// V-code finishing at 15:00 that began at 12:00 still reaches a duty signing off 04:00
+// the next morning. Keyed by crew, in minutes.
+const CALLOUT_MAX = { 2:16*60, 3:20*60 };
 function toMin(t){ const [h,m]=t.split(':').map(Number); return h*60+m; }
 function fmtMin(m){ const nd = m>=1440?' +1':''; m=((m%1440)+1440)%1440;
   return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')+nd; }
@@ -321,10 +333,24 @@ bindGroup('dayRow','day');
 sbSelect.addEventListener('change', ()=>{ sel.sb = sbSelect.value || null; update(); });
 
 // ---------- coverage ----------
+// The limit runs to the end of the assigned FDP, so a flight is judged by its
+// pairing's sign-off, never by its own arrival: QF7345 lands MEL 00:25 but signs off
+// at PER 04:20, nearly four hours later, and testing the arrival would wrongly admit
+// it. Where no pairing is loaded the scheduled arrival is all there is — that is an
+// under-estimate for any multi-sector duty, so the row is flagged rather than trusted.
+// Returned in minutes from the start of the standby day, like depMin.
+function fdpEndOf(f, depDay, depMin){
+  const pat = PATTERNS[ keyFor(PATTERN_OF, f.flight, depDay) ];
+  const duty = pat && pat.days.find(d => d.rls && d.legs.some(l => l.code===f.flight));
+  let m = toMin(duty ? duty.rls : f.sta);
+  while(m < depMin) m += 1440; // sign-off is on or after the departure it follows
+  return { min:m, est:!duty };
+}
+
 function coveredFlights(){
   const sb = STANDBY.find(s=>s.code===sel.sb);
   const ports = BASE_PORTS[sel.base] || [];
-  const s = toMin(sb.start), e = toMin(sb.end) + LEAD_MIN; // extend reach by lead time
+  const s = toMin(sb.start);
   const di = DAYS.indexOf(sel.day), nextDay = DAYS[(di+1)%7];
   // Each hit carries the day it actually departs and its minutes from the start of
   // the standby day, so a next-morning departure sorts after the evening ones and
@@ -334,10 +360,23 @@ function coveredFlights(){
     if(f.fleet!==sel.fleet) return;
     if(!ports.includes(f.dep)) return;
     const std = toMin(f.std);
-    // departs on the standby day, within [start, end+lead]
-    if(f.days.includes(sel.day) && std>=s && std<=e) out.push({...f, depDay:sel.day, depMin:std});
-    // early next-day departure caught when the window extends past midnight
-    else if(f.days.includes(nextDay) && (std+1440)>=s && (std+1440)<=e) out.push({...f, depDay:nextDay, depMin:std+1440});
+    // Positioning carries no FDP, so nothing caps how late it can be: every pax
+    // sector leaving on the standby day, once standby has started, is reachable.
+    if(f.pax){
+      if(f.days.includes(sel.day) && std>=s) out.push({...f, depDay:sel.day, depMin:std});
+      return;
+    }
+    const limit = s + CALLOUT_MAX[f.crew===3 ? 3 : 2];
+    // A next-day departure is still in reach — 16 h from a 17:00 standby lands at
+    // 09:00 the following morning. The FDP ceiling is what rules one out, and being
+    // 24 h apart it can never admit both copies of the same weekly flight.
+    [ f.days.includes(sel.day) ? {depDay:sel.day, depMin:std} : null,
+      f.days.includes(nextDay) ? {depDay:nextDay, depMin:std+1440} : null,
+    ].forEach(c => {
+      if(!c || c.depMin < s) return;
+      const fdp = fdpEndOf(f, c.depDay, c.depMin);
+      if(fdp.min <= limit) out.push({...f, ...c, fdpMin:fdp.min, fdpEst:fdp.est});
+    });
   });
   return out.sort((a,b)=> a.depMin-b.depMin);
 }
@@ -448,18 +487,23 @@ const list=document.getElementById('list');
 function flightRowHTML(r){
   const depName=(AIRPORTS[r.dep]||{}).name||r.dep;
   const arrName=(AIRPORTS[r.arr]||{}).name||r.arr;
+  // Positioning has no FDP to print; an operating row shows the sign-off the call-out
+  // limit was measured against, marked when it fell back to the scheduled arrival.
+  const fdp = r.pax ? ''
+    : `<span class="${r.fdpEst?'fdpEst':''}">FDP ends ${fmtMin(r.fdpMin)}${r.fdpEst?' (est)':''}</span>`;
   return `
     <div class="flightRow tappable" data-flight="${r.flight}" data-day="${r.depDay}">
       <div class="rowTop">
         <span class="flightNo">QF${r.flight}</span>
-        <span>
+        <span class="badges">
           <span class="badge ${r.pax?'pax':'op'}">${r.pax?'Positioning':'Operating'}</span>
+          ${r.crew===3?'<span class="badge z">3 crew</span>':''}
           ${r.depMin>=1440?`<span class="badge nx">${DAY_FULL[r.depDay]}</span>`:''}
           <span class="badge eq">${r.ac || (r.fleet==='A321'?'A320':r.fleet)}</span>
         </span>
       </div>
       <div class="route">${r.dep} ${fmtMin(r.depMin)} → ${r.arr} ${r.sta}</div>
-      <div class="meta"><span>${depName} → ${arrName}</span><span>${r.net}</span><span class="tapHint">View pattern ›</span></div>
+      <div class="meta"><span>${depName} → ${arrName}</span><span>${r.net}</span>${fdp}<span class="tapHint">View pattern ›</span></div>
     </div>`;
 }
 
@@ -473,7 +517,7 @@ function update(){
     clearPattern();
     drawCoverage([]);
     listHdr.textContent='';
-    list.innerHTML = `<div class="empty">Choose a <b>base</b>, <b>fleet</b>, <b>standby code</b> and <b>day</b> above to see the operating freighters that depart within your standby window, plus a 5 h call-out lead time.</div>`;
+    list.innerHTML = `<div class="empty">Choose a <b>base</b>, <b>fleet</b>, <b>standby code</b> and <b>day</b> above to see what that standby could be called out for. The limit runs from the <b>start</b> of standby to the <b>end of the FDP</b> — 16 h on two crew, 20 h on three — so it reaches well past the window itself. Positioning is unlimited.</div>`;
     return;
   }
   const sb = STANDBY.find(s=>s.code===sel.sb);
@@ -482,7 +526,11 @@ function update(){
   clearPattern();
   const fleetLabel = sel.fleet==='A321'?'A320':sel.fleet;
 
-  const reach = fmtMin(toMin(sb.end)+LEAD_MIN); // effective latest departure
+  // Both ceilings, measured from the standby's start. The 20 h one is only worth
+  // printing on a fleet that actually flies augmented — the A320 never does.
+  const s = toMin(sb.start);
+  const cap2 = fmtMin(s + CALLOUT_MAX[2]), cap3 = fmtMin(s + CALLOUT_MAX[3]);
+  const has3 = FLIGHTS.some(f => f.crew===3 && f.fleet===sel.fleet);
 
   summary.style.display='flex';
   summary.innerHTML =
@@ -490,15 +538,18 @@ function update(){
     `<span><span class="k">Fleet</span> <span class="v">${fleetLabel}</span></span>`+
     `<span><span class="k">${sb.code}</span> <span class="win">${sb.start}–${sb.end}</span></span>`+
     `<span><span class="k">Day</span> <span class="v">${DAY_FULL[sel.day]}</span></span>`+
-    `<span><span class="k">+5 h lead → dep by</span> <span class="win">${reach}</span></span>`+
+    `<span><span class="k">16 h → FDP by</span> <span class="win">${cap2}</span></span>`+
+    (has3?`<span><span class="k">20 h (3 crew) → FDP by</span> <span class="win">${cap3}</span></span>`:'')+
     `<span class="n ${flights.length?'':'zero'}">${flights.length} flight${flights.length===1?'':'s'}</span>`;
 
   drawCoverage(flights);
 
-  listHdr.textContent = flights.length ? `Covered flights (dep ${sb.start}–${reach}, incl. 5 h lead time)` : '';
+  listHdr.textContent = flights.length
+    ? `Covered flights (dep from ${sb.start}; FDP ends by ${cap2}${has3?`, ${cap3} on 3 crew`:''})`
+    : '';
   list.innerHTML = flights.length
     ? flights.map(flightRowHTML).join('')
-    : `<div class="empty">No operating ${fleetLabel} freighters depart <b>${sel.base}</b> between <b>${sb.start}</b> and <b>${reach}</b> (${sb.code} + 5 h lead time) on <b>${DAY_FULL[sel.day]}</b>.</div>`;
+    : `<div class="empty">Nothing ${fleetLabel} leaves <b>${sel.base}</b> on <b>${DAY_FULL[sel.day]}</b> that ${sb.code} reaches. A call-out from <b>${sb.start}</b> has to end its FDP by <b>${cap2}</b> (16 h)${has3?`, or <b>${cap3}</b> on three crew (20 h)`:''}.</div>`;
 }
 
 // ---------- FLIGHT PATTERNS (full pairings) ----------
