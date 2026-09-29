@@ -109,6 +109,13 @@ instead and is gone.
 - **Positioning is unlimited.** A pax sector carries no FDP, so nothing caps how late it can be: every
   `pax:true` flight leaving a base port on the chosen day, at or after the standby starts, is listed. It
   is not tested against the next weekday either — only the standby day itself.
+- **A pairing's later pax legs are joining points too.** `midPatternJoins()` lists any pax leg after
+  the first on a pairing's first day that leaves a base port on the standby day (car transfers
+  excluded), under the same positioning rule. If a pilot goes sick after QF7301 SYD–WSI on Monday, a
+  standby can be sent down QF651 SYD–PER 16:10 to take over, so QF651 is listed for standbys starting
+  after 7301 has gone. The row carries `patFlight` (`data-pat`), so tapping it opens the parent
+  pairing with that leg highlighted. It is derived from `PATTERNS`, so nothing needs adding to
+  `FLIGHTS` or `PATTERN_OF` (a `PATTERN_OF` key would tell Live-duty-limits the leg starts a pairing).
 - The next-weekday test (shifted 24 h) still runs for operating flights, because 16 h from a 17:00
   standby reaches 09:00 the following morning. Being 24 h apart, the two copies of a weekly flight can
   never both pass the ceiling, so no de-duplication is needed.
