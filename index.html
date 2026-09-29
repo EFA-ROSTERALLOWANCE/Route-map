@@ -339,10 +339,18 @@ sbSelect.addEventListener('change', ()=>{ sel.sb = sbSelect.value || null; updat
 // it. Where no pairing is loaded the scheduled arrival is all there is — that is an
 // under-estimate for any multi-sector duty, so the row is flagged rather than trusted.
 // Returned in minutes from the start of the standby day, like depMin.
+// Positioning after the last operating sector is duty, not FDP, so a duty that paxes
+// on afterwards ends its FDP 15 min after that last landing (the post-flight time the
+// pairings print): P7301 lands WSI 13:15 and its FDP ends 13:30, not at the 19:25 PER
+// sign-off after the car and QF651, which would wrongly rule out a morning standby.
+const POST_FLIGHT_MIN = 15;
 function fdpEndOf(f, depDay, depMin){
   const pat = PATTERNS[ keyFor(PATTERN_OF, f.flight, depDay) ];
   const duty = pat && pat.days.find(d => d.rls && d.legs.some(l => l.code===f.flight));
-  let m = toMin(duty ? duty.rls : f.sta);
+  const lastOp = duty && [...duty.legs].reverse().find(l => !l.pax);
+  let m = !duty ? toMin(f.sta)
+    : duty.legs[duty.legs.length-1].pax && lastOp ? toMin(lastOp.arrT) + POST_FLIGHT_MIN
+    : toMin(duty.rls);
   while(m < depMin) m += 1440; // sign-off is on or after the departure it follows
   return { min:m, est:!duty };
 }

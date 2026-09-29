@@ -102,6 +102,10 @@ instead and is gone.
   QF7345 lands MEL 00:25 but signs off PER 04:20, and testing the arrival would wrongly admit it. Where
   no pairing is loaded there is only `sta`, which under-reads any multi-sector duty, so the row prints
   **`(est)`** rather than being trusted silently. Twelve flights currently fall back that way.
+- **Trailing positioning is duty, not FDP.** When a day-1 duty ends in pax legs, the FDP ends 15 min
+  (`POST_FLIGHT_MIN`) after its last operating landing, not at `rls`. P7301 lands WSI 13:15 and then
+  cars and paxes to PER for a 19:25 sign-off; measured to 19:25 it dropped out for V1, V2 and V15, but
+  its FDP ends 13:30.
 - **The floor is the standby start, tested on the departure — not on the pairing's `rpt`.** A standby
   call-out carries no 1 h before-departure report, so a pairing printing `rpt` before the standby window
   even opened is still callable: QF7525 Wed reports 11:20 against a 12:20 push and is correctly listed
