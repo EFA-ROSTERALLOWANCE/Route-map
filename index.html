@@ -397,6 +397,8 @@ function coveredFlights(){
 // Later pax legs of a pairing's first day that leave one of the base's ports on the
 // standby day. Car transfers are left out. Each carries `patFlight`, the flight whose
 // pairing it belongs to, so tapping it opens that pairing with this leg highlighted.
+// Crewing can put the standby on a later flight to the same port, so a standby that
+// starts after the leg has gone still gets it, flagged `laterFlight`.
 function midPatternJoins(ports, s){
   const out = [];
   Object.keys(PATTERN_OF).forEach(key => {
@@ -409,10 +411,10 @@ function midPatternJoins(ports, s){
     legs.slice(1).forEach(l => {
       if(!l.pax || /^CAR/.test(l.code) || !ports.includes(l.dep)) return;
       const std = toMin(l.depT);
-      if(std < first || std < s) return; // a leg past midnight is not on the standby day
+      if(std < first) return; // a leg past midnight is not on the standby day
       out.push({flight:l.code, dep:l.dep, arr:l.arr, fleet:f.fleet, std:l.depT, sta:l.arrT,
         days:[day], pax:true, ac:l.eq, net:`Joins QF${flight} pattern`,
-        depDay:day, depMin:std, patFlight:flight});
+        depDay:day, depMin:std, patFlight:flight, laterFlight:std < s});
     });
   });
   return out;
@@ -541,7 +543,9 @@ function flightRowHTML(r){
       </div>
       <div class="route">${r.dep} ${fmtMin(r.depMin)} → ${r.arr} ${r.sta}</div>
       <div class="meta"><span>${depName} → ${arrName}</span><span>${r.net}</span>${fdp}<span class="tapHint">View pattern ›</span></div>
-      ${r.patFlight?`<div class="rowNote">Confirm with crewing — they may put you on a later flight to ${r.arr} instead.</div>`:''}
+      ${!r.patFlight ? '' : r.laterFlight
+        ? `<div class="rowNote">Leaves before this standby starts — crewing would put you on a later flight to ${r.arr}.</div>`
+        : `<div class="rowNote">Confirm with crewing — they may put you on a later flight to ${r.arr} instead.</div>`}
     </div>`;
 }
 
